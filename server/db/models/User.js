@@ -14,7 +14,34 @@ const User = db.define('user', {
   },
   password: {
     type: Sequelize.STRING,
+  },
+  email: {
+    type: Sequelize.STRING,
+    unique: true,
+    validate: {
+      isEmail: true
+    }
+  },
+  image: {
+    type: Sequelize.TEXT,
+    default: '',
+    validate: {
+      isUrl: true
+    }
+  },
+  longitude: {
+    type: Sequelize.FLOAT,
+    validate: {
+      isNumeric: true
+    }
+  },
+  latitude: {
+    type: Sequelize.FLOAT,
+    validate: {
+      isNumeric: true,
+    }
   }
+
 })
 
 module.exports = User
