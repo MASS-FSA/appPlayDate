@@ -14,16 +14,22 @@ export const UserPage = (props) => {
     }
 
     function loadMap(position) {
-      console.log(`got to map func`);
       let latitude = position.coords.latitude;
       let longitude = position.coords.longitude;
+      console.log(latitude, longitude);
 
-      const mymap = L.map("map").setView([latitude, longitude], 13);
+      const myMap = L.map("map").setView([latitude, longitude], 13);
 
       L.tileLayer("http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
         maxZoom: 20,
         subdomains: ["mt0", "mt1", "mt2", "mt3"],
-      }).addTo(mymap);
+      }).addTo(myMap);
+
+      const marker = L.marker([latitude, longitude]).addTo(myMap);
+
+      console.log(
+        myMap.distance([latitude, longitude], [51.505, -0.09]) / 1700 + " miles"
+      );
     }
 
     getLocation();
