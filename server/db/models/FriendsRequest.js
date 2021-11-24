@@ -1,14 +1,14 @@
-const Sequelize = require('sequelize')
-const db = require('../db')
+const Sequelize = require("sequelize");
+const db = require("../db");
 
-const FriendsRequest = db.define('friendsRequest', {
+const FriendsRequest = db.define("friendsRequest", {
   specifierId: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
   },
   status: {
-    type: Sequelize.ENUM('accepted', 'blocked', 'pending', 'declined'),
-    defaultValue: 'pending'
+    type: Sequelize.ENUM("accepted", "blocked", "pending", "declined"),
+    defaultValue: "pending",
   },
-})
+});
 
-module.exports = FriendsRequest
+module.exports = FriendsRequest;

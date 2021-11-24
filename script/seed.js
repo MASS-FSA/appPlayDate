@@ -2,8 +2,65 @@
 
 const {
   db,
-  models: { User },
+  models: { User, Event },
 } = require("../server/db");
+
+const users = [
+  {
+    username: "Mehron",
+    password: "123",
+    longitude: -77.1618725,
+    latitude: 38.8125889,
+  },
+
+  {
+    username: "Sean",
+    password: "123",
+    longitude: 77.1618725,
+    latitude: 38.8125889,
+  },
+
+  {
+    username: "Steven",
+    password: "123",
+    longitude: -77.1618725,
+    latitude: -38.8125889,
+  },
+
+  {
+    username: "Alex",
+    password: "123",
+    longitude: 77.1618725,
+    latitude: -38.8125889,
+  },
+];
+
+const events = [
+  {
+    name: "Fun Event",
+    location: "Iowa",
+  },
+  {
+    name: "Super Fun Event",
+    location: "Virginia",
+  },
+  {
+    name: "Soccer Game",
+    location: "New York",
+  },
+  {
+    name: "Yugioh YCS",
+    location: "Vegas",
+  },
+  {
+    name: "Football Game",
+    location: "New England",
+  },
+  {
+    name: "Marathon",
+    location: "Boston",
+  },
+];
 
 /**
  * seed - this function clears the database, updates tables to
@@ -14,24 +71,26 @@ async function seed() {
   console.log("db synced!");
 
   // Creating Users
-  const users = await Promise.all([
-    User.create({
-      username: "Mehron",
-      password: "123",
-      longitutde: -77.1618725,
-      latitude: 38.8125889,
+  await Promise.all(
+    users.map((user) => {
+      return User.create(user);
     }),
-    User.create({ username: "murphy", password: "123" }),
-  ]);
 
-  console.log(`seeded ${users.length} users`);
+    events.map((event) => {
+      return Event.create(event);
+    })
+  );
+
+  const allUsers = await User.findAll();
+  const singleUser = await User.findByPk(1);
+  const secondUser = await User.findByPk(2);
+
+  await singleUser.addFriend(allUsers);
+  await secondUser.addAddresseeId(allUsers, {
+    through: { specifierId: secondUser.id },
+  });
+
   console.log(`seeded successfully`);
-  return {
-    users: {
-      cody: users[0],
-      murphy: users[1],
-    },
-  };
 }
 
 /*
