@@ -1,9 +1,13 @@
-import React, { useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
-// let myMap;
+let myMap, latitude, longitude;
 
 export const UserPage = (props) => {
+  const [filter, setFilter] = useState("1");
+  const [users, setUsers] = useState([]);
+
   useEffect(() => {
     function getLocation() {
       if (navigator.geolocation) {
@@ -13,12 +17,16 @@ export const UserPage = (props) => {
       }
     }
 
-    function loadMap(position) {
-      let latitude = position.coords.latitude;
-      let longitude = position.coords.longitude;
+    async function loadMap(position) {
+      const { data } = await axios.get(`/api/users`);
+      setUsers(data);
+      console.log(users);
+
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
       console.log(latitude, longitude);
 
-      const myMap = L.map("map").setView([latitude, longitude], 13);
+      myMap = L.map("map").setView([latitude, longitude], 13);
 
       L.tileLayer("http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
         maxZoom: 20,
@@ -26,14 +34,39 @@ export const UserPage = (props) => {
       }).addTo(myMap);
 
       const marker = L.marker([latitude, longitude]).addTo(myMap);
-
-      console.log(
-        myMap.distance([latitude, longitude], [51.505, -0.09]) / 1700 + " miles"
-      );
     }
 
     getLocation();
   }, []);
+
+  function handleChange(event) {
+    setFilter(event.target.value);
+
+    users
+      .filter((person) => {
+        console.log(event.target.value);
+        return (
+          (
+            myMap.distance(
+              [latitude, longitude],
+              [person.latitude, person.longitude]
+            ) / 1609
+          ).toFixed(2) <= event.target.value
+        );
+      })
+      .map((person) => {
+        console.log(
+          `${person.username} is ` +
+            (
+              myMap.distance(
+                [latitude, longitude],
+                [person.latitude, person.longitude]
+              ) / 1609
+            ).toFixed(2) +
+            ` miles from Mehron`
+        );
+      });
+  }
 
   // useEffect(() => {
   //   console.log(`hi`);
@@ -42,7 +75,14 @@ export const UserPage = (props) => {
 
   return (
     <div>
-      Hello
+      <div>
+        <select onChange={handleChange}>
+          <option></option>
+          <option value="1">1 Mile</option>
+          <option value="5">5 Miles</option>
+          <option value="10">10 Miles</option>
+        </select>
+      </div>
       <div id="map"></div>
     </div>
   );
