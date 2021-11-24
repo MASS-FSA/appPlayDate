@@ -8,6 +8,7 @@ const Message = require("./models/Message");
 const Review = require("./models/Review");
 const Event = require("./models/Event");
 const FriendsRequest = require("./models/FriendsRequest");
+const Question = require("./models/Question");
 
 //associations could go here!
 User.belongsToMany(Channel, {
@@ -45,6 +46,9 @@ User.belongsToMany(User, {
 Event.hasMany(Review);
 Review.belongsTo(Event);
 
+Question.hasMany(User);
+User.belongsTo(Question);
+
 module.exports = {
   db,
   models: {
@@ -54,5 +58,6 @@ module.exports = {
     Review,
     Event,
     FriendsRequest,
+    Question,
   },
 };

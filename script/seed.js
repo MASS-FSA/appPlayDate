@@ -16,22 +16,22 @@ const users = [
   {
     username: "Sean",
     password: "123",
-    longitude: 77.1618725,
-    latitude: 38.8125889,
+    longitude: -77.1618725,
+    latitude: 38.8235889,
   },
 
   {
     username: "Steven",
     password: "123",
-    longitude: -77.1618725,
-    latitude: -38.8125889,
+    longitude: -77.18318725,
+    latitude: 38.8125889,
   },
 
   {
     username: "Alex",
     password: "123",
-    longitude: 77.1618725,
-    latitude: -38.8125889,
+    longitude: -77.1828725,
+    latitude: 38.8125889,
   },
 ];
 
@@ -61,6 +61,8 @@ const events = [
     location: "Boston",
   },
 ];
+
+const messages = [];
 
 /**
  * seed - this function clears the database, updates tables to
