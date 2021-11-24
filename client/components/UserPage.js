@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+const L = require("leaflet");
+// const leafletMap = require("leaflet-map");
 
 let myMap;
 
@@ -46,7 +48,11 @@ export const UserPage = (props) => {
     setFilter(event.target.value);
 
     const nearby = users.filter((person) => {
-      console.log(event.target.value);
+      console.log(
+        (
+          myMap.distance([lat, lng], [person.latitude, person.longitude]) / 1609
+        ).toFixed(2)
+      );
       return (
         (
           myMap.distance([lat, lng], [person.latitude, person.longitude]) / 1609

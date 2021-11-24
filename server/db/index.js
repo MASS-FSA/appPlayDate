@@ -35,12 +35,12 @@ User.belongsToMany(User, {
 
 // User.belongsToMany(User, {
 //   through: FriendsRequest,
-//   as: "RequesterId",
+//   as: "Requester",
 // });
 
 User.belongsToMany(User, {
   through: FriendsRequest,
-  as: "AddresseeId",
+  as: "Addressee",
 });
 
 Event.hasMany(Review);
