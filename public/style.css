@@ -21,6 +21,11 @@ form div {
 }
 
 #map {
-  height: 500px;
-  width: auto;
+  height: 300px;
+  width: 300px;
+}
+
+.nearby_users > img {
+  height: 50px;
+  width: 50px;
 }
