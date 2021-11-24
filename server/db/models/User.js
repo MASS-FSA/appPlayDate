@@ -24,7 +24,7 @@ const User = db.define('user', {
   },
   image: {
     type: Sequelize.TEXT,
-    default: '',
+    defaultValue: '',
     validate: {
       isUrl: true
     }
@@ -44,7 +44,6 @@ const User = db.define('user', {
 
 })
 
-module.exports = User
 
 /**
  * instanceMethods
@@ -62,13 +61,13 @@ User.prototype.generateToken = function() {
  * classMethods
  */
 User.authenticate = async function({ username, password }){
-    const user = await this.findOne({where: { username }})
-    if (!user || !(await user.correctPassword(password))) {
-      const error = Error('Incorrect username/password');
-      error.status = 401;
-      throw error;
-    }
-    return user.generateToken();
+  const user = await this.findOne({where: { username }})
+  if (!user || !(await user.correctPassword(password))) {
+    const error = Error('Incorrect username/password');
+    error.status = 401;
+    throw error;
+  }
+  return user.generateToken();
 };
 
 User.findByToken = async function(token) {
@@ -99,3 +98,5 @@ const hashPassword = async(user) => {
 User.beforeCreate(hashPassword)
 User.beforeUpdate(hashPassword)
 User.beforeBulkCreate(users => Promise.all(users.map(hashPassword)))
+
+module.exports = User
