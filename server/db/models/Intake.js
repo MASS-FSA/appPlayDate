@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
-const Question = db.define(`question`, {
+const Intake = db.define(`intake`, {
   vaccination: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
@@ -20,4 +20,4 @@ const Question = db.define(`question`, {
   },
 });
 
-module.exports = Question;
+module.exports = Intake;

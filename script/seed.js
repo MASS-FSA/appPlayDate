@@ -88,7 +88,7 @@ async function seed() {
   const secondUser = await User.findByPk(2);
 
   await singleUser.addFriend(allUsers);
-  await secondUser.addAddresseeId(allUsers, {
+  await secondUser.addAddressee(allUsers, {
     through: { specifierId: secondUser.id },
   });
 
