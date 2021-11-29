@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from 'react-router-dom'
 import { connect } from "react-redux";
 import { authenticate } from "../store";
 
@@ -12,8 +13,8 @@ const AuthForm = (props) => {
     <div className="LoginContainer">
       <div className="wrapper fadeInDown">
         <div id="formContent">
-          <h2 className="active"> Sign In </h2>
-          <h2 className="inactive underlineHover">Sign Up </h2>
+          <h2 className="active"><Link to="/login">Login</Link></h2>
+          <h2 className="inactive underlineHover"><Link to="/signup">Sign Up</Link></h2>
 
           <form onSubmit={handleSubmit} name={name}>
             <div className="loginentry">
