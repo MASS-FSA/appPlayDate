@@ -1,36 +1,39 @@
 //this is the access point for all things database related!
 
-const db = require("./db");
+const db = require('./db');
 
-const User = require("./models/User");
-const Channel = require("./models/Channel");
-const Message = require("./models/Message");
-const Review = require("./models/Review");
-const Event = require("./models/Event");
-const FriendsRequest = require("./models/FriendsRequest");
-const Intake = require("./models/Intake");
+const User = require('./models/User');
+const Channel = require('./models/Channel');
+const Message = require('./models/Message');
+const Review = require('./models/Review');
+const Event = require('./models/Event');
+const FriendsRequest = require('./models/FriendsRequest');
+const Intake = require('./models/Intake');
 
 //associations could go here!
-User.belongsToMany(Channel, {
-  through: Message,
-});
-Channel.belongsToMany(User, {
-  through: Message,
+Channel.hasMany(Message, {
+  onDelete: 'cascade',
+  hooks: true,
 });
 
+User.hasMany(Message);
+
+Message.belongsTo(Channel);
+Message.belongsTo(User);
+
 User.belongsToMany(Event, {
-  through: "UserEvents",
+  through: 'UserEvents',
 });
 Event.belongsToMany(User, {
-  through: "UserEvents",
+  through: 'UserEvents',
 });
 
 User.hasMany(Review);
 Review.belongsTo(User);
 
 User.belongsToMany(User, {
-  through: "Friends",
-  as: "friend",
+  through: 'Friends',
+  as: 'friend',
 });
 
 // User.belongsToMany(User, {
@@ -40,7 +43,7 @@ User.belongsToMany(User, {
 
 User.belongsToMany(User, {
   through: FriendsRequest,
-  as: "Addressee",
+  as: 'Addressee',
 });
 
 Event.hasMany(Review);
