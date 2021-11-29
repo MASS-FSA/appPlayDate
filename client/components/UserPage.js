@@ -20,7 +20,6 @@ export const UserPage = (props) => {
     async function loadMap(position) {
       const { data } = await axios.get(`/api/users`);
       setUsers(data);
-      console.log(users);
 
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
@@ -88,7 +87,11 @@ export const UserPage = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => {
+  return {
+    users: state.users.allUsers,
+  };
+};
 
 const mapDispatchToProps = {};
 
