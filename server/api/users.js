@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {
   models: { User },
 } = require("../db");
+
 module.exports = router;
 
 router.get("/", async (req, res, next) => {
@@ -12,6 +13,7 @@ router.get("/", async (req, res, next) => {
       // send everything to anyone who asks!
       attributes: ["id", "username", "email", "image", "longitude", "latitude"],
     });
+
     res.send(users);
   } catch (err) {
     next(err);

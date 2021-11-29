@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap');
+.Navbar{
+    display: flex;
+    background-image: linear-gradient(315deg, #486156 0%, #28313b 74%);
+    background-blend-mode: darken;
+    width: 100vw;
+    display: inline-block;
+    justify-content: center;
+    
+  }
+.Navbar h1{
+    font-family: 'Roboto Condensed', sans-serif;
+    color:cornsilk;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+    font-weight: bolder;
+    font-size: 7em;
+    text-shadow: 1px 1px 2px rgb(252, 64, 64), 5px 10px 2px rgb(99, 110, 100), 0 0 5px rgb(238, 169, 238);
+  }
+
+.navContainer{
+    display:flex;
+    justify-content: center;
+}  
+ 

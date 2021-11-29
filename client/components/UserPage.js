@@ -104,7 +104,11 @@ export const UserPage = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => {
+  return {
+    users: state.users.allUsers,
+  };
+};
 
 const mapDispatchToProps = {};
 
