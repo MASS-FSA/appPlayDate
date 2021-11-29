@@ -1,8 +1,8 @@
 const Sequelize = require("sequelize");
+const { Op } = require("sequelize");
 const db = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const axios = require("axios");
 
 const SALT_ROUNDS = 5;
 
@@ -69,6 +69,29 @@ User.prototype.correctPassword = function (candidatePwd) {
 
 User.prototype.generateToken = function () {
   return jwt.sign({ id: this.id }, process.env.JWT);
+};
+
+User.prototype.findNearbyUsers = async function (distance) {
+  try {
+    // convert miles to lat and long distance
+    // 69 miles per degree of latitude and 54.6 miles per degree of longitude
+    let lat = (distance / 69).toFixed(7);
+    let lng = (distance / 54.6).toFixed(7);
+
+    // find users withing the given lat and lng
+    const users = await User.findAll({
+      where: {
+        latitude: { [Op.between]: [this.latitude - lat, this.latitude + lat] },
+        longitude: {
+          [Op.between]: [this.longitude - lng, this.longitude + lng],
+        },
+      },
+    });
+
+    return users;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 /**
