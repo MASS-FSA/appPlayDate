@@ -1,15 +1,12 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { fetchdUsersWithinDistance } from "../store/users";
 const L = require("leaflet");
-// const leafletMap = require("leaflet-map");
 
 let myMap;
+let circle;
 
 export const UserPage = (props) => {
-  const [filter, setFilter] = useState("1");
-  const [users, setUsers] = useState([]);
-  const [nearbyUsers, setNearbyUsers] = useState([]);
   const [[lat, lng], setCoords] = useState([[]]);
 
   useEffect(() => {
@@ -22,15 +19,12 @@ export const UserPage = (props) => {
     }
 
     async function loadMap(position) {
-      const { data } = await axios.get(`/api/users`);
-      setUsers(data);
-
       let latitude = position.coords.latitude;
       let longitude = position.coords.longitude;
 
       setCoords([latitude, longitude]);
 
-      myMap = L.map("map").setView([latitude, longitude], 13);
+      myMap = L.map("map").setView([latitude, longitude], 12);
 
       L.tileLayer("http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
         maxZoom: 20,
@@ -43,46 +37,27 @@ export const UserPage = (props) => {
     getLocation();
   }, []);
 
-  function handleChange(event) {
-    console.log(`state coords`, lat, lng);
-    setFilter(event.target.value);
+  async function handleChange(event) {
+    console.log(`got here`);
+    const distance = event.target.value;
+    try {
+      await props.getNearbyUsers(props.singleUser.id, distance);
 
-    const nearby = users.filter((person) => {
-      console.log(
-        (
-          myMap.distance([lat, lng], [person.latitude, person.longitude]) / 1609
-        ).toFixed(2)
-      );
-      return (
-        (
-          myMap.distance([lat, lng], [person.latitude, person.longitude]) / 1609
-        ).toFixed(2) <= event.target.value
-      );
-    });
-
-    nearby.map((person) => {
-      console.log(
-        `${person.username} is ` +
-          (
-            myMap.distance([lat, lng], [person.latitude, person.longitude]) /
-            1609
-          ).toFixed(2) +
-          ` miles from Mehron`
-      );
-    });
-
-    setNearbyUsers(nearby);
+      if (circle) myMap.removeLayer(circle);
+      circle = L.circle([lat, lng], {
+        radius: distance * 1609,
+      }).addTo(myMap);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  // useEffect(() => {
-  //   console.log(`hi`);
-  //   loadmap();
-  // }, []);
+  console.log(props);
 
   return (
     <div>
       <div>
-        <select onChange={handleChange}>
+        <select onChange={(e) => handleChange(e)}>
           <option></option>
           <option value="1">1 Mile</option>
           <option value="5">5 Miles</option>
@@ -91,14 +66,25 @@ export const UserPage = (props) => {
       </div>
       <div id="map"></div>
       <div>
-        {nearbyUsers.map((person) => {
-          return (
-            <div key={person.id} className="nearby_users">
-              <img src={person.image} />
-              <h6>{person.username}</h6>
-            </div>
-          );
-        })}
+        {props.nearbyUsers
+          .filter((person) => person.username !== props.singleUser.username)
+          .map((person) => {
+            return (
+              <div key={person.id} className="nearby_users">
+                <img src={person.image} />
+                <p>
+                  {person.username} is{" "}
+                  {(
+                    myMap.distance(
+                      [lat, lng],
+                      [person.latitude, person.longitude]
+                    ) / 1609
+                  ).toFixed(2)}{" "}
+                  miles from you
+                </p>
+              </div>
+            );
+          })}
       </div>
     </div>
   );
@@ -106,10 +92,16 @@ export const UserPage = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    users: state.users.allUsers,
+    singleUser: state.auth,
+    nearbyUsers: state.users.nearbyUsers,
   };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getNearbyUsers: (userId, distance) =>
+      dispatch(fetchdUsersWithinDistance(userId, distance)),
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserPage);
