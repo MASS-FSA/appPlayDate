@@ -43,17 +43,6 @@ export const UserPage = (props) => {
     try {
       await props.getNearbyUsers(props.singleUser.id, distance);
 
-      props.nearbyUsers.map((person) => {
-        console.log(
-          `${person.username} is ` +
-            (
-              myMap.distance([lat, lng], [person.latitude, person.longitude]) /
-              1609
-            ).toFixed(2) +
-            ` miles from Mehron`
-        );
-      });
-
       if (circle) myMap.removeLayer(circle);
       circle = L.circle([lat, lng], {
         radius: distance * 1609,
@@ -77,14 +66,25 @@ export const UserPage = (props) => {
       </div>
       <div id="map"></div>
       <div>
-        {props.nearbyUsers.map((person) => {
-          return (
-            <div key={person.id} className="nearby_users">
-              <img src={person.image} />
-              <h6>{person.username}</h6>
-            </div>
-          );
-        })}
+        {props.nearbyUsers
+          .filter((person) => person.username !== props.singleUser.username)
+          .map((person) => {
+            return (
+              <div key={person.id} className="nearby_users">
+                <img src={person.image} />
+                <p>
+                  {person.username} is{" "}
+                  {(
+                    myMap.distance(
+                      [lat, lng],
+                      [person.latitude, person.longitude]
+                    ) / 1609
+                  ).toFixed(2)}{" "}
+                  miles from you
+                </p>
+              </div>
+            );
+          })}
       </div>
     </div>
   );
