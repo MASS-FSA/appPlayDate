@@ -7,15 +7,25 @@ module.exports = router;
 
 // /api/events
 
-router.get("/", async (req, res, next) => {
-  try {
-    // in future, will need to find single user, and find nearby events.. figure out how to turn address into lat/lng
-    const allEvents = await Event.findAll();
-    res.send(allEvents);
-  } catch (error) {
-    next(error);
-  }
-});
+router
+  .route(`/`)
+  .get(async (req, res, next) => {
+    try {
+      // in future, will need to find single user, and find nearby events.. figure out how to turn address into lat/lng
+      const allEvents = await Event.findAll();
+      res.send(allEvents);
+    } catch (error) {
+      next(error);
+    }
+  })
+  .put(async (req, res, next) => {
+    try {
+      const newEvent = await Event.create(req.body);
+      res.send(newEvent);
+    } catch (error) {
+      next(error);
+    }
+  });
 
 // /api/events/:id
 
