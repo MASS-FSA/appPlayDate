@@ -8,13 +8,22 @@ const { requireToken } = require('../gatekeeping');
 module.exports = router;
 
 // GET /api/channels/
-router.get('/', async (req, res, next) => {
+router.route(`/`)
+.get(async (req, res, next) => {
   try {
     // fix later
     // const users = await User.findAll()
     const channels = await Channel.findAll();
 
     res.send(channels);
+  } catch (err) {
+    next(err);
+  }
+}).post(async (req, res, next) => {
+// Creating a channel based off of req.body
+  try {
+    const channel = await Channel.create(req.body);
+    res.send(channel);
   } catch (err) {
     next(err);
   }
@@ -39,16 +48,8 @@ router.get('/:channelId/messages', requireToken, async (req, res, next) => {
   }
 });
 
-// POST /api/channels/
-// Creating a channel based off of req.body
-router.post('/', async (req, res, next) => {
-  try {
-    const channel = await Channel.create(req.body);
-    res.send(channel);
-  } catch (err) {
-    next(err);
-  }
-});
+
+
 
 // DELETE /api/channels
 // create frontend " ARE YOU SURE YOU WANT TO DELETE ?"

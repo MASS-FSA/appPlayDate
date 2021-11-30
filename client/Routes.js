@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import { Login, Signup } from "./components/AuthForm";
+import  Chat  from "./components/Chat";
 import Home from "./components/Home";
 import UserPage from "./components/UserPage";
 import { me } from "./store";
@@ -22,7 +23,7 @@ class Routes extends Component {
         {isLoggedIn ? (
           <Switch>
             <Route exact path="/home" component={Home} />
-
+            <Route exact path="/chat" component={Chat}/>
             <Route exact path="/user" component={UserPage} />
           </Switch>
         ) : (
@@ -31,6 +32,7 @@ class Routes extends Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route exact path="/user" component={UserPage} />
+            <Route exact path="/chat" component={Chat}/>
           </Switch>
         )}
       </div>
