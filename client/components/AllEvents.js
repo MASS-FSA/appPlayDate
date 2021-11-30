@@ -4,7 +4,7 @@ import { fetchAllEvents } from "../store/events";
 
 const AllEvents = (props) => {
   useEffect(() => {
-    async function fetchEvents() {
+    async function fetchData() {
       try {
         await props.getAllEvents();
       } catch (error) {
@@ -12,7 +12,7 @@ const AllEvents = (props) => {
       }
     }
 
-    fetchEvents();
+    fetchData();
   }, []);
 
   console.log(props);

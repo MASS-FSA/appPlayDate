@@ -19,11 +19,22 @@ router.get("/", async (req, res, next) => {
 
 // /api/events/:id
 
-router.get(`/:id`, async (req, res, next) => {
-  try {
-    const singleEvent = await Event.findByPk(req.params.id);
-    res.send(singleEvent);
-  } catch (error) {
-    next(error);
-  }
-});
+router
+  .route(`/:id`)
+  .get(async (req, res, next) => {
+    try {
+      const singleEvent = await Event.findByPk(req.params.id);
+      res.send(singleEvent);
+    } catch (error) {
+      next(error);
+    }
+  })
+  .delete(async (req, res, next) => {
+    try {
+      const deleteEvent = await Event.findByPk(req.params.id);
+      await deleteEvent.destroy();
+      res.send();
+    } catch (error) {
+      next(error);
+    }
+  });

@@ -36,8 +36,18 @@ export const fetchSingleEvent = (id) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`/api/events/${id}`);
-      console.log(`back from server`, data);
+
       dispatch(setSingleEvent(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const deleteSingleEvent = (id) => {
+  return async () => {
+    try {
+      await axios.delete(`/api/events/${id}`);
     } catch (error) {
       console.error(error);
     }
