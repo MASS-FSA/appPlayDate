@@ -2,11 +2,14 @@ const router = require('express').Router();
 const {
   models: { Channel, Message },
 } = require('../../db');
+const User = require('../../db/models/User');
+const { requireToken } = require('../gatekeeping');
 
 module.exports = router;
 
 // GET /api/channels/
-router.get('/', async (req, res, next) => {
+router.route(`/`)
+.get(async (req, res, next) => {
   try {
     // fix later
     // const users = await User.findAll()
@@ -16,25 +19,8 @@ router.get('/', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
-
-// GET /api/channels/:channelId/messages
-router.get('/:channelId/messages', async (req, res, next) => {
-  try {
-    /* some logic here to the effect of:
-    if(user doesn't exist on channel) res.send('access denied');
-    else{ everything below goes here } */
-    const channelId = req.params.channelId;
-    const messages = await Message.findAll({ where: { channelId } });
-    res.send(messages);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// POST /api/channels/
+}).post(async (req, res, next) => {
 // Creating a channel based off of req.body
-router.post('/', async (req, res, next) => {
   try {
     const channel = await Channel.create(req.body);
     res.send(channel);
@@ -42,6 +28,28 @@ router.post('/', async (req, res, next) => {
     next(err);
   }
 });
+
+// GET /api/channels/:channelId/messages
+router.get('/:channelId/messages', requireToken, async (req, res, next) => {
+  try {
+    const user = req.user;
+    const channelId = req.params.channelId;
+    const findUser = await Message.findOne({
+      where: { channelId, userId: user.id },
+    });
+    if (!findUser) {
+      res.send('access denied');
+    } else {
+      const messages = await Message.findAll({ where: { channelId } });
+      res.send(messages);
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+
 
 // DELETE /api/channels
 // create frontend " ARE YOU SURE YOU WANT TO DELETE ?"
