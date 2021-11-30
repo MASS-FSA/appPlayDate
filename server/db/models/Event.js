@@ -1,22 +1,26 @@
-const Sequelize = require('sequelize')
-const db = require('../db')
+const Sequelize = require("sequelize");
+const db = require("../db");
 
-const Event = db.define('event', {
+const Event = db.define("event", {
   name: {
     type: Sequelize.STRING,
-    defaultValue: 'unNamed Event',
+    defaultValue: "unNamed Event",
   },
   location: {
     type: Sequelize.STRING,
   },
   time: {
     type: Sequelize.DATE,
-    defaultValue: new Date()
-  }
-})
+    defaultValue: new Date(),
+  },
+
+  description: {
+    type: Sequelize.TEXT,
+  },
+});
 
 //  FOR REFRENCE
 // const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
 // const [hour, minutes, seconds] = [date.getHours(), date.getMinutes(), date.getSeconds()];
 
-module.exports = Event
+module.exports = Event;
