@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
   models: { User },
-} = require("../db");
+} = require("../../db");
 
 module.exports = router;
 
