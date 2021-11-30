@@ -3,11 +3,8 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import AllEvents from "./components/AllEvents";
 import { Login, Signup } from "./components/AuthForm";
-<<<<<<< Updated upstream
-=======
 import Chat from "./components/Chat";
 import CreateEvent from "./components/CreateEvent";
->>>>>>> Stashed changes
 import Home from "./components/Home";
 import SingleEvent from "./components/SingleEvent";
 import UserPage from "./components/UserPage";
@@ -29,15 +26,10 @@ class Routes extends Component {
         {isLoggedIn ? (
           <Switch>
             <Route exact path="/home" component={Home} />
-<<<<<<< Updated upstream
-            <Route exact path="/events" component={AllEvents} />
-            <Route exact path="/user" component={UserPage} />
-=======
             <Route exact path="/chat" component={Chat} />
             <Route exact path="/events" component={AllEvents} />
             <Route exact path="/user" component={UserPage} />
             <Route exact path="/events/create" component={CreateEvent} />
->>>>>>> Stashed changes
             <Route exact path="/events/:id" component={SingleEvent} />
           </Switch>
         ) : (
@@ -46,10 +38,7 @@ class Routes extends Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route exact path="/user" component={UserPage} />
-<<<<<<< Updated upstream
-=======
             <Route exact path="/chat" component={Chat} />
->>>>>>> Stashed changes
           </Switch>
         )}
       </div>
