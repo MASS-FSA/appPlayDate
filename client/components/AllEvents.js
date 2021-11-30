@@ -15,7 +15,6 @@ const AllEvents = (props) => {
     fetchData();
   }, []);
 
-  console.log(props);
   return (
     <div>
       {props.allEvents
