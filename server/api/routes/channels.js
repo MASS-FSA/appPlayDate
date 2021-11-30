@@ -2,6 +2,8 @@ const router = require('express').Router();
 const {
   models: { Channel, Message },
 } = require('../../db');
+const User = require('../../db/models/User');
+const { requireToken } = require('../gatekeeping');
 
 module.exports = router;
 
@@ -19,14 +21,19 @@ router.get('/', async (req, res, next) => {
 });
 
 // GET /api/channels/:channelId/messages
-router.get('/:channelId/messages', async (req, res, next) => {
+router.get('/:channelId/messages', requireToken, async (req, res, next) => {
   try {
-    /* some logic here to the effect of:
-    if(user doesn't exist on channel) res.send('access denied');
-    else{ everything below goes here } */
+    const user = req.user;
     const channelId = req.params.channelId;
-    const messages = await Message.findAll({ where: { channelId } });
-    res.send(messages);
+    const findUser = await Message.findOne({
+      where: { channelId, userId: user.id },
+    });
+    if (!findUser) {
+      res.send('access denied');
+    } else {
+      const messages = await Message.findAll({ where: { channelId } });
+      res.send(messages);
+    }
   } catch (err) {
     next(err);
   }
