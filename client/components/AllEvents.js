@@ -17,6 +17,14 @@ const AllEvents = (props) => {
 
   return (
     <div>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          props.history.push(`events/create`);
+        }}
+      >
+        Create Event
+      </button>
       {props.allEvents
         .sort((a, b) => a.id - b.id)
         .map((event) => {
@@ -28,7 +36,7 @@ const AllEvents = (props) => {
               <legend>{event.name}</legend>
               <img src={event.image} height="300px" />
               <h4>Location: {event.location}</h4>
-              <h4>Time: {event.time}</h4>
+              <h4>Time: {event.time.slice(0, 10)}</h4>
               <p>{event.description}</p>
             </fieldset>
           );

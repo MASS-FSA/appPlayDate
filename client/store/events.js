@@ -65,6 +65,18 @@ export const updateSingleEvent = (id, body) => {
   };
 };
 
+export const createSingleEvent = (body, history) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.put(`/api/events`, body);
+      dispatch(setSingleEvent(data));
+      history.push(`/events/${data.id}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
 // Reducer
 
 const initialState = {
