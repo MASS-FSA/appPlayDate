@@ -26,12 +26,26 @@ export const UserPage = (props) => {
 
       myMap = L.map("map").setView([latitude, longitude], 12);
 
-      L.tileLayer("http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
-        maxZoom: 20,
-        subdomains: ["mt0", "mt1", "mt2", "mt3"],
-      }).addTo(myMap);
+      const googleView = L.tileLayer(
+        "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        }
+      ).addTo(myMap);
 
       const marker = L.marker([latitude, longitude]).addTo(myMap);
+
+      const osm = L.tileLayer(
+        "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      );
+
+      const baseMaps = {
+        OpenStreetMap: osm,
+        GoogleMap: googleView,
+      };
+
+      L.control.layers(baseMaps).addTo(myMap);
     }
 
     getLocation();
@@ -47,6 +61,28 @@ export const UserPage = (props) => {
       circle = L.circle([lat, lng], {
         radius: distance * 1609,
       }).addTo(myMap);
+
+      if (distance >= 10)
+        myMap.flyTo([lat, lng], 11, {
+          animate: true,
+          pan: {
+            duration: 2,
+          },
+        });
+      else if (distance < 10 && distance >= 5)
+        myMap.flyTo([lat, lng], 12, {
+          animate: true,
+          pan: {
+            duration: 2,
+          },
+        });
+      else
+        myMap.flyTo([lat, lng], 13, {
+          animate: true,
+          pan: {
+            duration: 2,
+          },
+        });
     } catch (error) {
       console.error(error);
     }
