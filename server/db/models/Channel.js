@@ -1,6 +1,5 @@
-const Sequelize = require('sequelize')
-const db = require('../db')
-
+const Sequelize = require('sequelize');
+const db = require('../db');
 
 const Channel = db.define('channel', {
   name: {
@@ -8,13 +7,12 @@ const Channel = db.define('channel', {
     allowNull: false,
     defaultValue: 'NewChannel',
     validate: {
-      notEmpty: true
-    }
+      notEmpty: true,
+    },
   },
   createdBy: {
     type: Sequelize.STRING,
   },
+});
 
-})
-
-module.exports = Channel
+module.exports = Channel;
