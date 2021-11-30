@@ -37,4 +37,12 @@ router
     } catch (error) {
       next(error);
     }
+  })
+  .post(async (req, res, next) => {
+    try {
+      const editEvent = await Event.findByPk(req.params.id);
+      res.send(await editEvent.update(req.body));
+    } catch (error) {
+      next(error);
+    }
   });

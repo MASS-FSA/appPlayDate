@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { deleteSingleEvent, fetchSingleEvent } from "../store/events";
+import {
+  deleteSingleEvent,
+  fetchSingleEvent,
+  updateSingleEvent,
+} from "../store/events";
 import EditEvent from "./EditEvent";
 
 const SingleEvent = (props) => {
@@ -23,22 +27,30 @@ const SingleEvent = (props) => {
     props.history.push(`/events`);
   }
 
+  async function handleUpdate(body) {
+    await props.updateEvent(props.match.params.id, body);
+    handleEdit();
+  }
+
   function handleEdit() {
-    console.log(`click`);
-    setEdit(true);
+    setEdit((prevEdit) => !prevEdit);
   }
 
   return (
     <div>
       {edit ? (
-        <EditEvent event={props.event} />
+        <EditEvent
+          event={props.event}
+          handleEdit={handleEdit}
+          handleUpdate={handleUpdate}
+        />
       ) : (
         <div>
           <img src={props.event.image} height="300px" />
           <h1>{props.event.name}</h1>
           <h4>{props.event.description}</h4>
           <h4>{props.event.location}</h4>
-          <button onClick={() => handleEdit()}>Edit</button>
+          <button onClick={(e) => handleEdit(e)}>Edit</button>
           <button onClick={() => handleDelete()}>Delete</button>
         </div>
       )}
@@ -56,6 +68,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getEvent: (id) => dispatch(fetchSingleEvent(id)),
     deleteEvent: (id) => dispatch(deleteSingleEvent(id)),
+    updateEvent: (id, body) => dispatch(updateSingleEvent(id, body)),
   };
 };
 

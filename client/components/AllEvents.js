@@ -18,18 +18,22 @@ const AllEvents = (props) => {
   console.log(props);
   return (
     <div>
-      {props.allEvents.map((event) => {
-        return (
-          <fieldset
-            key={event.id}
-            onClick={() => props.history.push(`/events/${event.id}`)}
-          >
-            <legend>{event.name}</legend>
-            <h4>Location: {event.location}</h4>
-            <h4>Time: {event.time}</h4>
-          </fieldset>
-        );
-      })}
+      {props.allEvents
+        .sort((a, b) => a.id - b.id)
+        .map((event) => {
+          return (
+            <fieldset
+              key={event.id}
+              onClick={() => props.history.push(`/events/${event.id}`)}
+            >
+              <legend>{event.name}</legend>
+              <img src={event.image} height="300px" />
+              <h4>Location: {event.location}</h4>
+              <h4>Time: {event.time}</h4>
+              <p>{event.description}</p>
+            </fieldset>
+          );
+        })}
     </div>
   );
 };

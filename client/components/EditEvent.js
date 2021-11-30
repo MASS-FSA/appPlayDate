@@ -68,7 +68,22 @@ export default function EditEvent(props) {
         <br />
         <img src={eventInfo.image} height="300px" />
         <br />
-        <button>Submit</button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            props.handleUpdate(eventInfo);
+          }}
+        >
+          Submit
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            props.handleEdit();
+          }}
+        >
+          Back
+        </button>
       </form>
     </div>
   );
