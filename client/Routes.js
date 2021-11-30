@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import AllEvents from "./components/AllEvents";
 import { Login, Signup } from "./components/AuthForm";
 import  Chat  from "./components/Chat";
 import Home from "./components/Home";
+import SingleEvent from "./components/SingleEvent";
 import UserPage from "./components/UserPage";
 import { me } from "./store";
 
@@ -25,6 +27,7 @@ class Routes extends Component {
             <Route exact path="/home" component={Home} />
             <Route exact path="/chat" component={Chat}/>
             <Route exact path="/user" component={UserPage} />
+            <Route exact path="/events/:id" component={SingleEvent} />
           </Switch>
         ) : (
           <Switch>

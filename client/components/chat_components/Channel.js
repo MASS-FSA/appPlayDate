@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { getChannels } from "../../store/chat";
+import { Link } from "react-router-dom";
 
 
 const Channel = (props) =>{
