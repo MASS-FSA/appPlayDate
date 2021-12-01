@@ -1,8 +1,4 @@
 import axios from "axios";
-// Google places api routes to use
-
-// creates the url for the Google Places api.
-// Location arg is an array with 2 floats [lat, long]
 
 
 // Action Types
@@ -20,9 +16,12 @@ const getPlaces = (places) => {
 
 // Thunks
 
+//  location should be an array with 2 floats. I.E [3.3422, -1.0033]
 export const fetchPlaces = (location, radius) => async(dispatch) => {
   try {
-
+    const locationToString = `${location[0]},${location[1]}`
+    const {data} = await axios.get(`/api/places/${locationToString}/${radius}`)
+    dispatch(getPlaces(data))
   } catch (err) {
     console.log('from fetch places', err)
   }
@@ -34,8 +33,8 @@ const initialState = []
 
 export default (state = initialState, action) => {
   switch (action.type) {
-
-
+    case GET_PLACES:
+      return action.places
     default:
       return state
   }

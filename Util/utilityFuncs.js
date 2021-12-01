@@ -16,8 +16,6 @@ const createPlacesApiUrl = (location, radius = 16000 ) => {
  * @param {!number} longitude2 The latitude of the second point.
  * @return {Object}  // google.maps.LatLng.
  */
-
-
 const findMidPoint = function(latitude1, longitude1, latitude2, longitude2) {
   var DEG_TO_RAD = Math.PI / 180;     // To convert degrees to radians.
 
@@ -48,8 +46,6 @@ const findMidPoint = function(latitude1, longitude1, latitude2, longitude2) {
    * @param {!number} lng2 The longitude of the second point.
    * @return {number} The distance in kilometers between the points.
    */
-
-
   const distanceBetweenPoints = function(lat1, lng1, lat2, lng2) {
     var RADIUS_EARTH = 6371;            // Radius of the earth in kilometers.
     var DEG_TO_RAD = Math.PI / 180;     // To convert degrees to radians.
