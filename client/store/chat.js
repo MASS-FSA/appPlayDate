@@ -54,14 +54,12 @@ export const getChannels = () => async (dispatch) => {
 
 export const sendMessage = (message) => async (dispatch) => {
   try {
-    console.log("i'm in the thunk!", message);
     const { data: newMessage } = await axios.post(
       '/api/messages',
       message,
       tokenHeader
     );
-    console.log('This is the newMessage!', newMessage);
-    dispatch(gotMessage(newMessage));
+    dispatch(getMessages(newMessage));
   } catch (error) {
     console.error(error);
   }

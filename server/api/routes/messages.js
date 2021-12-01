@@ -38,15 +38,15 @@ router.get('/:channelId/', async (req, res, next) => {
 // Creating a message based off of req.body
 router.post('/', requireToken, async (req, res, next) => {
   try {
-    const message = await Message.create(req.body);
-    const messageUser = await Message.findOne({
-      where: { id: message.id },
-      include: { model: User },
-    });
-    console.log('this is my backend message', message);
-    // message.setUser(req.user.id);
+    // const channelId = req.params.channelId;
 
-    res.json(messageUser);
+    const message = await Message.create(req.body);
+    await message.setUser(req.user.id);
+    const messages = await Message.findAll({
+      where: { channelId: req.body.channelId },
+      include: User,
+    });
+    res.json(messages);
   } catch (err) {
     next(err);
   }

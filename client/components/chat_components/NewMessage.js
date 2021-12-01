@@ -2,40 +2,53 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { sendMessage } from '../../store/chat';
 
-class NewMessage extends React.Component {
-  constructor() {
-    super();
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+function NewMessage(props) {
+  const [message, setMessage] = useState({
+    content: '',
+    channelId: props.channelId,
+  });
 
-  handleSubmit(event) {
-    event.preventDefault();
-    const message = event.target.content.value;
-    this.props.submitMessage({
-      content: message,
-      channelId: this.props.channelId,
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setMessage((prevInfo) => {
+      return {
+        ...prevInfo,
+        [name]: value,
+      };
     });
   }
 
-  render() {
-    return (
-      <form id='new-message-form' onSubmit={this.handleSubmit}>
-        <div className='input-group input-group-lg'>
-          <input
-            className='form-control'
-            type='text'
-            name='content'
-            placeholder='Say something nice...'
-          />
-          <span className='input-group-btn'>
-            <button className='btn btn-default' type='submit'>
-              Chat!
-            </button>
-          </span>
-        </div>
-      </form>
-    );
+  function handleSubmit(event) {
+    event.preventDefault();
+    props.submitMessage(message);
+    setMessage((prevInfo) => {
+      return {
+        ...prevInfo,
+        content: '',
+      };
+    });
   }
+
+  return (
+    <form id='new-message-form' onSubmit={handleSubmit}>
+      <div className='input-group input-group-lg'>
+        <input
+          onChange={handleChange}
+          className='form-control'
+          type='text'
+          name='content'
+          placeholder='Say something nice...'
+          value={message.content}
+        />
+        <span className='input-group-btn'>
+          <button className='btn btn-default' type='submit'>
+            Chat!
+          </button>
+        </span>
+      </div>
+    </form>
+  );
 }
 
 const mapDispatchToProps = (dispatch) => {
