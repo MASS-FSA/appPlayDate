@@ -4,9 +4,31 @@ const {
   models: { User, Channel, Message },
 } = require('../../db')
 const { requireToken } = require('../gatekeeping')
-const { createPlacesApiUrl } = require('../placesUtil')
+const { createPlacesApiUrl, findMidPoint, distanceBetweenPoints } = require('../../../Util/utilityFuncs')
 
 module.exports = router;
+
+router.get('/find_distance/:id1/:id2', async (req, res, next) => {
+  try {
+    const user1 = await User.findByPk(req.params.id1)
+    const user2 = await User.findByPk(req.params.id2)
+    const distance = distanceBetweenPoints(user1.latitude, user1.longitude, user2.latitude, user2.longitude).toFixed(7)
+    res.send(distance)
+  } catch (err) {
+    next (err)
+  }
+})
+
+router.get('/find_midpoint/:id1/:id2', async (req, res, next) => {
+  try {
+    const user1 = await User.findByPk(req.params.id1)
+    const user2 = await User.findByPk(req.params.id2)
+    const distance = findMidPoint(user1.latitude, user1.longitude, user2.latitude, user2.longitude)
+    res.send(distance)
+  } catch (err) {
+    next (err)
+  }
+})
 
 router.get('/:location/:radius', async (req, res, next) => {
   try {

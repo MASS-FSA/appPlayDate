@@ -1,8 +1,3 @@
-module.exports = {
-  createPlacesApiUrl,
-  findMidPoint,
-  distanceBetweenPoints
-}
 
 //  location is a string arg 'lat,long' Must have the comma in between
 const createPlacesApiUrl = (location, radius = 16000 ) => {
@@ -21,6 +16,8 @@ const createPlacesApiUrl = (location, radius = 16000 ) => {
  * @param {!number} longitude2 The latitude of the second point.
  * @return {Object}  // google.maps.LatLng.
  */
+
+
 const findMidPoint = function(latitude1, longitude1, latitude2, longitude2) {
   var DEG_TO_RAD = Math.PI / 180;     // To convert degrees to radians.
 
@@ -34,36 +31,44 @@ const findMidPoint = function(latitude1, longitude1, latitude2, longitude2) {
   var bx = Math.cos(lat2) * Math.cos(dLng);
   var by = Math.cos(lat2) * Math.sin(dLng);
   var lat = Math.atan2(
-      Math.sin(lat1) + Math.sin(lat2),
-      Math.sqrt((Math.cos(lat1) + bx) * (Math.cos(lat1) + bx) + by * by));
-  var lng = lng1 + Math.atan2(by, Math.cos(lat1) + bx);
+    Math.sin(lat1) + Math.sin(lat2),
+    Math.sqrt((Math.cos(lat1) + bx) * (Math.cos(lat1) + bx) + by * by));
+    var lng = lng1 + Math.atan2(by, Math.cos(lat1) + bx);
 
-  return [lat / DEG_TO_RAD, lng / DEG_TO_RAD];
-};
+    return [lat / DEG_TO_RAD, lng / DEG_TO_RAD];
+  };
 
 
-/**
- * Returns the distance in kilometers [CHANGED TO METERS BY *1000] between two coordinates.
- * @see: http://www.movable-type.co.uk/scripts/latlong.html
- * @param {!number} lat1 The latitude of the first point (in degrees).
- * @param {!number} lng1 The longitude of the first point.
- * @param {!number} lat2 The latitude of the second point.
- * @param {!number} lng2 The longitude of the second point.
- * @return {number} The distance in kilometers between the points.
- */
- const distanceBetweenPoints = function(lat1, lng1, lat2, lng2) {
-  var RADIUS_EARTH = 6371;            // Radius of the earth in kilometers.
-  var DEG_TO_RAD = Math.PI / 180;     // To convert degrees to radians.
+  /**
+   * Returns the distance in kilometers [CHANGED TO METERS BY *1000] between two coordinates.
+   * @see: http://www.movable-type.co.uk/scripts/latlong.html
+   * @param {!number} lat1 The latitude of the first point (in degrees).
+   * @param {!number} lng1 The longitude of the first point.
+   * @param {!number} lat2 The latitude of the second point.
+   * @param {!number} lng2 The longitude of the second point.
+   * @return {number} The distance in kilometers between the points.
+   */
 
-  var dLat = (lat2 - lat1) * DEG_TO_RAD;
-  var dLng = (lng2 - lng1) * DEG_TO_RAD;
-  lat1 = lat1 * DEG_TO_RAD;
-  lat2 = lat2 * DEG_TO_RAD;
 
-  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-          Math.sin(dLng / 2) * Math.sin(dLng / 2) *
-          Math.cos(lat1) * Math.cos(lat2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distanceBetweenPoints = function(lat1, lng1, lat2, lng2) {
+    var RADIUS_EARTH = 6371;            // Radius of the earth in kilometers.
+    var DEG_TO_RAD = Math.PI / 180;     // To convert degrees to radians.
 
-  return RADIUS_EARTH * c * 1000;
-};
+    var dLat = (lat2 - lat1) * DEG_TO_RAD;
+    var dLng = (lng2 - lng1) * DEG_TO_RAD;
+    lat1 = lat1 * DEG_TO_RAD;
+    lat2 = lat2 * DEG_TO_RAD;
+
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLng / 2) * Math.sin(dLng / 2) *
+    Math.cos(lat1) * Math.cos(lat2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return RADIUS_EARTH * c * 1000;
+  };
+
+  module.exports = {
+    createPlacesApiUrl,
+    findMidPoint,
+    distanceBetweenPoints
+  }
