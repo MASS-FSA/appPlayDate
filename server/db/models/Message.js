@@ -9,7 +9,7 @@ const Message = db.define('message', {
     autoIncrement: true,
     allowNull: false,
   },
-  messageContent: {
+  content: {
     type: Sequelize.TEXT,
   },
 });
