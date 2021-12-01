@@ -12,7 +12,7 @@ router.get('/', async (req, res, next) => {
   try {
     // fix later
     // const users = await User.findAll()
-    const messages = await Message.findAll();
+    const messages = await Message.findAll({ include: User });
     res.json(messages);
   } catch (err) {
     next(err);
