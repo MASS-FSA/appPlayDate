@@ -8,6 +8,7 @@ import CreateEvent from './components/CreateEvent';
 import Home from './components/Home';
 import SingleEvent from './components/SingleEvent';
 import UserPage from './components/UserPage';
+import PlacesTest from './components/placesTest';
 import { me } from './store';
 
 /**
@@ -31,6 +32,7 @@ class Routes extends Component {
             <Route exact path='/user' component={UserPage} />
             <Route exact path='/events/create' component={CreateEvent} />
             <Route exact path='/events/:id' component={SingleEvent} />
+            <Route exact path='/placesTest' component={PlacesTest} />
           </Switch>
         ) : (
           <Switch>
@@ -39,6 +41,7 @@ class Routes extends Component {
             <Route path='/signup' component={Signup} />
             <Route exact path='/user' component={UserPage} />
             <Route path='/chat' component={Chat} />
+            <Route exact path='/placesTest' component={PlacesTest} />
           </Switch>
         )}
       </div>

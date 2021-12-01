@@ -6,8 +6,15 @@ import auth from './auth';
 import users from './users';
 import chat from './chat';
 import events from './events';
+import places from './places';
 
-const reducer = combineReducers({ auth, users, chat, events });
+const reducer = combineReducers({
+  auth,
+  users,
+  chat,
+  events,
+  places,
+ });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 );
