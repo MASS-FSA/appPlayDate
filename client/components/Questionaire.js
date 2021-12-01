@@ -30,7 +30,8 @@ export const Questionaire = (props) => {
   }
 
   return (
-    <div>
+    <div className="questioncontainer">
+      <div className="lines"/>
       <form>
         <label>What is your child's age?</label>
         <input name="age" value={intake.age} onChange={handleChange} />

@@ -2,21 +2,24 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { authenticate } from "../store";
+import history from "../history";
 
 /**
  * COMPONENT
  */
 const AuthForm = (props) => {
   const { name, displayName, handleSubmit, error } = props;
-
+  const redirect = () =>{
+    window.location.pathname === "/signup"? history.push('/questionaire') : history.push('/user')
+  }
   return (
     <div className="LoginContainer">
       <div className="wrapper fadeInDown">
         <div id="formContent">
-          <h2 className="active">
+          <h2 className={window.location.pathname === "/login" ? "active" : "inactive underlineHover"}>
             <Link to="/login">Login</Link>
           </h2>
-          <h2 className="inactive underlineHover">
+          <h2 className={window.location.pathname === "/signup" ? "active" : "inactive underlineHover"}>
             <Link to="/signup">Sign Up</Link>
           </h2>
 
@@ -26,7 +29,7 @@ const AuthForm = (props) => {
                 name="username"
                 id="login"
                 className="fadeIn second"
-                placeholder="login"
+                placeholder={window.location.pathname === "/signup" ? "Sign up" : "Login"}
                 type="text"
               />
             </div>
@@ -40,7 +43,7 @@ const AuthForm = (props) => {
               />
             </div>
             <div className="loginentry">
-              <button type="submit" className="fadeIn fourth">
+              <button type="submit" className="fadeIn fourth" onClick={redirect}>
                 {displayName}
               </button>
             </div>
