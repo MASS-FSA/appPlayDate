@@ -38,9 +38,15 @@ router.get('/:channelId/', async (req, res, next) => {
 // Creating a message based off of req.body
 router.post('/', requireToken, async (req, res, next) => {
   try {
+    // const channelId = req.params.channelId;
+
     const message = await Message.create(req.body);
-    message.setUser(req.user.id);
-    res.json(message);
+    await message.setUser(req.user.id);
+    const messages = await Message.findAll({
+      where: { channelId: req.body.channelId },
+      include: User,
+    });
+    res.json(messages);
   } catch (err) {
     next(err);
   }
