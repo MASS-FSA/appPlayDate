@@ -39,8 +39,14 @@ router.get('/:channelId/', async (req, res, next) => {
 router.post('/', requireToken, async (req, res, next) => {
   try {
     const message = await Message.create(req.body);
-    message.setUser(req.user.id);
-    res.json(message);
+    const messageUser = await Message.findOne({
+      where: { id: message.id },
+      include: { model: User },
+    });
+    console.log('this is my backend message', message);
+    // message.setUser(req.user.id);
+
+    res.json(messageUser);
   } catch (err) {
     next(err);
   }
