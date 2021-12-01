@@ -59,7 +59,7 @@ export const sendMessage = (message) => async (dispatch) => {
       message,
       tokenHeader
     );
-    dispatch(getMessages(newMessage));
+    dispatch(gotMessage(newMessage));
   } catch (error) {
     console.error(error);
   }
