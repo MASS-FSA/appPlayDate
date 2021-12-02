@@ -1,58 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchdUsersWithinDistance } from "../store/users";
+import { loadMap, getGeoLocationFromBrowser } from "../../Util/loadMap"
 const L = require("leaflet");
 
 let myMap;
 let circle;
 
 export const UserPage = (props) => {
-  const [[lat, lng], setCoords] = useState([[]]);
+  const [[lat, lng], setCoords] = useState([null, null]);
+  if (lat) {
+    const myMap = loadMap('map', lat, lng)
+    L.marker([lat, lng]).addTo(myMap);
+  }
 
   useEffect(() => {
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(loadMap);
-      } else {
-        console.log("Geolocation is not supported by this browser.");
-      }
+    const call = (position) => {
+      const point = []
+      point.push(position.coords.latitude)
+      point.push(position.coords.longitude)
+      setCoords(point)
     }
-
-    async function loadMap(position) {
-      let latitude = position.coords.latitude;
-      let longitude = position.coords.longitude;
-
-      setCoords([latitude, longitude]);
-
-      myMap = L.map("map").setView([latitude, longitude], 12);
-
-      const googleView = L.tileLayer(
-        "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
-        {
-          maxZoom: 20,
-          subdomains: ["mt0", "mt1", "mt2", "mt3"],
-        }
-      ).addTo(myMap);
-
-      const marker = L.marker([latitude, longitude]).addTo(myMap);
-
-      const osm = L.tileLayer(
-        "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      );
-
-      const baseMaps = {
-        OpenStreetMap: osm,
-        GoogleMap: googleView,
-      };
-
-      L.control.layers(baseMaps).addTo(myMap);
-    }
-
-    getLocation();
+    getGeoLocationFromBrowser(call)
   }, []);
 
   async function handleChange(event) {
-    console.log(`got here`);
     const distance = event.target.value;
     try {
       await props.getNearbyUsers(props.singleUser.id, distance);
@@ -100,7 +72,7 @@ export const UserPage = (props) => {
           <option value="10">10 Miles</option>
         </select>
       </div>
-      <div id="map"></div>
+      <div className="leafMap" id="map"></div>
       <div>
         {props.nearbyUsers
           .filter((person) => person.username !== props.singleUser.username)
