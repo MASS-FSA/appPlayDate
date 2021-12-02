@@ -4,6 +4,7 @@ import axios from "axios";
 const SET_ALL_USERS = `SET_ALL_USERS`;
 const SET_NEARBY_USERS = `SET_NEARBY_USERS`;
 const SET_SINGLE_USER = `SET_SINGLE_USER`;
+const SET_INTAKE = `SET_INTAKE`;
 
 // ACTION CREATORS
 export const setAllUsers = (users) => {
@@ -24,6 +25,13 @@ export const setSingleUser = (user) => {
   return {
     type: SET_SINGLE_USER,
     user,
+  };
+};
+
+export const setIntake = (intake) => {
+  return {
+    type: SET_INTAKE,
+    intake,
   };
 };
 
@@ -62,6 +70,16 @@ export const updateSingleUser = (userId, body) => {
       const { data } = await axios.post(`/api/users/${userId}`, body);
       dispatch(setSingleUser(data));
     } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const createUserIntake = (userId, body) => {
+  return async () => {
+    try {
+      await axios.post(`/api/users/intakes/${userId}`, body);
+    } catch (error) {
       console.error(error);
     }
   };
@@ -71,6 +89,7 @@ const initialState = {
   allUsers: [],
   nearbyUsers: [],
   singleUser: {},
+  intake: {},
 };
 
 export default (state = initialState, action) => {
@@ -81,6 +100,8 @@ export default (state = initialState, action) => {
       return { ...state, nearbyUsers: action.users };
     case SET_SINGLE_USER:
       return { ...state, singleUser: action.user };
+    case SET_INTAKE:
+      return { ...state, intake: action.intake };
 
     default:
       return state;

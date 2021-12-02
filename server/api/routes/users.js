@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const {
-  models: { User },
+  models: { User, Intake },
 } = require("../../db");
 const Intake = require("../../db/models/Intake");
 
@@ -42,7 +42,6 @@ router
       const singleUser = await User.findByPk(req.params.userId, {
         include: Intake,
       });
-
       res.send(singleUser);
     } catch (error) {
       next(error);
@@ -57,3 +56,15 @@ router
       next(error);
     }
   });
+
+// /api/users/intakes/:userId
+
+router.route(`/intakes/:userId`).post(async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.userId);
+    await user.createIntake(req.body);
+    res.send(200);
+  } catch (error) {
+    next(error);
+  }
+});
