@@ -64,7 +64,7 @@ export const UserProfile = (props) => {
         <div>
           <section className="user_profile_section">
             <div>
-              <img src={user.image} />
+              <img src={user.image} height="300px" />
             </div>
             <div>
               <h3>{user.username}</h3>
