@@ -76,6 +76,12 @@ export const UserProfile = (props) => {
               </div>
             </div>
           </section>
+          <fieldset>
+            <legend>Questionaire</legend>
+            <h4>Child Age {user.intake?.age}</h4>
+            <h4>Favorite Color {user.intake?.favoriteColor}</h4>
+            <h4>Vaccinated? {user.intake?.vaccination ? `Yes` : `No`}</h4>
+          </fieldset>
         </div>
       ) : (
         <div>
