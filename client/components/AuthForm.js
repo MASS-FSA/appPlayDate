@@ -43,7 +43,7 @@ const AuthForm = (props) => {
               />
             </div>
             <div className="loginentry">
-              <button type="submit" className="fadeIn fourth" onClick={redirect}>
+              <button type="submit" className="fadeIn fourth" >
                 {displayName}
               </button>
             </div>

@@ -23,9 +23,9 @@ const init = async () => {
         socket.broadcast.emit ('new-message', message);
         
         socket.on('new-channel', channel => {
-          socket.broadcast.emit('new-channel', channel);
-        });
-    
+      socket.broadcast.emit('new-channel', channel);
+    });
+
       })
     })
   } catch (ex) {
