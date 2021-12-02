@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {
   models: { User },
 } = require("../../db");
+const Intake = require("../../db/models/Intake");
 
 module.exports = router;
 
@@ -32,3 +33,27 @@ router.post("/nearby/:userId", async (req, res, next) => {
     next(error);
   }
 });
+
+// /api/users/:userId
+router
+  .route(`/:userId`)
+  .get(async (req, res, next) => {
+    try {
+      const singleUser = await User.findByPk(req.params.userId, {
+        include: Intake,
+      });
+
+      res.send(singleUser);
+    } catch (error) {
+      next(error);
+    }
+  })
+  .post(async (req, res, next) => {
+    try {
+      const updatedUser = await User.findByPk(req.params.userId);
+      await updatedUser.update(req.body);
+      res.send(await updatedUser.reload());
+    } catch (error) {
+      next(error);
+    }
+  });

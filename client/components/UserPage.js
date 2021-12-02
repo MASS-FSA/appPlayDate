@@ -106,7 +106,11 @@ export const UserPage = (props) => {
           .filter((person) => person.username !== props.singleUser.username)
           .map((person) => {
             return (
-              <div key={person.id} className="nearby_users">
+              <div
+                key={person.id}
+                className="nearby_users"
+                onClick={() => props.history.push(`/profile/${person.id}`)}
+              >
                 <img src={person.image} />
                 <p>
                   {person.username} is{" "}

@@ -57,6 +57,10 @@ const User = db.define("user", {
     type: Sequelize.INTEGER,
     allowNull: true,
   },
+
+  bio: {
+    type: Sequelize.TEXT,
+  },
 });
 
 /**
