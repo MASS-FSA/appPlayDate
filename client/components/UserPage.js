@@ -4,9 +4,6 @@ import { fetchdUsersWithinDistance } from "../store/users";
 import { loadMap, getGeoLocationFromBrowser } from "../../Util/loadMap"
 const L = require("leaflet");
 
-let myMap;
-let circle;
-
 export const UserPage = (props) => {
   const [[lat, lng], setCoords] = useState([null, null]);
   if (lat) {
@@ -27,6 +24,7 @@ export const UserPage = (props) => {
   async function handleChange(event) {
     const distance = event.target.value;
     try {
+      let circle;
       await props.getNearbyUsers(props.singleUser.id, distance);
 
       if (circle) myMap.removeLayer(circle);
@@ -59,8 +57,6 @@ export const UserPage = (props) => {
       console.error(error);
     }
   }
-
-  console.log(props);
 
   return (
     <div>

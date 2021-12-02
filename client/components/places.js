@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
+import { fetchPlaces } from '../store/places'
 import monster from '../../Util/moster'
 const L = require('leaflet')
 import {getGeoLocationFromBrowser, loadMap} from '../../Util/loadMap'
@@ -6,13 +8,20 @@ import {getGeoLocationFromBrowser, loadMap} from '../../Util/loadMap'
 
 const Places = (props) => {
   const [[lat, lng], setCoords] = useState([null, null]);
-  if (lat) {
-    const myMap = loadMap('mapForPlaces', lat, lng)
-    L.marker([lat, lng]).addTo(myMap);
-    // monster.map(location => {
-    //   return L.marker([location.geometry.location.lat, location.geometry.location.lng]).addTo(myMap)
-    // })
-  }
+  useEffect(() => {
+    if (lat) {
+      var myMap = loadMap('mapForPlaces', lat, lng)
+      L.marker([lat, lng]).addTo(myMap);
+      // console.log('places: ', props.places)
+    }
+    // if (myMap) {
+    //   console.log('map off')
+    //   myMap.off()
+    //   myMap.remove()
+    // }
+    props.fetchPlaces([lat, lng], 16000)
+
+  })
 
   useEffect(() => {
     const call = (position) => {
@@ -33,7 +42,19 @@ const Places = (props) => {
   )
 }
 
-export default Places
+const mapStateToProps = (state) => {
+  return {
+    places: state.places
+  }
+}
+
+const mapDispatchToProps= (dispatch) => {
+  return {
+    fetchPlaces: (loc, radius) => dispatch(fetchPlaces(loc, radius))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Places)
 
 
 
