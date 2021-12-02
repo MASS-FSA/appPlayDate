@@ -65,6 +65,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    text-align: center;
 }
 .lines{
     border-left: 1px solid #ffaa9f;
