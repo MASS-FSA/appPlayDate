@@ -1,4 +1,7 @@
 import axios from 'axios';
+import io from 'socket.io-client';
+const socket = io(window.location.origin);
+
 
 const TOKEN = 'token';
 export const token = window.localStorage.getItem(TOKEN);
@@ -60,6 +63,7 @@ export const sendMessage = (message) => async (dispatch) => {
       tokenHeader
     );
     dispatch(gotMessage(newMessage));
+    socket.emit('new-message', newMessage)
   } catch (error) {
     console.error(error);
   }
