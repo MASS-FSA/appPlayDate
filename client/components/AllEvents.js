@@ -16,7 +16,7 @@ const AllEvents = (props) => {
   }, []);
 
   return (
-    <div>
+    <div className="eventscontainer">
       <button
         onClick={(e) => {
           e.preventDefault();
@@ -29,7 +29,8 @@ const AllEvents = (props) => {
         .sort((a, b) => a.id - b.id)
         .map((event) => {
           return (
-            <fieldset
+            <div className="singleEvent">
+              <fieldset
               key={event.id}
               onClick={() => props.history.push(`/events/${event.id}`)}
             >
@@ -39,6 +40,7 @@ const AllEvents = (props) => {
               <h4>Time: {event.time.slice(0, 10)}</h4>
               <p>{event.description}</p>
             </fieldset>
+            </div>
           );
         })}
     </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Message from './Message';
+import NewMessage from './NewMessage';
 
 // I didn't use hooks here, not sure if we need to. -sh
 export const Messages = (props) => {
@@ -18,7 +19,7 @@ export const Messages = (props) => {
           <Message message={message} key={message.id} />
         ))}
       </ul>
-      {/* <NewMessage channelId={channelId} /> */}
+      <NewMessage channelId={channelId} />
     </div>
   );
 };

@@ -39,8 +39,12 @@ router.get('/:channelId/', async (req, res, next) => {
 router.post('/', requireToken, async (req, res, next) => {
   try {
     const message = await Message.create(req.body);
-    message.setUser(req.user.id);
-    res.json(message);
+    await message.setUser(req.user.id);
+    const newMessage = await Message.findOne({
+      order: [['id', 'DESC']],
+      include: User,
+    });
+    res.json(newMessage);
   } catch (err) {
     next(err);
   }
