@@ -28,7 +28,7 @@ export const UserProfile = (props) => {
     setProfileInfo((prevState) => {
       return {
         ...prevState,
-        name: props.user.username || "",
+        username: props.user.username || "",
         image: props.user.image || "",
         state: props.user.state || "",
         email: props.user.email || "",
@@ -98,8 +98,8 @@ export const UserProfile = (props) => {
             <div>
               <label>Name</label>
               <input
-                name="name"
-                value={profileInfo.name}
+                name="username"
+                value={profileInfo.username}
                 onChange={handleChange}
               />
               <br />
