@@ -34,6 +34,7 @@ class Routes extends Component {
             <Route exact path='/events/:id' component={SingleEvent} />
             <Route path='/questionaire' component={Questionaire} />
             <Route exact path='/placesTest' component={PlacesTest} />
+            <Route path='/chat' component={Chat} />
           </Switch>
         ) : (
           <Switch>

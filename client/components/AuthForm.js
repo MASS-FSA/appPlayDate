@@ -9,7 +9,7 @@ import history from "../history";
  */
 const AuthForm = (props) => {
   const { name, displayName, handleSubmit, error } = props;
-  const redirect = () =>{
+  const redirect = () => {
     window.location.pathname === "/signup"? history.push('/questionaire') : history.push('/user')
   }
   return (
