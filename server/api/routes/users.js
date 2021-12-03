@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const {
-  models: { User, Intake },
+  models: { User, Intake, Friend },
 } = require("../../db");
 
 module.exports = router;
@@ -28,6 +28,20 @@ router.post("/nearby/:userId", async (req, res, next) => {
     const output = await user.findNearbyUsers(req.body.distance);
 
     res.send(output);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// /api/users/friends/:friendId
+router.route(`/friends/:friendId`).put(async (req, res, next) => {
+  try {
+    // can change req.body to req.user when authentication middleware is implemented.. then change method to GET
+    const connection = await Friend.findOne({
+      where: { userId: req.body.userId, AddresseeId: req.params.friendId },
+    });
+    if (connection) res.send(connection.status);
+    else res.send(`none`);
   } catch (error) {
     next(error);
   }
