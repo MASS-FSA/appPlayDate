@@ -22,9 +22,7 @@ const Navbar = ({ handleClick, isLoggedIn, user }) => (
         </div>
       ) : (
         <div className="Login_signupContainer">
-          {
-
-          /* The navbar will show these links before you log in */}
+          {/* The navbar will show these links before you log in */}
           <button>
             <Link to="/home">Home</Link>
           </button>

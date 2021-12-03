@@ -16,11 +16,14 @@ export const UserProfile = (props) => {
   useEffect(() => {
     async function getUserData() {
       try {
-        await props.getUser(props.match.params.userId);
+        props.match.params.userId
+          ? await props.getUser(props.match.params.userId)
+          : await props.getUser(props.myId);
       } catch (error) {
         console.error(error);
       }
     }
+
     getUserData();
   }, []);
 
@@ -144,6 +147,7 @@ export const UserProfile = (props) => {
 const mapStateToProps = (state) => {
   return {
     user: state.users.singleUser,
+    myId: state.auth.id,
   };
 };
 

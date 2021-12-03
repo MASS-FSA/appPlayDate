@@ -2,7 +2,6 @@ const router = require("express").Router();
 const {
   models: { User, Intake },
 } = require("../../db");
-const Intake = require("../../db/models/Intake");
 
 module.exports = router;
 
@@ -51,7 +50,7 @@ router
     try {
       const updatedUser = await User.findByPk(req.params.userId);
       await updatedUser.update(req.body);
-      res.send(await updatedUser.reload());
+      res.send(await updatedUser.reload({ include: Intake }));
     } catch (error) {
       next(error);
     }

@@ -37,6 +37,7 @@ class Routes extends Component {
             <Route exact path="/placesTest" component={PlacesTest} />
             <Route path="/chat" component={Chat} />
             <Route exact path="/profile/:userId" component={UserProfile} />
+            <Route exact path="/myProfile" component={UserProfile} />
           </Switch>
         ) : (
           <Switch>
