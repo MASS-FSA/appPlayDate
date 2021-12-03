@@ -7,31 +7,26 @@ import {getGeoLocationFromBrowser, loadMap} from '../../Util/loadMap'
 
 
 const Places = (props) => {
+
   const [[lat, lng], setCoords] = useState([null, null]);
-  useEffect(() => {
-    if (lat) {
-      var myMap = loadMap('mapForPlaces', lat, lng)
-      L.marker([lat, lng]).addTo(myMap);
-      // console.log('places: ', props.places)
-    }
-    // if (myMap) {
-    //   console.log('map off')
-    //   myMap.off()
-    //   myMap.remove()
-    // }
-    props.fetchPlaces([lat, lng], 16000)
-
-  })
-
+  const [myMap, setMap] = useState({})
+  if(lat) {
+    const myMap = loadMap('mapForPlaces', lat, lng)
+    console.log('myMap: ', myMap)
+    L.marker([lat, lng]).addTo(myMap);
+  }
   useEffect(() => {
     const call = (position) => {
+      console.log('position: ', position)
       const point = []
       point.push(position.coords.latitude)
       point.push(position.coords.longitude)
       setCoords(point)
     }
     getGeoLocationFromBrowser(call)
-  }, []);
+    console.log('lat long: ', lat, lng)
+
+  }, [])
 
 
   return (

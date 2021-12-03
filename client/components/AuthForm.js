@@ -1,46 +1,49 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { authenticate } from '../store';
+import React from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { authenticate } from "../store";
+import history from "../history";
 
 /**
  * COMPONENT
  */
 const AuthForm = (props) => {
   const { name, displayName, handleSubmit, error } = props;
-
+  const redirect = () => {
+    window.location.pathname === "/signup"? history.push('/questionaire') : history.push('/user')
+  }
   return (
-    <div className='LoginContainer'>
-      <div className='wrapper fadeInDown'>
-        <div id='formContent'>
-          <h2 className='active'>
-            <Link to='/login'>Login</Link>
+    <div className="LoginContainer">
+      <div className="wrapper fadeInDown">
+        <div id="formContent">
+          <h2 className={window.location.pathname === "/login" ? "active" : "inactive underlineHover"}>
+            <Link to="/login">Login</Link>
           </h2>
-          <h2 className='inactive underlineHover'>
-            <Link to='/signup'>Sign Up</Link>
+          <h2 className={window.location.pathname === "/signup" ? "active" : "inactive underlineHover"}>
+            <Link to="/signup">Sign Up</Link>
           </h2>
 
           <form onSubmit={handleSubmit} name={name}>
-            <div className='loginentry'>
+            <div className="loginentry">
               <input
-                name='username'
-                id='login'
-                className='fadeIn second'
-                placeholder='login'
-                type='text'
+                name="username"
+                id="login"
+                className="fadeIn second"
+                placeholder={window.location.pathname === "/signup" ? "Sign up" : "Login"}
+                type="text"
               />
             </div>
-            <div className='loginentry'>
+            <div className="loginentry">
               <input
-                name='password'
-                id='password'
-                className='fadeIn third'
-                placeholder='password'
-                type='text'
+                name="password"
+                id="password"
+                className="fadeIn third"
+                placeholder="password"
+                type="text"
               />
             </div>
-            <div className='loginentry'>
-              <button type='submit' className='fadeIn fourth'>
+            <div className="loginentry">
+              <button type="submit" className="fadeIn fourth" >
                 {displayName}
               </button>
             </div>
@@ -48,8 +51,8 @@ const AuthForm = (props) => {
             {error && error.response && <div> {error.response.data} </div>}
           </form>
         </div>
-        <div id='formFooter'>
-          <a className='underlineHover' href='#'>
+        <div id="formFooter">
+          <a className="underlineHover" href="#">
             Forgot Password?
           </a>
         </div>
@@ -67,16 +70,16 @@ const AuthForm = (props) => {
  */
 const mapLogin = (state) => {
   return {
-    name: 'login',
-    displayName: 'Login',
+    name: "login",
+    displayName: "Login",
     error: state.auth.error,
   };
 };
 
 const mapSignup = (state) => {
   return {
-    name: 'signup',
-    displayName: 'Sign Up',
+    name: "signup",
+    displayName: "Sign Up",
     error: state.auth.error,
   };
 };
