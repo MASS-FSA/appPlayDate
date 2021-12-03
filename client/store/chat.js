@@ -1,9 +1,8 @@
-import axios from 'axios';
-import io from 'socket.io-client';
+import axios from "axios";
+import io from "socket.io-client";
 const socket = io(window.location.origin);
 
-
-const TOKEN = 'token';
+const TOKEN = "token";
 export const token = window.localStorage.getItem(TOKEN);
 export const tokenHeader = {
   headers: {
@@ -11,9 +10,9 @@ export const tokenHeader = {
   },
 };
 
-const GET_MESSAGES = 'GET_MESSAGES';
-const GET_CHANNELS = 'GET_CHANNELS';
-const GOT_MESSAGE = 'GOT_MESSAGE';
+const GET_MESSAGES = "GET_MESSAGES";
+const GET_CHANNELS = "GET_CHANNELS";
+const GOT_MESSAGE = "GOT_MESSAGE";
 
 const getMessages = (messages) => {
   return {
@@ -40,14 +39,14 @@ export const fetchMessages = () => {
       const { data: messages } = await axios.get(`/api/messages`);
       dispatch(getMessages(messages));
     } catch (err) {
-      throw ('error something went wrong', err);
+      throw ("error something went wrong", err);
     }
   };
 };
 
 export const getChannels = () => async (dispatch) => {
   try {
-    const { data: channels } = await axios.get('/api/channels');
+    const { data: channels } = await axios.get("/api/channels");
     dispatch(_getChannels(channels));
   } catch (error) {
     console.error(error);
@@ -56,14 +55,19 @@ export const getChannels = () => async (dispatch) => {
 };
 
 export const sendMessage = (message) => async (dispatch) => {
+  // socket.emit("new-message", message);
   try {
     const { data: newMessage } = await axios.post(
-      '/api/messages',
+      "/api/messages",
       message,
       tokenHeader
     );
+
+    // socket.on(`new-message`, (message) => {
+    //   console.log(`yo`, message);
+    //   dispatch(gotMessage(newMessage));
+    // });
     dispatch(gotMessage(newMessage));
-    socket.emit('new-message', newMessage)
   } catch (error) {
     console.error(error);
   }
