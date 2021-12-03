@@ -35,7 +35,12 @@ router.get('/find_midpoint/:id1/:id2', async (req, res, next) => {
 router.get('/:location/:radius', async (req, res, next) => {
   try {
     const {data} = await axios.get(createPlacesApiUrl(req.params.location, req.params.radius))
-    const top10Places = data.results.slice(0,10)
+    const top10Places = data.results.slice(0,10).map((place)=> {
+      const {geometry, icon, name, photos, rating, types, vicinity} = place
+      const {location} = geometry
+      const {lat, lng} = location
+      return {name, vicinity, lat, lng, icon, photos, rating, types}
+    })
     res.send(top10Places)
   } catch (err) {
     next(err)
