@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { fetchSingleUser, updateSingleUser } from "../store/users";
+import {
+  fetchFriendRequests,
+  fetchSingleUser,
+  updateSingleUser,
+} from "../store/users";
 
 export const UserProfile = (props) => {
   const { user } = props;
@@ -16,15 +20,14 @@ export const UserProfile = (props) => {
   useEffect(() => {
     async function getUserData() {
       try {
-        props.match.params.userId
-          ? await props.getUser(props.match.params.userId)
-          : await props.getUser(props.myId);
+        await props.getUser(props.myId);
       } catch (error) {
         console.error(error);
       }
     }
 
     getUserData();
+    props.checkRequests(props.myId);
   }, []);
 
   useEffect(() => {
@@ -56,10 +59,12 @@ export const UserProfile = (props) => {
   }
 
   function handleSubmit() {
-    props.updateUser(props.match.params.userId, profileInfo);
+    props.updateUser(props.myId, profileInfo);
 
     setEdit((prevEdit) => !prevEdit);
   }
+
+  console.log(`requests`, props.requests);
 
   return (
     <div>
@@ -140,6 +145,20 @@ export const UserProfile = (props) => {
       >
         {edit ? `Save` : `Edit`}
       </button>
+      {props.requests.map((request, index) => {
+        return (
+          <fieldset key={index}>
+            <p>Request from {request.requester.username}</p>
+            <img
+              src={request.requester.image}
+              height="50px"
+              onClick={() =>
+                props.history.push(`/profile/${request.requester.id}`)
+              }
+            />
+          </fieldset>
+        );
+      })}
     </div>
   );
 };
@@ -148,6 +167,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.users.singleUser,
     myId: state.auth.id,
+    requests: state.users.requests,
   };
 };
 
@@ -155,6 +175,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getUser: (userId) => dispatch(fetchSingleUser(userId)),
     updateUser: (userId, body) => dispatch(updateSingleUser(userId, body)),
+    checkRequests: (userId) => dispatch(fetchFriendRequests(userId)),
   };
 };
 

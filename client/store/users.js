@@ -5,6 +5,8 @@ const SET_ALL_USERS = `SET_ALL_USERS`;
 const SET_NEARBY_USERS = `SET_NEARBY_USERS`;
 const SET_SINGLE_USER = `SET_SINGLE_USER`;
 const SET_INTAKE = `SET_INTAKE`;
+const SET_STATUS = `SET_STATUS`;
+const SET_REQUESTS = `SET_REQUESTS`;
 
 // ACTION CREATORS
 export const setAllUsers = (users) => {
@@ -32,6 +34,20 @@ export const setIntake = (intake) => {
   return {
     type: SET_INTAKE,
     intake,
+  };
+};
+
+export const setStatus = (status) => {
+  return {
+    type: SET_STATUS,
+    status,
+  };
+};
+
+export const setRequests = (requests) => {
+  return {
+    type: SET_REQUESTS,
+    requests,
   };
 };
 
@@ -65,6 +81,7 @@ export const fetchSingleUser = (userId) => {
 };
 
 export const updateSingleUser = (userId, body) => {
+  console.log(`from thunk`, body);
   return async (dispatch) => {
     try {
       const { data } = await axios.post(`/api/users/${userId}`, body);
@@ -85,11 +102,48 @@ export const createUserIntake = (userId, body) => {
   };
 };
 
+export const checkFriendStatus = (userId, friendId) => {
+  const body = { userId };
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.put(`/api/users/friends/${friendId}`, body);
+      dispatch(setStatus(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const sendFriendRequest = (userId, friendId) => {
+  const body = { userId };
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.post(`/api/users/friends/${friendId}`, body);
+      dispatch(setStatus(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const fetchFriendRequests = (userId) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(`/api/users/requests/${userId}`);
+      dispatch(setRequests(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
 const initialState = {
   allUsers: [],
   nearbyUsers: [],
   singleUser: {},
   intake: {},
+  status: ``,
+  requests: [],
 };
 
 export default (state = initialState, action) => {
@@ -102,6 +156,10 @@ export default (state = initialState, action) => {
       return { ...state, singleUser: action.user };
     case SET_INTAKE:
       return { ...state, intake: action.intake };
+    case SET_STATUS:
+      return { ...state, status: action.status };
+    case SET_REQUESTS:
+      return { ...state, requests: action.requests };
 
     default:
       return state;
