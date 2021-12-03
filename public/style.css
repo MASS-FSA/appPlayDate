@@ -37,7 +37,7 @@ form div {
   display: flex;
   justify-content: center;
 }
-#map {
+.leafMap {
   display: flex;
   height: 500px;
   width: auto;

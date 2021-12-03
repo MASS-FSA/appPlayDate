@@ -30,6 +30,8 @@ router.get('/find_midpoint/:id1/:id2', async (req, res, next) => {
   }
 })
 
+//  The following 2 routes both get retrieve a list of 'local places/parks' using google places API. The first takes 2 args and the second takes just the 1.
+
 router.get('/:location/:radius', async (req, res, next) => {
   try {
     const {data} = await axios.get(createPlacesApiUrl(req.params.location, req.params.radius))

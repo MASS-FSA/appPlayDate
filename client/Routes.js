@@ -9,7 +9,7 @@ import Home from "./components/Home";
 import Questionaire from "./components/Questionaire";
 import SingleEvent from "./components/SingleEvent";
 import UserPage from "./components/UserPage";
-import PlacesTest from "./components/placesTest";
+import Places from "./components/places";
 import UserProfile from "./components/UserProfile";
 import { me } from "./store";
 
@@ -34,7 +34,7 @@ class Routes extends Component {
             <Route exact path="/events/create" component={CreateEvent} />
             <Route exact path="/events/:id" component={SingleEvent} />
             <Route path="/questionaire" component={Questionaire} />
-            <Route exact path="/placesTest" component={PlacesTest} />
+            <Route exact path="/places" component={Places} />
             <Route path="/chat" component={Chat} />
             <Route exact path="/profile/:userId" component={UserProfile} />
             <Route exact path="/myProfile" component={UserProfile} />
@@ -47,7 +47,7 @@ class Routes extends Component {
             <Route exact path="/user" component={UserPage} />
             <Route path="/chat" component={Chat} />
             <Route path="/questionaire" component={Questionaire} />
-            <Route exact path="/placesTest" component={PlacesTest} />
+            <Route exact path="/places" component={Places} />
           </Switch>
         )}
       </div>

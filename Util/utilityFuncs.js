@@ -36,7 +36,6 @@ const findMidPoint = function(latitude1, longitude1, latitude2, longitude2) {
     return [lat / DEG_TO_RAD, lng / DEG_TO_RAD];
   };
 
-
   /**
    * Returns the distance in kilometers [CHANGED TO METERS BY *1000] between two coordinates.
    * @see: http://www.movable-type.co.uk/scripts/latlong.html
