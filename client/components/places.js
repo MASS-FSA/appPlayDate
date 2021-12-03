@@ -1,69 +1,70 @@
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import { fetchPlaces } from '../store/places'
-import monster from '../../Util/moster'
-const L = require('leaflet')
-import {getGeoLocationFromBrowser, loadMap} from '../../Util/loadMap'
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { fetchPlaces } from "../store/places";
+const L = require("leaflet");
+import { getGeoLocationFromBrowser, loadMap } from "../../Util/loadMap";
 
+let myMap;
 
 const Places = (props) => {
-
-  const [coords, setCoords] = useState([null, null]);
-  const [map, setMap] = useState(null)
+  const [coords, setCoords] = useState([]);
+  // const [map, setMap] = useState(null);
 
   useEffect(() => {
-    console.log('places: ', props.places)
+    console.log("places: ", props.places);
+    // this is a callback to give position of user
     const call = (position) => {
-      console.log('position: ', position)
-      const point = []
-      point.push(position.coords.latitude)
-      point.push(position.coords.longitude)
-      setCoords(point)
+      console.log("position: ", position);
+      const point = [];
+      point.push(position.coords.latitude);
+      point.push(position.coords.longitude);
+      setCoords(point);
+    };
+    // uses navigator method and uses `call` function as the callback
+    getGeoLocationFromBrowser(call);
+  }, []);
+
+  useEffect(() => {
+    if (!myMap && coords[0]) {
+      console.log(`from coords`, coords);
+      props.fetchPlaces(coords, 1600);
+      myMap = loadMap("map", coords[0], coords[1]);
     }
-    getGeoLocationFromBrowser(call)
-  }, [])
+  }, [coords]);
 
-  useEffect(()=> {
-    if (coords[0]) {
-      props.fetchPlaces(coords, 16000)
-      setMap( loadMap('mapForPlaces', coords[0], coords[1])   )
+  useEffect(() => {
+    if (props.palces !== []) {
+      console.log(props.places);
+      props.places.map((place) => {
+        const marker = L.marker([
+          place.geometry.location.lat,
+          place.geometry.location.lng,
+        ])
+          .addTo(myMap)
+          .bindPopup(`<p>${place.name}</p>`);
+
+        return marker;
+      });
     }
-    }, [coords])
-
-  useEffect(()=> {
-    if (map !== null) {
-      console.log('map: ',map)
-      console.log('places', props.places)
-    }
-  },[map])
-
-
-  // useEffect(() => {
-  //   return myMap.close()
-  // },[])
+  }, [props.places]);
 
   return (
     <div>
-      <div className="leafMap" id="mapForPlaces">
-      </div>
+      <div className="leafMap" id="map"></div>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
-    places: state.places
-  }
-}
+    places: state.places,
+  };
+};
 
-const mapDispatchToProps= (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    fetchPlaces: (loc, radius) => dispatch(fetchPlaces(loc, radius))
-  }
-}
+    fetchPlaces: (loc, radius) => dispatch(fetchPlaces(loc, radius)),
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Places)
-
-
-
-
+export default connect(mapStateToProps, mapDispatchToProps)(Places);
