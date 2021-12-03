@@ -146,7 +146,18 @@ export const UserProfile = (props) => {
         {edit ? `Save` : `Edit`}
       </button>
       {props.requests.map((request, index) => {
-        return <p key={index}>Request from {request.requester.username}</p>;
+        return (
+          <fieldset key={index}>
+            <p>Request from {request.requester.username}</p>
+            <img
+              src={request.requester.image}
+              height="50px"
+              onClick={() =>
+                props.history.push(`/profile/${request.requester.id}`)
+              }
+            />
+          </fieldset>
+        );
       })}
     </div>
   );
