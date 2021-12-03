@@ -33,19 +33,65 @@ router.post("/nearby/:userId", async (req, res, next) => {
   }
 });
 
-// /api/users/friends/:friendId
-router.route(`/friends/:friendId`).put(async (req, res, next) => {
+// /api/users/requests/:userId
+router.get(`/requests/:userId`, async (req, res, next) => {
   try {
-    // can change req.body to req.user when authentication middleware is implemented.. then change method to GET
-    const connection = await Friend.findOne({
-      where: { userId: req.body.userId, AddresseeId: req.params.friendId },
+    const requests = await Friend.findAll({
+      where: { AddresseeId: req.params.userId, status: `pending` },
+      // include: { model: User },
     });
-    if (connection) res.send(connection.status);
-    else res.send(`none`);
+
+    // [{pending request.. userId sean}, {pending request... userId Alex}... ]
+    const someArray = await Promise.all(
+      requests.map(async (request) => {
+        let output = { ...request };
+        const user = await User.findByPk(request.userId);
+        output.requester = user;
+        return output;
+      })
+    );
+
+    // const requesters = requests.map((request) => {
+    //   return request.userId;
+    // });
+
+    res.send(someArray);
+
+    // if (!requests) res.send([]);
+    // else res.send(requests);
   } catch (error) {
     next(error);
   }
 });
+
+// /api/users/friends/:friendId
+router
+  .route(`/friends/:friendId`)
+  .put(async (req, res, next) => {
+    try {
+      // can change req.body to req.user when authentication middleware is implemented.. then change method to GET
+      const connection = await Friend.findOne({
+        where: { userId: req.body.userId, AddresseeId: req.params.friendId },
+      });
+      if (connection) res.send(connection.status);
+      else res.send(`none`);
+    } catch (error) {
+      next(error);
+    }
+  })
+  .post(async (req, res, next) => {
+    try {
+      const user = await User.findByPk(req.body.userId);
+      const friend = await User.findByPk(req.params.friendId);
+      const connection = await user.addAddressee(friend);
+      // const connection = await Friend.create({
+      //   where: { userId: req.body.userId, AddresseeId: req.params.friendId },
+      // });
+      res.send(connection[0].status);
+    } catch (error) {
+      next(error);
+    }
+  });
 
 // /api/users/:userId
 router

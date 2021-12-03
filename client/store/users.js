@@ -6,6 +6,7 @@ const SET_NEARBY_USERS = `SET_NEARBY_USERS`;
 const SET_SINGLE_USER = `SET_SINGLE_USER`;
 const SET_INTAKE = `SET_INTAKE`;
 const SET_STATUS = `SET_STATUS`;
+const SET_REQUESTS = `SET_REQUESTS`;
 
 // ACTION CREATORS
 export const setAllUsers = (users) => {
@@ -40,6 +41,13 @@ export const setStatus = (status) => {
   return {
     type: SET_STATUS,
     status,
+  };
+};
+
+export const setRequests = (requests) => {
+  return {
+    type: SET_REQUESTS,
+    requests,
   };
 };
 
@@ -106,12 +114,36 @@ export const checkFriendStatus = (userId, friendId) => {
   };
 };
 
+export const sendFriendRequest = (userId, friendId) => {
+  const body = { userId };
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.post(`/api/users/friends/${friendId}`, body);
+      dispatch(setStatus(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const fetchFriendRequests = (userId) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(`/api/users/requests/${userId}`);
+      dispatch(setRequests(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
 const initialState = {
   allUsers: [],
   nearbyUsers: [],
   singleUser: {},
   intake: {},
   status: ``,
+  requests: [],
 };
 
 export default (state = initialState, action) => {
@@ -126,6 +158,8 @@ export default (state = initialState, action) => {
       return { ...state, intake: action.intake };
     case SET_STATUS:
       return { ...state, status: action.status };
+    case SET_REQUESTS:
+      return { ...state, requests: action.requests };
 
     default:
       return state;

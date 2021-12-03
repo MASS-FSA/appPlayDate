@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { checkFriendStatus, fetchSingleUser } from "../store/users";
+import {
+  checkFriendStatus,
+  fetchSingleUser,
+  sendFriendRequest,
+} from "../store/users";
 
 export const OthersProfile = ({
   user,
@@ -10,6 +14,7 @@ export const OthersProfile = ({
   history,
   checkStatus,
   status,
+  friendRequest,
 }) => {
   const [profileInfo, setProfileInfo] = useState({
     name: "",
@@ -41,12 +46,14 @@ export const OthersProfile = ({
     });
   }, [user]);
 
-  console.log(`status`, status);
+  function handleAddFriend() {
+    friendRequest(myId, user.id);
+  }
 
   function statusSetter() {
     switch (status) {
       case `none`:
-        return <button>Add Friend</button>;
+        return <button onClick={() => handleAddFriend()}>Add Friend</button>;
       case `pending`:
         return <h4>Friend Request Pending...</h4>;
       case `declined`:
@@ -99,17 +106,9 @@ const mapDispatchToProps = (dispatch) => {
     getUser: (userId) => dispatch(fetchSingleUser(userId)),
     checkStatus: (userId, friendId) =>
       dispatch(checkFriendStatus(userId, friendId)),
+    friendRequest: (userId, friendId) =>
+      dispatch(sendFriendRequest(userId, friendId)),
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OthersProfile);
-
-{
-  /* <button>
-        {status === `none`
-          ? `Add Friend`
-          : status === `accepted`
-          ? `Friends`
-          : `Request Sent...`}
-      </button> */
-}
