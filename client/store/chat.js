@@ -1,7 +1,7 @@
 import axios from 'axios';
-import io from 'socket.io-client';
-const socket = io(window.location.origin);
-
+import socket from '../socket';
+// import io from 'socket.io-client';
+// const socket = io(window.location.origin);
 
 const TOKEN = 'token';
 export const token = window.localStorage.getItem(TOKEN);
@@ -15,13 +15,13 @@ const GET_MESSAGES = 'GET_MESSAGES';
 const GET_CHANNELS = 'GET_CHANNELS';
 const GOT_MESSAGE = 'GOT_MESSAGE';
 
-const getMessages = (messages) => {
+export const getMessages = (messages) => {
   return {
     type: GET_MESSAGES,
     messages,
   };
 };
-const gotMessage = (newMessage) => {
+export const gotMessage = (newMessage) => {
   return {
     type: GOT_MESSAGE,
     newMessage,
@@ -63,7 +63,7 @@ export const sendMessage = (message) => async (dispatch) => {
       tokenHeader
     );
     dispatch(gotMessage(newMessage));
-    socket.emit('new-message', newMessage)
+    socket.emit('new-message', newMessage);
   } catch (error) {
     console.error(error);
   }
