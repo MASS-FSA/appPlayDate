@@ -12,6 +12,7 @@ import UserPage from "./components/UserPage";
 import Places from "./components/places";
 import UserProfile from "./components/UserProfile";
 import { me } from "./store";
+import OthersProfile from "./components/OthersProfile";
 
 /**
  * COMPONENT
@@ -36,7 +37,7 @@ class Routes extends Component {
             <Route path="/questionaire" component={Questionaire} />
             <Route exact path="/places" component={Places} />
             <Route path="/chat" component={Chat} />
-            <Route exact path="/profile/:userId" component={UserProfile} />
+            <Route exact path="/profile/:userId" component={OthersProfile} />
             <Route exact path="/myProfile" component={UserProfile} />
           </Switch>
         ) : (

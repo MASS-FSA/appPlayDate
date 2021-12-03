@@ -56,7 +56,7 @@ export const UserProfile = (props) => {
   }
 
   function handleSubmit() {
-    props.updateUser(props.match.params.userId, profileInfo);
+    props.updateUser(props.myId, profileInfo);
 
     setEdit((prevEdit) => !prevEdit);
   }

@@ -47,6 +47,7 @@ router
     }
   })
   .post(async (req, res, next) => {
+    console.log(req.params.userId);
     try {
       const updatedUser = await User.findByPk(req.params.userId);
       await updatedUser.update(req.body);

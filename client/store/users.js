@@ -65,6 +65,7 @@ export const fetchSingleUser = (userId) => {
 };
 
 export const updateSingleUser = (userId, body) => {
+  console.log(`from thunk`, body);
   return async (dispatch) => {
     try {
       const { data } = await axios.post(`/api/users/${userId}`, body);
