@@ -33,27 +33,37 @@ router.post("/nearby/:userId", async (req, res, next) => {
   }
 });
 
-// /api/users/intakes/:userId
-
+// /api/users/:userId
 router
-  .route(`/intakes/:userId`)
-  .post(async (req, res, next) => {
+  .route(`/:userId`)
+  .get(async (req, res, next) => {
     try {
-      const user = await User.findByPk(req.params.userId);
-      await user.createIntake(req.body);
-      res.send(200);
+      const singleUser = await User.findByPk(req.params.userId, {
+        include: Intake,
+      });
+      res.send(singleUser);
     } catch (error) {
       next(error);
     }
   })
-  .get(async (req, res, next) => {
+  .post(async (req, res, next) => {
     try {
-      const user = await User.findByPk(req.params.userId, {
-        include: Intake,
-      });
-
-      res.send(user);
+      const updatedUser = await User.findByPk(req.params.userId);
+      await updatedUser.update(req.body);
+      res.send(await updatedUser.reload({ include: Intake }));
     } catch (error) {
       next(error);
     }
   });
+
+// /api/users/intakes/:userId
+
+router.route(`/intakes/:userId`).post(async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.userId);
+    await user.createIntake(req.body);
+    res.send(200);
+  } catch (error) {
+    next(error);
+  }
+});

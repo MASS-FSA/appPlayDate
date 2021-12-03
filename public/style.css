@@ -42,3 +42,8 @@ form div {
   height: 500px;
   width: auto;
 }
+
+.user_profile_section {
+  display: flex;
+  align-items: center;
+}
