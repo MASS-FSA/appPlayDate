@@ -12,10 +12,10 @@ export const loadMap = (element, lat = 38.8125889, long = -77.18318725, zoom = 2
   return myMap
 }
 
-export const getGeoLocationFromBrowser = async(CB) => {
+export const getGeoLocationFromBrowser = (CB) => {
 
   if (navigator.geolocation) {
-   await navigator.geolocation.getCurrentPosition(CB)
+   navigator.geolocation.getCurrentPosition(CB)
   } else {
     console.log("Geolocation is not supported by this browser.")
   }

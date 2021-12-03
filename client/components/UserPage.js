@@ -5,6 +5,7 @@ import { loadMap, getGeoLocationFromBrowser } from "../../Util/loadMap"
 const L = require("leaflet");
 
 export const UserPage = (props) => {
+
   const [[lat, lng], setCoords] = useState([null, null]);
   if (lat) {
     const myMap = loadMap('map', lat, lng)

@@ -8,14 +8,11 @@ import {getGeoLocationFromBrowser, loadMap} from '../../Util/loadMap'
 
 const Places = (props) => {
 
-  const [[lat, lng], setCoords] = useState([null, null]);
-  const [myMap, setMap] = useState({})
-  if(lat) {
-    const myMap = loadMap('mapForPlaces', lat, lng)
-    console.log('myMap: ', myMap)
-    L.marker([lat, lng]).addTo(myMap);
-  }
+  const [coords, setCoords] = useState([null, null]);
+  const [map, setMap] = useState(null)
+
   useEffect(() => {
+    console.log('places: ', props.places)
     const call = (position) => {
       console.log('position: ', position)
       const point = []
@@ -24,10 +21,26 @@ const Places = (props) => {
       setCoords(point)
     }
     getGeoLocationFromBrowser(call)
-    console.log('lat long: ', lat, lng)
-
   }, [])
 
+  useEffect(()=> {
+    if (coords[0]) {
+      props.fetchPlaces(coords, 16000)
+      setMap( loadMap('mapForPlaces', coords[0], coords[1])   )
+    }
+    }, [coords])
+
+  useEffect(()=> {
+    if (map !== null) {
+      console.log('map: ',map)
+      console.log('places', props.places)
+    }
+  },[map])
+
+
+  // useEffect(() => {
+  //   return myMap.close()
+  // },[])
 
   return (
     <div>
