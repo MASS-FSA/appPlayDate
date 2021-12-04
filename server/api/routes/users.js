@@ -74,7 +74,6 @@ router
   .get(async (req, res, next) => {
     // for checking friend request status
     try {
-      // can change req.body to req.user when authentication middleware is implemented.. then change method to GET
       const connection = await Friend.findOne({
         where: { userId: req.params.userId, AddresseeId: req.params.friendId },
       });
@@ -99,13 +98,31 @@ router
     }
   })
   .put(async (req, res, next) => {
-    // for updating status based on request response
     try {
-      const connection = await Friend.findOne({
-        where: { userId: req.params.friendId, AddresseeId: req.params.userId },
-      });
-      await connection.update(req.body);
-      res.send();
+      if (req.body.status === `blocked` || req.body.status === `accepted`) {
+        // When updating a block or accept.. have to update the table both ways for users
+        const userOne = await User.findByPk(req.params.userId);
+        const userTwo = await User.findByPk(req.params.friendId);
+
+        userOne.addAddressee(userTwo, { through: { status: req.body.status } });
+        userTwo.addAddressee(userOne, { through: { status: req.body.status } });
+
+        res.send();
+      } else {
+        // When updating responses to friend requests
+        // const connection = await Friend.findOne({
+        //   where: {
+        //     userId: req.params.friendId,
+        //     AddresseeId: req.params.userId,
+        //   },
+        // });
+        const userOne = await User.findByPk(req.params.userId);
+        const userTwo = await User.findByPk(req.params.friendId);
+
+        userTwo.addAddressee(userOne, { through: { status: req.body.status } });
+
+        res.send();
+      }
     } catch (error) {
       next(error);
     }

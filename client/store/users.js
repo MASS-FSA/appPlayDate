@@ -81,7 +81,6 @@ export const fetchSingleUser = (userId) => {
 };
 
 export const updateSingleUser = (userId, body) => {
-  console.log(`from thunk`, body);
   return async (dispatch) => {
     try {
       const { data } = await axios.post(`/api/users/${userId}`, body);
@@ -129,13 +128,14 @@ export const sendFriendRequest = (userId, friendId) => {
   };
 };
 
-export const updateFriendRequest = (userId, friendId, response) => {
+export const updateFriendStatus = (userId, friendId, response) => {
   const body = { status: response };
   return async (dispatch) => {
     try {
       await axios.put(`/api/users/friends/${friendId}/${userId}`, body);
       // updated all friend requests with other thunk function
-      dispatch(fetchFriendRequests(userId));
+      if (response === `blocked`) dispatch(checkFriendStatus(userId, friendId));
+      else dispatch(fetchFriendRequests(userId));
     } catch (error) {
       console.error(error);
     }
@@ -146,7 +146,6 @@ export const fetchFriendRequests = (userId) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`/api/users/requests/${userId}`);
-      console.log(`got to second thunk`, data);
       dispatch(setRequests(data));
     } catch (error) {
       console.error(error);

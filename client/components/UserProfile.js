@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {
   fetchFriendRequests,
   fetchSingleUser,
-  updateFriendRequest,
+  updateFriendStatus,
   updateSingleUser,
 } from "../store/users";
 
@@ -193,7 +193,7 @@ const mapDispatchToProps = (dispatch) => {
     updateUser: (userId, body) => dispatch(updateSingleUser(userId, body)),
     checkRequests: (userId) => dispatch(fetchFriendRequests(userId)),
     updateRequest: (userId, friendId, response) =>
-      dispatch(updateFriendRequest(userId, friendId, response)),
+      dispatch(updateFriendStatus(userId, friendId, response)),
   };
 };
 
