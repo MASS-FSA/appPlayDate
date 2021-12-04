@@ -55,7 +55,6 @@ const AuthForm = (props) => {
                 id="password"
                 className="fadeIn third"
                 placeholder="password"
-                // type="text"
                 type="password"
               />
             </div>
