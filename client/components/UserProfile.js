@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import {
   fetchFriendRequests,
   fetchSingleUser,
+  updateFriendRequest,
   updateSingleUser,
 } from "../store/users";
 
@@ -64,7 +65,10 @@ export const UserProfile = (props) => {
     setEdit((prevEdit) => !prevEdit);
   }
 
-  console.log(`requests`, props.requests);
+  function handleUpdateRequest(event, friendId) {
+    event.preventDefault();
+    props.updateRequest(props.myId, friendId, event.target.value);
+  }
 
   return (
     <div>
@@ -156,6 +160,18 @@ export const UserProfile = (props) => {
                 props.history.push(`/profile/${request.requester.id}`)
               }
             />
+            <button
+              value="accepted"
+              onClick={(e) => handleUpdateRequest(e, request.requester.id)}
+            >
+              Accept
+            </button>
+            <button
+              value="declined"
+              onClick={(e) => handleUpdateRequest(e, request.requester.id)}
+            >
+              Decline
+            </button>
           </fieldset>
         );
       })}
@@ -176,6 +192,8 @@ const mapDispatchToProps = (dispatch) => {
     getUser: (userId) => dispatch(fetchSingleUser(userId)),
     updateUser: (userId, body) => dispatch(updateSingleUser(userId, body)),
     checkRequests: (userId) => dispatch(fetchFriendRequests(userId)),
+    updateRequest: (userId, friendId, response) =>
+      dispatch(updateFriendRequest(userId, friendId, response)),
   };
 };
 
