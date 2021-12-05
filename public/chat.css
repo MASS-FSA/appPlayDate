@@ -19,14 +19,6 @@
     position: relative;
 
 }
-.newmessage{
-    background-color: red;
-    height: 30px;
-    width: 700px;
-    position: absolute;
-    bottom: 1%;
-    
-}
 .sidebar{
     background-color: white;
     height: 800px;
@@ -50,4 +42,85 @@
     height: 50%;
     width: 100%;
     border-radius: 10px 0 0 0;
+}
+.message-container {
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  .message-container::-webkit-scrollbar {
+    display: none;
+  }
+  #new-message-form{
+      display:flex;
+      margin: auto;
+      position: relative;
+      justify-content: center;
+      width:100%
+  }
+  #new-message-form .inputcontainer{
+    display:flex;
+    justify-content: center;
+    width: 40%;
+    position: fixed;
+    z-index: 0;
+    bottom:5%;
+    overflow: hidden;
+    padding:0
+}
+#new-message-form .form-control {
+  display: flex;
+  border-width: 3px 1.5px 3px 3px;
+
+  float: left;
+  width: 80%;
+}
+
+#new-message-form .btn {
+  display: flex;
+  justify-content: center;
+  border-width: 3px;
+  background: #fd9535;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+  width: 100px;
+  height: 100%;
+  font-weight: bold;
+border: solid 2px #d27d00;
+}
+.btn h1{
+    color: #FFF
+}
+#new-message-form .btn:hover{
+    background-color: rgb(255, 102, 0);
+    box-shadow:
+      0 0 0 10px hsl(0, 0%, 80%),
+      0 0 0 15px hsl(0, 0%, 90%);
+  
+}
+#new-message-form .btn:active{
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);
+    border-bottom: none;
+}
+
+.picturecontainer{
+    display: flex;
+    align-content: center;
+    flex-direction: row;
+}
+.sentmsgcontainer .picturecontainer img{
+    display:flex;
+    border-radius: 50%;
+    justify-content: center;
+}
+
+
+.sentmsgcontainer{
+    background-color: blue;
+    width: 20px;
+    height: 20px;
 }

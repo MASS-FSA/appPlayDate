@@ -57,6 +57,9 @@ const AuthForm = (props) => {
           </a>
         </div>
       </div>
+      <div >
+        <img id="MASSMasscot" src="MainDino.png" />
+      </div>
     </div>
   );
 };

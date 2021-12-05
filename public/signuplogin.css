@@ -5,6 +5,7 @@
 .LoginContainer{
     display:flex;
     justify-content: center;
+    flex-direction:column ;
 
 }
 
@@ -278,4 +279,15 @@ input[type=text]:placeholder {
 
 * {
   box-sizing: border-box;
+}
+
+#MASSMasscot{
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top:15%;
+  margin: auto;
+  width:auto;
+  height: auto;
+  z-index: -999999;
 }

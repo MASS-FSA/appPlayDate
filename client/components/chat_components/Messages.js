@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Message from './Message';
 import NewMessage from './NewMessage';
+import ScrollToBottom from "react-scroll-to-bottom"
 
 // I didn't use hooks here, not sure if we need to. -sh
 export const Messages = (props) => {
@@ -13,14 +14,17 @@ export const Messages = (props) => {
   );
 
   return (
-    <div>
-      <ul className='media-list'>
-        {filteredMessages.map((message) => (
-          <Message message={message} key={message.id} />
-        ))}
-      </ul>
-      <NewMessage channelId={channelId} />
-    </div>
+    <ScrollToBottom className="message-container">
+    {
+          filteredMessages.map((message) => {
+
+          return<Message key={message.id}  message={message}/>}
+          )
+    }
+    <NewMessage channelId={channelId} />
+    </ScrollToBottom>
+    
+
   );
 };
 

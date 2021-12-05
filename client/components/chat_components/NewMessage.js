@@ -32,7 +32,7 @@ function NewMessage(props) {
 
   return (
     <form id='new-message-form' onSubmit={handleSubmit}>
-      <div className='input-group input-group-lg'>
+      <div className='inputcontainer'>
         <input
           onChange={handleChange}
           className='form-control'
@@ -43,7 +43,7 @@ function NewMessage(props) {
         />
         <span className='input-group-btn'>
           <button className='btn btn-default' type='submit'>
-            Chat!
+          <h1>CHAT</h1>
           </button>
         </span>
       </div>
