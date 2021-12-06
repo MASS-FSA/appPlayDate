@@ -43,6 +43,19 @@ const User = db.define("user", {
     },
   },
 
+  homeLongitude: {
+    type: Sequelize.FLOAT,
+    validate: {
+      isNumeric: true,
+    },
+  },
+  homeLatitude: {
+    type: Sequelize.FLOAT,
+    validate: {
+      isNumeric: true,
+    },
+  },
+
   address: {
     type: Sequelize.STRING,
     allowNull: true,

@@ -22,7 +22,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // /api/users/nearby/:userId
-router.post("/nearby/:userId", async (req, res, next) => {
+router.post("/nearby/:userId/", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId);
     const output = await user.findNearbyUsers(req.body.distance);

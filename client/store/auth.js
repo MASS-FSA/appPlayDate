@@ -35,6 +35,7 @@ export const authenticate =
       window.localStorage.setItem(TOKEN, res.data.token);
       dispatch(me());
       if (method === `signup`) history.push(`/intake`);
+      else history.push(`/home`);
     } catch (authError) {
       return dispatch(setAuth({ error: authError }));
     }

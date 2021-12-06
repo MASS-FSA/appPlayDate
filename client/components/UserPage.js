@@ -1,16 +1,12 @@
 import React, { createRef, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { fetchdUsersWithinDistance } from "../store/users";
+import { fetchdUsersWithinDistance, updateSingleUser } from "../store/users";
 import { loadMap, getGeoLocationFromBrowser } from "../../Util/loadMap";
-const L = require("leaflet");
-
-let myMap;
 
 export const UserPage = (props) => {
   const [coords, setCoords] = useState([null, null]);
 
   useEffect(() => {
-    console.log("places: ", props.places);
     // this is a callback to give position of user
     const call = (position) => {
       const point = [];
@@ -23,46 +19,24 @@ export const UserPage = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!myMap && coords[0]) {
-      console.log(`from coords`, coords);
-      var myMap = loadMap("map", coords[0], coords[1]);
-      L.marker([coords[0], coords[1]]).addTo(myMap).bindPopup("<p>YOU</p>");
+    async function setCurrentPosition() {
+      // if (!myMap && coords[0]) {
+      //   console.log(`from coords`, coords);
+      //   var myMap = loadMap("map", coords[0], coords[1]);
+      //   L.marker([coords[0], coords[1]]).addTo(myMap).bindPopup("<p>YOU</p>");
+
+      await props.updateUser(props.singleUser.id, {
+        latitude: coords[0],
+        longitude: coords[1],
+      });
     }
+    setCurrentPosition();
   }, [coords]);
 
   async function handleChange(event) {
     const distance = event.target.value;
     try {
-      let circle;
       await props.getNearbyUsers(props.singleUser.id, distance);
-
-      if (circle) myMap.removeLayer(circle);
-
-      circle = L.circle([coords[0], coords[1]], {
-        radius: distance * 1609,
-      }).addTo(myMap);
-
-      if (distance >= 10)
-        myMap.flyTo([coords[0], coords[1]], 11, {
-          animate: true,
-          pan: {
-            duration: 2,
-          },
-        });
-      else if (distance < 10 && distance >= 5)
-        myMap.flyTo([coords[0], coords[1]], 12, {
-          animate: true,
-          pan: {
-            duration: 2,
-          },
-        });
-      else
-        myMap.flyTo([coords[0], coords[1]], 13, {
-          animate: true,
-          pan: {
-            duration: 2,
-          },
-        });
     } catch (error) {
       console.error(error);
     }
@@ -78,7 +52,7 @@ export const UserPage = (props) => {
           <option value="10">10 Miles</option>
         </select>
       </div>
-      <div className="leafMap" id="map"></div>
+      {/* <div className="leafMap" id="map"></div> */}
       <div>
         {props.nearbyUsers
           .filter((person) => person.username !== props.singleUser.username)
@@ -110,6 +84,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getNearbyUsers: (userId, distance) =>
       dispatch(fetchdUsersWithinDistance(userId, distance)),
+    updateUser: (userId, coordsObj) =>
+      dispatch(updateSingleUser(userId, coordsObj)),
   };
 };
 
