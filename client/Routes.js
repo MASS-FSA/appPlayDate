@@ -34,7 +34,7 @@ class Routes extends Component {
             <Route exact path="/user" component={UserPage} />
             <Route exact path="/events/create" component={CreateEvent} />
             <Route exact path="/events/:id" component={SingleEvent} />
-            <Route path="/questionaire" component={Questionaire} />
+            <Route path="/intake" component={Questionaire} />
             <Route exact path="/places" component={Places} />
             <Route path="/chat" component={Chat} />
             <Route exact path="/profile/:userId" component={OthersProfile} />
@@ -47,7 +47,7 @@ class Routes extends Component {
             <Route path="/signup" component={Signup} />
             <Route exact path="/user" component={UserPage} />
             <Route path="/chat" component={Chat} />
-            <Route path="/questionaire" component={Questionaire} />
+
             <Route exact path="/places" component={Places} />
           </Switch>
         )}

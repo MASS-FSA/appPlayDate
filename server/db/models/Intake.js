@@ -8,14 +8,14 @@ const Intake = db.define(`intake`, {
   },
 
   favoriteColor: {
-    type: Sequelize.ENUM(`blue`, `green`, `purple`),
+    type: Sequelize.STRING,
   },
 
   age: {
     type: Sequelize.INTEGER,
     validate: {
       min: 0,
-      max: 14,
+      max: 17,
     },
   },
 });
