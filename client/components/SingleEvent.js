@@ -45,13 +45,16 @@ const SingleEvent = (props) => {
           handleUpdate={handleUpdate}
         />
       ) : (
-        <div>
-          <img src={props.event.image} height="300px" />
-          <h1>{props.event.name}</h1>
-          <h4>{props.event.description}</h4>
-          <h4>{props.event.location}</h4>
+        <div className="eventscontainer">
           <button onClick={(e) => handleEdit(e)}>Edit</button>
-          <button onClick={() => handleDelete()}>Delete</button>
+          <button type="button" onClick={() => handleDelete()}>Delete</button>
+          <img src={props.event.image} />
+          <div className="singleeventcasing">
+            <h1>{props.event.name}</h1>
+            <h4>Description</h4>
+            <h4>{props.event.description}</h4>
+            <h4>{props.event.location}</h4>
+          </div>
         </div>
       )}
     </div>

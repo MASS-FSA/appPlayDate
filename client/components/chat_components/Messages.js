@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchMessages } from '../../store/chat';
 import Message from './Message';
 import NewMessage from './NewMessage';
+import ScrollToBottom from "react-scroll-to-bottom"
 
 export const Messages = (props) => {
   const [messages, setMessages] = useState([]);
@@ -25,14 +26,17 @@ export const Messages = (props) => {
   );
 
   return (
-    <div>
-      <ul className='media-list'>
-        {filteredMessages.map((message) => (
-          <Message message={message} key={message.id} />
-        ))}
-      </ul>
-      <NewMessage channelId={channelId} />
-    </div>
+    <ScrollToBottom className="message-container">
+    {
+          filteredMessages.map((message) => {
+
+          return<Message key={message.id}  message={message}/>}
+          )
+    }
+    <NewMessage channelId={channelId} />
+    </ScrollToBottom>
+    
+
   );
 };
 

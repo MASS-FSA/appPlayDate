@@ -2,7 +2,11 @@ body {
   font-family: sans-serif;
   margin: 0;
   padding: 0;
-  background: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.4),
+    rgba(255, 255, 255, 0.7)
+  ), linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);
   background-repeat: no-repeat;
   background-attachment: fixed;
   height: 100%;

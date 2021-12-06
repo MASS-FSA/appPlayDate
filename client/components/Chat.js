@@ -5,6 +5,7 @@ import { fetchMessages } from '../store/chat';
 import Channel from './chat_components/Channel';
 import Messages from './chat_components/Messages';
 
+
 const Chat = (props) => {
   const [messages, setMessages] = useState(props);
   useEffect(() => {

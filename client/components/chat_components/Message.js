@@ -4,19 +4,20 @@ export default function Message(props) {
   const message = props.message;
 
   return (
-    <li className='media'>
-      <div className='media-left'>
+    <div>
+      <div className='sentmsgcontainer'>
+      <div className='picturecontainer'>
         <img
           className='media-object'
           src={message.user.image}
           alt='image'
-          height='100px'
+          height='40px'
+          width='40px'
         />
+         <h4 className='media-heading'>{message.user.username}</h4>
       </div>
-      <div className='media-body'>
-        <h4 className='media-heading'>{message.user.username}</h4>
-        {message.content}
+      <div className='media-body'>{message.content}</div>
       </div>
-    </li>
+    </div>
   );
 }

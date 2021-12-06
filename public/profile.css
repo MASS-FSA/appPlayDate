@@ -1,0 +1,19 @@
+/* user dashboard */
+
+.userSdashboard select{
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    background-color: transparent;
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    font-weight: 900;
+    font-size: 16pt;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+
+/* User profile */

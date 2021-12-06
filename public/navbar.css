@@ -5,7 +5,6 @@
     background-blend-mode: darken;
     width: 100vw;
     display: inline-block;
-    justify-content: center;
     
   }
 .Navbar h1{
@@ -16,11 +15,21 @@
     text-align: center;
     font-weight: bolder;
     font-size: 7em;
-    text-shadow: 1px 1px 2px rgb(252, 64, 64), 5px 10px 2px rgb(99, 110, 100), 0 0 5px rgb(238, 169, 238);
+    text-shadow: 2px 2px 4px rgba(240, 147, 251, 1), 5px 10px 2px rgb(65, 167, 145), 0 0 10px rgba(245, 87, 108, 1);
   }
 
 .navContainer{
     display:flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    flex-direction: row;
+    order:5;
 }  
- 
+
+@media only screen and (max-width:500px) {
+  .Navbar h1{
+    font-size: 5em;
+    width: 100%;
+  }
+  .Navbar 
+}
