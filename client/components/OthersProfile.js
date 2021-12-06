@@ -4,7 +4,9 @@ import {
   checkFriendStatus,
   fetchSingleUser,
   sendFriendRequest,
+  updateFriendStatus,
 } from "../store/users";
+import Blocked from "./Blocked";
 
 export const OthersProfile = ({
   user,
@@ -15,7 +17,9 @@ export const OthersProfile = ({
   checkStatus,
   status,
   friendRequest,
+  blockUser,
 }) => {
+  const [block, setBlock] = useState(false);
   const [profileInfo, setProfileInfo] = useState({
     name: "",
     image: "",
@@ -60,35 +64,54 @@ export const OthersProfile = ({
         return <h4>Friend Request Declined 🤣</h4>;
       case `accepted`:
         return <h4>Already Friends!</h4>;
+      case `blocked`:
+        return setBlock(true);
 
       default:
-        return <h4>Bruh...you blocked</h4>;
+        break;
     }
+  }
+
+  function handleBlock(event) {
+    event.preventDefault();
+    console.log(myId);
+    blockUser(myId, user.id, event.target.value);
   }
 
   return (
     <div>
-      <section className="user_profile_section">
+      {block ? (
+        <Blocked />
+      ) : (
         <div>
-          <img src={profileInfo.image} height="300px" />
+          <section className="user_profile_section">
+            <div>
+              <img src={profileInfo.image} height="300px" />
+            </div>
+            <div>
+              <h3>{profileInfo.username}</h3>
+              <p>{profileInfo.bio}</p>
+              <div>
+                <p>Email: {profileInfo.email}</p>
+                <p>State: {profileInfo.state}</p>
+                <p>Member Since: {profileInfo.createdAt?.slice(0, 10)}</p>
+              </div>
+            </div>
+          </section>
+          <button value="blocked" onClick={(e) => handleBlock(e)}>
+            Block User
+          </button>
+          <fieldset>
+            <legend>Questionaire</legend>
+            <h4>Child Age {profileInfo.intake?.age}</h4>
+            <h4>Favorite Color {profileInfo.intake?.favoriteColor}</h4>
+            <h4>
+              Vaccinated? {profileInfo.intake?.vaccination ? `Yes` : `No`}
+            </h4>
+          </fieldset>
+          {statusSetter()}
         </div>
-        <div>
-          <h3>{profileInfo.username}</h3>
-          <p>{profileInfo.bio}</p>
-          <div>
-            <p>Email: {profileInfo.email}</p>
-            <p>State: {profileInfo.state}</p>
-            <p>Member Since: {profileInfo.createdAt?.slice(0, 10)}</p>
-          </div>
-        </div>
-      </section>
-      <fieldset>
-        <legend>Questionaire</legend>
-        <h4>Child Age {profileInfo.intake?.age}</h4>
-        <h4>Favorite Color {profileInfo.intake?.favoriteColor}</h4>
-        <h4>Vaccinated? {profileInfo.intake?.vaccination ? `Yes` : `No`}</h4>
-      </fieldset>
-      {statusSetter()}
+      )}
     </div>
   );
 };
@@ -108,6 +131,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(checkFriendStatus(userId, friendId)),
     friendRequest: (userId, friendId) =>
       dispatch(sendFriendRequest(userId, friendId)),
+    blockUser: (userId, friendId, status) =>
+      dispatch(updateFriendStatus(userId, friendId, status)),
   };
 };
 

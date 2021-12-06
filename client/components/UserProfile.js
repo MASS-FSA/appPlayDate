@@ -3,8 +3,14 @@ import { connect } from "react-redux";
 import {
   fetchFriendRequests,
   fetchSingleUser,
+  updateFriendStatus,
   updateSingleUser,
 } from "../store/users";
+
+import { OpenStreetMapProvider } from "leaflet-geosearch";
+
+// learn constant hook for this later
+let provider;
 
 export const UserProfile = (props) => {
   const { user } = props;
@@ -15,12 +21,17 @@ export const UserProfile = (props) => {
     state: "",
     email: "",
     bio: "",
+    address: "",
   });
 
   useEffect(() => {
     async function getUserData() {
       try {
+        //Get users information
         await props.getUser(props.myId);
+
+        // Geosearch with leaflet-geosearch
+        if (!provider) provider = new OpenStreetMapProvider();
       } catch (error) {
         console.error(error);
       }
@@ -39,6 +50,7 @@ export const UserProfile = (props) => {
         state: props.user.state || "",
         email: props.user.email || "",
         bio: props.user.bio || "",
+        address: props.user.address || "",
       };
     });
   }, [user]);
@@ -58,13 +70,28 @@ export const UserProfile = (props) => {
     });
   }
 
-  function handleSubmit() {
-    props.updateUser(props.myId, profileInfo);
+  async function handleSubmit() {
+    const infoObject = { ...profileInfo };
+    // make sure not to overuse OpenStreeAPI if User address already exists
+    if (profileInfo.address !== "" && !props.user.address) {
+      const [{ x, y }] = await parseAddress(infoObject.address);
+      infoObject.longitude = x.toFixed(7);
+      infoObject.latitude = y.toFixed(7);
+    }
+    props.updateUser(props.myId, infoObject);
 
     setEdit((prevEdit) => !prevEdit);
   }
 
-  console.log(`requests`, props.requests);
+  function handleUpdateRequest(event, friendId) {
+    event.preventDefault();
+    props.updateRequest(props.myId, friendId, event.target.value);
+  }
+
+  async function parseAddress(address) {
+    const results = await provider.search({ query: address });
+    return results;
+  }
 
   return (
     <div>
@@ -79,6 +106,7 @@ export const UserProfile = (props) => {
               <p>{user.bio}</p>
               <div>
                 <p>Email: {user.email}</p>
+                <p>Address: {user.address}</p>
                 <p>State: {user.state}</p>
                 <p>Member Since: {user.createdAt?.slice(0, 10)}</p>
               </div>
@@ -126,6 +154,13 @@ export const UserProfile = (props) => {
                   onChange={handleChange}
                 />
                 <br />
+                <label>Address</label>
+                <input
+                  name="address"
+                  value={profileInfo.address}
+                  onChange={handleChange}
+                />
+                <br />
                 <label>State</label>
                 <input
                   name="state"
@@ -156,6 +191,18 @@ export const UserProfile = (props) => {
                 props.history.push(`/profile/${request.requester.id}`)
               }
             />
+            <button
+              value="accepted"
+              onClick={(e) => handleUpdateRequest(e, request.requester.id)}
+            >
+              Accept
+            </button>
+            <button
+              value="declined"
+              onClick={(e) => handleUpdateRequest(e, request.requester.id)}
+            >
+              Decline
+            </button>
           </fieldset>
         );
       })}
@@ -176,6 +223,8 @@ const mapDispatchToProps = (dispatch) => {
     getUser: (userId) => dispatch(fetchSingleUser(userId)),
     updateUser: (userId, body) => dispatch(updateSingleUser(userId, body)),
     checkRequests: (userId) => dispatch(fetchFriendRequests(userId)),
+    updateRequest: (userId, friendId, response) =>
+      dispatch(updateFriendStatus(userId, friendId, response)),
   };
 };
 

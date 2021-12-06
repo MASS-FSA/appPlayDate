@@ -28,6 +28,7 @@
     "history": "^4.9.0",
     "jsonwebtoken": "^8.5.1",
     "leaflet": "^1.7.1",
+    "leaflet-geosearch": "^3.6.0",
     "morgan": "^1.9.1",
     "pg": "^8.5.1",
     "sequelize": "^6.3.5"
