@@ -2,8 +2,7 @@ import io from 'socket.io-client';
 import chat from './store';
 import { gotMessage } from './store/chat';
 
-const socket = io(`https://appplaydate.herokuapp.com`);
-// const socket = io(`https://appplaydate.herokuapp.com/chat/channels/`);
+const socket = io(`/chat/channels/`);
 
 socket.on('connect', (channel) => {
   socket.emit('join', channel);
