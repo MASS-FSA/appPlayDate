@@ -3,11 +3,9 @@ import { connect } from 'react-redux';
 import { fetchMessages } from '../../store/chat';
 import Message from './Message';
 import NewMessage from './NewMessage';
-import ScrollToBottom from "react-scroll-to-bottom"
-
+import ScrollToBottom from 'react-scroll-to-bottom';
 export const Messages = (props) => {
   const [messages, setMessages] = useState([]);
-
   useEffect(() => {
     async function getData() {
       await props.getMessages();
@@ -36,7 +34,6 @@ export const Messages = (props) => {
     <NewMessage channelId={channelId} />
     </ScrollToBottom>
     
-
   );
 };
 

@@ -27,17 +27,17 @@ const Chat = (props) => {
     <div className='chatcontainer'>
       <h1> Chat </h1>
       <div className='ChatParent'>
-        <div className='sidebar'>
-          <div className='channel'>
-            {' '}
+          
+        <div className='Chat'>
+        <div className='channel'>
             <Channel />
           </div>
-          <div className='directmessage'> direct Message</div>
-        </div>
-        <div className='Chat'>
           <Route path='/chat/channels/:channelId' component={Messages} />
           <div className='newmessage'></div>
         </div>
+      </div>
+      <div >
+        <img id="MASSMasscot" src="trasparentdino.png" />
       </div>
     </div>
   );

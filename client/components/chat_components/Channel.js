@@ -19,20 +19,18 @@ const Channel = (props) => {
   }, []);
 
   return (
-    <div>
+    <div className = "dropdown-content">
       <h1> Channels List </h1>
-      <ul>
         {props.channels.map((channel) => (
-          <li key={channel.id}>
+          <a key={channel.id}>
             <NavLink
               to={`/chat/channels/${channel.id}`}
               onClick={() => socket.emit('join', channel.id)}
             >
-              {channel.name}
+              {channel.name.split('_').join(' ')}
             </NavLink>
-          </li>
+          </a>
         ))}
-      </ul>
     </div>
   );
 };
