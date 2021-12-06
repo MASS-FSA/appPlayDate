@@ -53,12 +53,12 @@ export const setRequests = (requests) => {
 
 // THUNKS
 
-export const fetchdUsersWithinDistance = (userId, distance) => {
+export const fetchUsersWithinDistance = (userId, distance) => {
   const distanceObj = { distance };
   return async (dispatch) => {
     try {
-      const { data } = await axios.post(
-        `/api/users/nearby/${userId}`,
+      const { data } = await axios.get(
+        `/api/users/nearby/${userId}/${distance}`,
         distanceObj
       );
 
