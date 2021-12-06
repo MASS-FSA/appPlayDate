@@ -1,13 +1,17 @@
 module.exports = (io) => {
-  io.on('connection', (socket) => {
-    console.log(socket.id, ' Welcome to the party!');
+  const chat = io.of(`/chat/channels/`);
 
-    socket.on('new-message', (message) => {
-      socket.broadcast.emit('new-message', message);
+  chat.on('connection', (socket) => {
+    socket.on('join', (channel) => {
+      socket.join(channel);
     });
 
-    socket.on('new-channel', (channel) => {
-      socket.broadcast.emit('new-channel', channel);
+    socket.on('new-message', (message) => {
+      chat.emit('new-message', message.newMessage);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
     });
   });
 };

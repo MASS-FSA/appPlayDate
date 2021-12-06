@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { getChannels } from '../../store/chat';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { Socket } from 'socket.io-client';
+import socket from '../../socket';
 
 const Channel = (props) => {
   useEffect(() => {
@@ -22,7 +24,12 @@ const Channel = (props) => {
       <ul>
         {props.channels.map((channel) => (
           <li key={channel.id}>
-            <Link to={`/chat/channels/${channel.id}`}>{channel.name}</Link>
+            <NavLink
+              to={`/chat/channels/${channel.id}`}
+              onClick={() => socket.emit('join', channel.id)}
+            >
+              {channel.name}
+            </NavLink>
           </li>
         ))}
       </ul>

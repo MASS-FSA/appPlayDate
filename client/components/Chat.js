@@ -5,8 +5,8 @@ import { fetchMessages } from '../store/chat';
 import Channel from './chat_components/Channel';
 import Messages from './chat_components/Messages';
 
-
 const Chat = (props) => {
+  const [messages, setMessages] = useState(props);
   useEffect(() => {
     async function callmessages() {
       try {
@@ -15,9 +15,12 @@ const Chat = (props) => {
         throw error;
       }
     }
-
     callmessages();
   }, []);
+
+  useEffect(() => {
+    setMessages(props.messages);
+  }, [props.messages]);
 
   return (
     <div className='chatcontainer'>
