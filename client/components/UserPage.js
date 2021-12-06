@@ -1,26 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchdUsersWithinDistance } from "../store/users";
 import { loadMap, getGeoLocationFromBrowser } from "../../Util/loadMap"
 const L = require("leaflet");
 
+let myMap
+
 export const UserPage = (props) => {
 
-  const [[lat, lng], setCoords] = useState([null, null]);
-  if (lat) {
-    const myMap = loadMap('map', lat, lng)
-    L.marker([lat, lng]).addTo(myMap);
-  }
+  const [coords, setCoords] = useState([null, null]);
+
 
   useEffect(() => {
+    console.log("places: ", props.places);
+    // this is a callback to give position of user
     const call = (position) => {
       const point = []
       point.push(position.coords.latitude)
       point.push(position.coords.longitude)
       setCoords(point)
     }
+    // uses navigator method and uses `call` function as the callback
     getGeoLocationFromBrowser(call)
   }, []);
+
+  useEffect(() => {
+    if (!myMap && coords[0]) {
+      console.log(`from coords`, coords);
+      var myMap = loadMap("map", coords[0], coords[1]);
+      L.marker([coords[0], coords[1]]).addTo(myMap).bindPopup('<p>YOU</p>')
+    }
+  }, [coords]);
+
 
   async function handleChange(event) {
     const distance = event.target.value;

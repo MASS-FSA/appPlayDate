@@ -4,11 +4,11 @@ import { fetchPlaces } from "../store/places";
 const L = require("leaflet");
 import { getGeoLocationFromBrowser, loadMap } from "../../Util/loadMap";
 
-let myMap;
+let myMap
 
 const Places = (props) => {
-  const [coords, setCoords] = useState([]);
-  // const [map, setMap] = useState(null);
+  const [coords, setCoords] = useState([null, null]);
+
 
   useEffect(() => {
     console.log("places: ", props.places);
@@ -27,7 +27,7 @@ const Places = (props) => {
   useEffect(() => {
     if (!myMap && coords[0]) {
       console.log(`from coords`, coords);
-      props.fetchPlaces(coords, 1600);
+      props.fetchPlaces(coords, 16000)
       myMap = loadMap("map", coords[0], coords[1]);
     }
   }, [coords]);
@@ -37,8 +37,8 @@ const Places = (props) => {
       console.log(props.places);
       props.places.map((place) => {
         const marker = L.marker([
-          place.geometry.location.lat,
-          place.geometry.location.lng,
+          place.lat,
+          place.lng,
         ])
           .addTo(myMap)
           .bindPopup(`<p>${place.name}</p>`);
