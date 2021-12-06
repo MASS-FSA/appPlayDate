@@ -72,7 +72,8 @@ export const UserProfile = (props) => {
 
   async function handleSubmit() {
     const infoObject = { ...profileInfo };
-    if (profileInfo.address !== "") {
+    // make sure not to overuse OpenStreeAPI if User address already exists
+    if (profileInfo.address !== "" && !props.user.address) {
       const [{ x, y }] = await parseAddress(infoObject.address);
       infoObject.longitude = x.toFixed(7);
       infoObject.latitude = y.toFixed(7);
