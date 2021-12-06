@@ -5,27 +5,11 @@ const {
 
 module.exports = router;
 
-// /api/users
-router.get("/", async (req, res, next) => {
-  try {
-    const users = await User.findAll({
-      // explicitly select only the id and username fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
-      attributes: ["id", "username", "email", "image", "longitude", "latitude"],
-    });
-
-    res.send(users);
-  } catch (err) {
-    next(err);
-  }
-});
-
 // /api/users/nearby/:userId
-router.post("/nearby/:userId", async (req, res, next) => {
+router.get("/nearby/:userId/:distance", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId);
-    const output = await user.findNearbyUsers(req.body.distance);
+    const output = await user.findNearbyUsers(req.params.distance);
 
     res.send(output);
   } catch (error) {
@@ -161,5 +145,21 @@ router.route(`/intakes/:userId`).post(async (req, res, next) => {
     res.send(200);
   } catch (error) {
     next(error);
+  }
+});
+
+// /api/users
+router.get("/", async (req, res, next) => {
+  try {
+    const users = await User.findAll({
+      // explicitly select only the id and username fields - even though
+      // users' passwords are encrypted, it won't help if we just
+      // send everything to anyone who asks!
+      attributes: ["id", "username", "email", "image", "longitude", "latitude"],
+    });
+
+    res.send(users);
+  } catch (err) {
+    next(err);
   }
 });

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchPlaces } from "../store/places";
+import { fetchUsersWithinDistance } from "../store/users";
 const L = require("leaflet");
 import { getGeoLocationFromBrowser, loadMap } from "../../Util/loadMap";
 import SinglePlaceView from "./singlePlace"
+import SinglePerson from "./singlePerson"
 
 let myMap
 
@@ -29,6 +31,13 @@ const Places = (props) => {
     // uses navigator method and uses `call` function as the callback
     getGeoLocationFromBrowser(call);
   }, []);
+
+  useEffect(()=>{
+    if (props.me.id) {
+      console.log('me: ', props.me)
+      props.fetchUsersWithinDistance(props.me.id, 10)
+    }
+  }, [props.me])
 
   useEffect(() => {
     if (!myMap && coords[0]) {
@@ -113,9 +122,20 @@ const Places = (props) => {
         <hr />
       </div>
       <div>
+        {/* FOR DISPALYING NEARBY PLACES */}
         {options.seePlaces ?
         props.places.map(place => (
           <SinglePlaceView key={place.name} place={place} />
+        ))
+        :
+        null
+        }
+      </div>
+      <div>
+        {/* FOR DISPLAYING NEARBY PEOPLE */}
+        {options.seePeople ?
+        props.people.map(person => (
+          <SinglePerson key={person.id} person={person}/>
         ))
         :
         null
@@ -128,6 +148,7 @@ const Places = (props) => {
 const mapStateToProps = (state) => {
   return {
     places: state.places,
+    people: state.users.nearbyUsers,
     me: state.auth,
   };
 };
@@ -135,6 +156,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchPlaces: (loc, radius) => dispatch(fetchPlaces(loc, radius)),
+    fetchUsersWithinDistance: (id, distance) =>  dispatch(fetchUsersWithinDistance(id, distance))
   };
 };
 

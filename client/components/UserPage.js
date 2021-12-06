@@ -1,6 +1,6 @@
 import React, { createRef, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { fetchdUsersWithinDistance } from "../store/users";
+import { fetchUsersWithinDistance } from "../store/users";
 import { loadMap, getGeoLocationFromBrowser } from "../../Util/loadMap";
 const L = require("leaflet");
 
@@ -109,7 +109,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getNearbyUsers: (userId, distance) =>
-      dispatch(fetchdUsersWithinDistance(userId, distance)),
+      dispatch(fetchUsersWithinDistance(userId, distance)),
   };
 };
 
