@@ -98,12 +98,21 @@ export const UserProfile = (props) => {
       {!edit ? (
         <div>
           <section className="user_profile_section">
-            <div className="leftsideContainer">
-              <img src={user.image} />
-            </div>
-            <div className="rightsideContainer">
-              <h3>{user.username}</h3>
-              <p>{user.bio}</p>
+          <button
+        onClick={(e) => {
+          e.preventDefault();
+          edit ? handleSubmit() : handleEdit();
+        }}
+      >
+        {edit ? `Save` : `Edit`}
+      </button>
+            <div className="leftright">
+              <div className="leftsideContainer">
+                <img src={user.image} />
+              </div>
+              <div className="rightsideContainer">
+                <h3>{user.username}</h3>
+                <p>{user.bio}</p>
               <div>
                 <p>Email: {user.email}</p>
                 <p>Address: {user.address}</p>
@@ -111,6 +120,8 @@ export const UserProfile = (props) => {
                 <p>Member Since: {user.createdAt?.slice(0, 10)}</p>
               </div>
             </div>
+            </div>
+            
           </section>
           <fieldset>
             <legend>Questionaire</legend>
@@ -122,15 +133,12 @@ export const UserProfile = (props) => {
       ) : (
         <div>
           <form>
-            <div>
-              <img src={user.image} />
               <label>Image</label>
               <input
                 name="image"
                 value={profileInfo.image}
                 onChange={handleChange}
               />
-            </div>
             <div>
               <label>Name</label>
               <input
@@ -172,14 +180,6 @@ export const UserProfile = (props) => {
           </form>
         </div>
       )}
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          edit ? handleSubmit() : handleEdit();
-        }}
-      >
-        {edit ? `Save` : `Edit`}
-      </button>
       {props.requests.map((request, index) => {
         return (
           <fieldset key={index}>
