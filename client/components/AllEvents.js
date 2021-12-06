@@ -25,17 +25,22 @@ const AllEvents = (props) => {
       >
         Create Event
       </button>
+      <select>
+          <option> Today </option>
+          <option> Weekend </option>
+          <option> Near Me </option>
+      </select>
       {props.allEvents
         .sort((a, b) => a.id - b.id)
         .map((event) => {
           return (
-            <div className="singleEvent">
+            <div key={event.id} className="singleEvent">
               <fieldset
               key={event.id}
               onClick={() => props.history.push(`/events/${event.id}`)}
             >
               <legend>{event.name}</legend>
-              <img src={event.image} height="300px" />
+              <img src={event.image}  />
               <h4>Location: {event.location}</h4>
               <h4>Time: {event.time.slice(0, 10)}</h4>
               <p>{event.description}</p>

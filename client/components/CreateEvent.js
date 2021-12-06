@@ -41,7 +41,8 @@ export const CreateEvent = (props) => {
   }
 
   return (
-    <div>
+    <div className="questioncontainer">
+      <div className="lines"/>
       <form>
         <label>Name</label>
         <input name="name" value={eventInfo.name} onChange={handleChange} />

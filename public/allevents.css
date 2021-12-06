@@ -2,26 +2,119 @@
     display: flex;
     margin: auto;
     flex-direction: column;
+    text-align: center;
     justify-content: center;
+    font-size: large;
 }
 .eventscontainer button{    
     display:flex;
     margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
     width: 100px;
-    background-color: #4CAF50;
     color: white;
     padding: 14px 20px;
-    margin: auto;
-    border: none;
     border-radius: 4px;
     cursor: pointer;
+    border-width: 3px;
+    background: #fd9535;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+    font-weight: bold;
+    border: solid 2px #d27d00
 }
-.singleEvent{
+.eventscontainer > button:hover{
+    background-color: rgb(255, 102, 0);
+    box-shadow:
+    0 0 7.5px 3.75px #fff,
+    0 0 17.5px 7.5px rgb(255, 0, 106),
+    0 0 17.5px 11.25px rgb(255, 136, 0);
+}
+.eventscontainer > button:active{
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);
+    border-bottom: none;
+}
+.eventscontainer select{
     display: flex;
     margin: auto;
-    background-color: rgb(143, 160, 95);
-    padding-bottom: 5px;
-    -moz-box-shadow:inset 0 0 10px #000000;
-   -webkit-box-shadow:inset 0 0 10px #000000;
-   box-shadow:inset 0 0 10px #000000;
+    justify-content: center;
+    background-color: transparent;
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    font-weight: 900;
+    font-size: 16pt;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.singleEvent{
+    border-radius: 15px 50px;
+    display: flex;
+    margin: auto;
+    margin-bottom: 7px;
+    margin-top: 7px;
+    background:linear-gradient(120deg, rgba(240, 147, 251, 0.6) 0%, rgba(245, 87, 108, 0.6) 100%);
+    box-shadow: 0 30px 60px 0 rgba(0,0,0,0.7); 
+    color: rgb(82, 80, 80);
+    opacity: .8;
+
+}
+.singleEvent:hover{
+    opacity: 1;
+    transform: scale(1.05);
+}
+.singleEvent fieldset{
+    border-width: 6px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+.singleEvent fieldset legend{
+    color: rgb(7, 7, 7);
+    text-shadow:1px 2px 2px blanchedalmond;
+    padding: 3px 6px;
+    line-height: 1;
+    font-weight: 900;
+}
+.singleEvent img{
+    height:300px;
+    box-shadow: 12px 0 15px -4px rgb(75, 75, 75), -12px 0 8px -4px gray
+}
+
+.eventscontainer img{
+    display: flex;
+    width: 50%;
+    margin: auto;
+
+}
+.singleeventcasing{
+    border-radius: 15px 50px;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: auto;
+    margin-bottom: 7px;
+    margin-top: 7px;
+    background:linear-gradient(120deg, rgba(240, 147, 251, 0.6) 0%, rgba(245, 87, 108, 0.6) 100%);
+    box-shadow: 0 30px 60px 0 rgba(0,0,0,0.7); 
+    color: rgb(82, 80, 80);
+    opacity: .8;
+}
+
+@media only screen and (max-width:500px){
+    .eventscontainer{
+        width:60%;
+        height: 60%;
+    }
+    .eventscontainer img{
+    width: 100%;
+    height: 100%;
+    }
+    .singleeventcasing{
+        width: 100%;
+    }
+    .singleEvent img{
+        height: 100%;
+        width: 100%;
+    }
 }

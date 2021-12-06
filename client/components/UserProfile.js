@@ -71,10 +71,10 @@ export const UserProfile = (props) => {
       {!edit ? (
         <div>
           <section className="user_profile_section">
-            <div>
-              <img src={user.image} height="300px" />
+            <div className="leftsideContainer">
+              <img src={user.image} />
             </div>
-            <div>
+            <div className="rightsideContainer">
               <h3>{user.username}</h3>
               <p>{user.bio}</p>
               <div>

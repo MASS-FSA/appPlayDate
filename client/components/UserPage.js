@@ -72,7 +72,7 @@ export const UserPage = (props) => {
 
   return (
     <div>
-      <div>
+      <div className="userSdashboard">
         <select onChange={(e) => handleChange(e)}>
           <option></option>
           <option value="1">1 Mile</option>
