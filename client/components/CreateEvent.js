@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { createSingleEvent } from "../store/events";
+import { clearSelectedPlace } from "../store/selectedPlace";
 
 const defaultUrl = `https://assets.rebelmouse.io/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbWFnZSI6Imh0dHBzOi8vYXNzZXRzLnJibC5tcy8xODMwNzc2My9vcmlnaW4uanBnIiwiZXhwaXJlc19hdCI6MTY3MTkzNTYwMX0.lHK0h7BhP9FgVrL0xNdfW9kyYEaCNRk8MLXzGv3VzVQ/img.jpg?width=1245&quality=85&coordinates=66%2C0%2C67%2C0&height=700`;
 
@@ -12,6 +13,24 @@ export const CreateEvent = (props) => {
     description: "",
     image: "",
   });
+
+  useEffect(()=>{
+      const {name, icon, rating, types, vicinity} = props.selectedPlace
+      setEventInfo({
+        name: name,
+        location: vicinity,
+        time: "",
+        description: "",
+        image: icon,
+      })
+  },[])
+
+   useEffect(()=> {
+    return () => {
+      props.clearSelectedPlace()
+      window.localStorage.setItem("selectedPlace", {})
+    }
+  }, [])
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -38,6 +57,16 @@ export const CreateEvent = (props) => {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  function handleClear () {
+    setEventInfo({
+      name: "",
+      location: "",
+      time: "",
+      description: "",
+      image: "",
+    })
   }
 
   return (
@@ -80,7 +109,10 @@ export const CreateEvent = (props) => {
             handleSubmit(eventInfo);
           }}
         >
-          Submit
+          Create This Event!
+        </button>
+        <button onClick={handleClear}>
+          Clear All
         </button>
       </form>
     </div>
@@ -90,12 +122,14 @@ export const CreateEvent = (props) => {
 const mapStateToProps = (state) => {
   return {
     event: state.events.singleEvent,
+    selectedPlace: state.selectedPlace
   };
 };
 
 const mapDispatchToProps = (dispatch, { history }) => {
   return {
     createEvent: (body) => dispatch(createSingleEvent(body, history)),
+    clearSelectedPlace: () => dispatch(clearSelectedPlace())
   };
 };
 

@@ -1,19 +1,9 @@
 import React from "react";
-import { useEffect } from "react";
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
-import { clearSelectedPlace } from "../store/selectedPlace";
 
 const SinglePlaceDetailedView = (props) => {
   const {name, icon, rating, types, vicinity} = props.selectedPlace || window.localStorage.selectedPlace
-
-  useEffect(()=> {
-    return () => {
-      props.clearSelectedPlace()
-      window.localStorage.setItem("selectedPlace", {})
-    }
-  }, [])
-
 
   return (
     <div>
@@ -39,7 +29,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-  clearSelectedPlace: () => dispatch(clearSelectedPlace())
+
   }
 }
 

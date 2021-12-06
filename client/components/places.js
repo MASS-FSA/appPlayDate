@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { fetchPlaces } from "../store/places";
 const L = require("leaflet");
 import { getGeoLocationFromBrowser, loadMap } from "../../Util/loadMap";
+import SinglePlaceView from "./singlePlace"
 
 let myMap
 
@@ -51,6 +52,11 @@ const Places = (props) => {
   return (
     <div>
       <div className="leafMap" id="map"></div>
+      <div>
+        {props.places.map(place => (
+          <SinglePlaceView key={place.name} place={place} />
+        ))}
+      </div>
     </div>
   );
 };
