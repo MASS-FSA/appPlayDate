@@ -75,8 +75,8 @@ export const UserProfile = (props) => {
     // make sure not to overuse OpenStreeAPI if User address already exists
     if (profileInfo.address !== "" && !props.user.address) {
       const [{ x, y }] = await parseAddress(infoObject.address);
-      infoObject.longitude = x.toFixed(7);
-      infoObject.latitude = y.toFixed(7);
+      infoObject.homeLongitude = x.toFixed(7);
+      infoObject.homeLatitude = y.toFixed(7);
     }
     props.updateUser(props.myId, infoObject);
 

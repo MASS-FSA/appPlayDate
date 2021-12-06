@@ -24,6 +24,7 @@ export const Questionaire = (props) => {
     if (body.age === "") return alert(`Please add child's age`);
     try {
       props.addIntake(props.me.id, body);
+      props.history.push(`/home`);
     } catch (error) {
       console.error(error);
     }
@@ -31,7 +32,7 @@ export const Questionaire = (props) => {
 
   return (
     <div className="questioncontainer">
-      <div className="lines"/>
+      <div className="lines" />
       <form>
         <label>What is your child's age?</label>
         <input name="age" value={intake.age} onChange={handleChange} />
