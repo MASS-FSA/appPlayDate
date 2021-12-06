@@ -9,7 +9,7 @@ let myMap
 
 const Places = (props) => {
   const [coords, setCoords] = useState([null, null]);
-  const [thisLocation, setThisLocation] = useState(true)
+  // const [thisLocation, setThisLocation] = useState(true)
   const [options, setOptions] = useState({
     seePlaces: false,
     seePeople: false,
@@ -52,29 +52,48 @@ const Places = (props) => {
     }
   }, [props.places]);
 
-  function handleLocation() {
-    setThisLocation(!thisLocation)
-    console.log(thisLocation)
-  }
+  // useEffect(() => {
+  //   console.log('thislocation')
+  //   if(thisLocation) {
+  //     const call = (position) => {
+  //       const point = [];
+  //       point.push(position.coords.latitude);
+  //       point.push(position.coords.longitude);
+  //       setCoords(point);
+  //     };
+  //     // uses navigator method and uses `call` function as the callback
+  //     getGeoLocationFromBrowser(call);
+  //   } else {
+  //     setCoords([props.me.latitude, props.me.longitude, 1600])
+  //   }
+  // }, [thisLocation])
+
+  // function handleLocation() {
+  //   setThisLocation(!thisLocation)
+  // }
 
   function handleCheckBox(event) {
-    if(event) {
-      console.log(event.target.value)
-      options[event.target.value] = !options[event.target.value]
-      console.log(options)
+    if(event.target.value) {
+      setOptions(prevOptions => {
+        return {
+          ...prevOptions,
+          [event.target.value]: !options[event.target.value]
+        }
+      })
+      event.persist()
     }
   }
 
 
   return (
     <div>
-      <div>
+      {/* <div>
         <label htmlFor="chooseLocation">Use Location</label>
         <select name="locations" onChange={handleLocation}>
           <option value="myLocation">My Location</option>
           <option value="useHomeAddress">Use Home Address</option>
         </select>
-      </div>
+      </div> */}
       <hr />
       <div className="leafMap" id="map" />
       <h2>Options</h2>
@@ -94,9 +113,13 @@ const Places = (props) => {
         <hr />
       </div>
       <div>
-        {props.places.map(place => (
+        {options.seePlaces ?
+        props.places.map(place => (
           <SinglePlaceView key={place.name} place={place} />
-        ))}
+        ))
+        :
+        null
+        }
       </div>
     </div>
   );
@@ -105,6 +128,7 @@ const Places = (props) => {
 const mapStateToProps = (state) => {
   return {
     places: state.places,
+    me: state.auth,
   };
 };
 
