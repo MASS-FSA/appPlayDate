@@ -1,12 +1,12 @@
-const Sequelize = require("sequelize");
-const { Op } = require("sequelize");
-const db = require("../db");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const Sequelize = require('sequelize');
+const db = require('../db');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const { distanceBetweenPoints } = require('../../../Util/utilityFuncs');
 
 const SALT_ROUNDS = 5;
 
-const User = db.define("user", {
+const User = db.define('user', {
   username: {
     type: Sequelize.STRING,
     unique: true,
@@ -25,7 +25,7 @@ const User = db.define("user", {
   image: {
     type: Sequelize.TEXT,
     defaultValue:
-      "https://us.123rf.com/450wm/kyryloff/kyryloff2008/kyryloff200800018/152844692-profile-icon-male-user-icon-ui-button-stock-vector-illustration-isolated-on-white-background-.jpg?ver=6",
+      'https://us.123rf.com/450wm/kyryloff/kyryloff2008/kyryloff200800018/152844692-profile-icon-male-user-icon-ui-button-stock-vector-illustration-isolated-on-white-background-.jpg?ver=6',
     validate: {
       isUrl: true,
     },
@@ -37,6 +37,19 @@ const User = db.define("user", {
     },
   },
   latitude: {
+    type: Sequelize.FLOAT,
+    validate: {
+      isNumeric: true,
+    },
+  },
+
+  homeLongitude: {
+    type: Sequelize.FLOAT,
+    validate: {
+      isNumeric: true,
+    },
+  },
+  homeLatitude: {
     type: Sequelize.FLOAT,
     validate: {
       isNumeric: true,
@@ -77,22 +90,16 @@ User.prototype.generateToken = function () {
 
 User.prototype.findNearbyUsers = async function (distance) {
   try {
-    // convert miles to lat and long distance
-    // 69 miles per degree of latitude and 54.6 miles per degree of longitude
-    let lat = (distance / 69).toFixed(7);
-    let lng = (distance / 54.6).toFixed(7);
-
-    // find users withing the given lat and lng
-    const users = await User.findAll({
-      where: {
-        latitude: { [Op.between]: [this.latitude - lat, this.latitude + lat] },
-        longitude: {
-          [Op.between]: [this.longitude - lng, this.longitude + lng],
-        },
-      },
+    const users = await User.findAll();
+    return users.filter((user) => {
+      const dist = distanceBetweenPoints(
+        this.latitude,
+        this.longitude,
+        user.homeLatitude,
+        user.homeLongitude
+      );
+      return dist <= distance;
     });
-
-    return users;
   } catch (error) {
     console.error(error);
   }
@@ -104,7 +111,7 @@ User.prototype.findNearbyUsers = async function (distance) {
 User.authenticate = async function ({ username, password }) {
   const user = await this.findOne({ where: { username } });
   if (!user || !(await user.correctPassword(password))) {
-    const error = Error("Incorrect username/password");
+    const error = Error('Incorrect username/password');
     error.status = 401;
     throw error;
   }
@@ -116,11 +123,11 @@ User.findByToken = async function (token) {
     const { id } = await jwt.verify(token, process.env.JWT);
     const user = User.findByPk(id);
     if (!user) {
-      throw "nooo";
+      throw 'nooo';
     }
     return user;
   } catch (ex) {
-    const error = Error("bad token");
+    const error = Error('bad token');
     error.status = 401;
     throw error;
   }
@@ -131,7 +138,7 @@ User.findByToken = async function (token) {
  */
 const hashPassword = async (user) => {
   //in case the password has been changed, we want to encrypt it with bcrypt
-  if (user.changed("password")) {
+  if (user.changed('password')) {
     user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
   }
 };
