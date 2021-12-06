@@ -7,6 +7,11 @@ import {
   updateSingleUser,
 } from "../store/users";
 
+import { OpenStreetMapProvider } from "leaflet-geosearch";
+
+// learn constant hook for this later
+let provider;
+
 export const UserProfile = (props) => {
   const { user } = props;
   const [edit, setEdit] = useState(false);
@@ -16,12 +21,17 @@ export const UserProfile = (props) => {
     state: "",
     email: "",
     bio: "",
+    address: "",
   });
 
   useEffect(() => {
     async function getUserData() {
       try {
+        //Get users information
         await props.getUser(props.myId);
+
+        // Geosearch with leaflet-geosearch
+        if (!provider) provider = new OpenStreetMapProvider();
       } catch (error) {
         console.error(error);
       }
@@ -40,6 +50,7 @@ export const UserProfile = (props) => {
         state: props.user.state || "",
         email: props.user.email || "",
         bio: props.user.bio || "",
+        address: props.user.address || "",
       };
     });
   }, [user]);
@@ -59,8 +70,14 @@ export const UserProfile = (props) => {
     });
   }
 
-  function handleSubmit() {
-    props.updateUser(props.myId, profileInfo);
+  async function handleSubmit() {
+    const infoObject = { ...profileInfo };
+    if (profileInfo.address !== "") {
+      const [{ x, y }] = await parseAddress(infoObject.address);
+      infoObject.longitude = x.toFixed(7);
+      infoObject.latitude = y.toFixed(7);
+    }
+    props.updateUser(props.myId, infoObject);
 
     setEdit((prevEdit) => !prevEdit);
   }
@@ -68,6 +85,11 @@ export const UserProfile = (props) => {
   function handleUpdateRequest(event, friendId) {
     event.preventDefault();
     props.updateRequest(props.myId, friendId, event.target.value);
+  }
+
+  async function parseAddress(address) {
+    const results = await provider.search({ query: address });
+    return results;
   }
 
   return (
@@ -83,6 +105,7 @@ export const UserProfile = (props) => {
               <p>{user.bio}</p>
               <div>
                 <p>Email: {user.email}</p>
+                <p>Address: {user.address}</p>
                 <p>State: {user.state}</p>
                 <p>Member Since: {user.createdAt?.slice(0, 10)}</p>
               </div>
@@ -127,6 +150,13 @@ export const UserProfile = (props) => {
                 <input
                   name="email"
                   value={profileInfo.email}
+                  onChange={handleChange}
+                />
+                <br />
+                <label>Address</label>
+                <input
+                  name="address"
+                  value={profileInfo.address}
                   onChange={handleChange}
                 />
                 <br />
