@@ -9,13 +9,18 @@ let myMap
 
 const Places = (props) => {
   const [coords, setCoords] = useState([null, null]);
+  const [thisLocation, setThisLocation] = useState(true)
+  const [options, setOptions] = useState({
+    seePlaces: false,
+    seePeople: false,
+    seeFriends: false,
+    seeEvents: false
+  })
 
 
   useEffect(() => {
-    console.log("places: ", props.places);
     // this is a callback to give position of user
     const call = (position) => {
-      console.log("position: ", position);
       const point = [];
       point.push(position.coords.latitude);
       point.push(position.coords.longitude);
@@ -37,21 +42,57 @@ const Places = (props) => {
     if (props.palces !== []) {
       console.log(props.places);
       props.places.map((place) => {
-        const marker = L.marker([
+        return L.marker([
           place.lat,
           place.lng,
         ])
           .addTo(myMap)
           .bindPopup(`<p>${place.name}</p>`);
-
-        return marker;
       });
     }
   }, [props.places]);
 
+  function handleLocation() {
+    setThisLocation(!thisLocation)
+    console.log(thisLocation)
+  }
+
+  function handleCheckBox(event) {
+    if(event) {
+      console.log(event.target.value)
+      options[event.target.value] = !options[event.target.value]
+      console.log(options)
+    }
+  }
+
+
   return (
     <div>
-      <div className="leafMap" id="map"></div>
+      <div>
+        <label htmlFor="chooseLocation">Use Location</label>
+        <select name="locations" onChange={handleLocation}>
+          <option value="myLocation">My Location</option>
+          <option value="useHomeAddress">Use Home Address</option>
+        </select>
+      </div>
+      <hr />
+      <div className="leafMap" id="map" />
+      <h2>Options</h2>
+      <br />
+      <div onClick={handleCheckBox}>
+        <input type="checkbox" name="selectionOne" value="seePlaces" />
+        <label htmlFor="seePlaces"> View Possible Meet Up<br /> Spots Near Me</label><br></br>
+
+        <input type="checkbox" name="selectionTwo" value="seePeople" />
+        <label htmlFor="seePeople"> View People Near Me</label><br></br>
+
+        <input type="checkbox" name="selectionThree" value="seeFriends" />
+        <label htmlFor="seeFriends"> View Friends</label><br></br>
+
+        <input type="checkbox" name="selectionFour" value="seeEvents" />
+        <label htmlFor="seeEvents"> View Events in My Area</label><br></br>
+        <hr />
+      </div>
       <div>
         {props.places.map(place => (
           <SinglePlaceView key={place.name} place={place} />
