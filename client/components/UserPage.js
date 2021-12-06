@@ -1,7 +1,7 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { fetchdUsersWithinDistance, updateSingleUser } from '../store/users';
-import { loadMap, getGeoLocationFromBrowser } from '../../Util/loadMap';
+import { fetchUsersWithinDistance, updateSingleUser } from '../store/users';
+import { getGeoLocationFromBrowser } from '../../Util/loadMap';
 
 export const UserPage = (props) => {
   const [coords, setCoords] = useState([null, null]);
@@ -78,7 +78,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getNearbyUsers: (userId, distance) =>
-      dispatch(fetchdUsersWithinDistance(userId, distance)),
+      dispatch(fetchUsersWithinDistance(userId, distance)),
     updateUser: (userId, coordsObj) =>
       dispatch(updateSingleUser(userId, coordsObj)),
   };
