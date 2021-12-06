@@ -1,7 +1,5 @@
 import axios from 'axios';
 import socket from '../socket';
-// import io from 'socket.io-client';
-// const socket = io(window.location.origin);
 
 const TOKEN = 'token';
 export const token = window.localStorage.getItem(TOKEN);
@@ -34,15 +32,13 @@ export const _getChannels = (channels) => {
   };
 };
 
-export const fetchMessages = () => {
-  return async (dispatch) => {
-    try {
-      const { data: messages } = await axios.get(`/api/messages`);
-      dispatch(getMessages(messages));
-    } catch (err) {
-      throw ('error something went wrong', err);
-    }
-  };
+export const fetchMessages = () => async (dispatch) => {
+  try {
+    const { data: messages } = await axios.get(`/api/messages`);
+    dispatch(getMessages(messages));
+  } catch (err) {
+    throw ('error something went wrong', err);
+  }
 };
 
 export const getChannels = () => async (dispatch) => {
@@ -62,8 +58,8 @@ export const sendMessage = (message) => async (dispatch) => {
       message,
       tokenHeader
     );
-    dispatch(gotMessage(newMessage));
-    socket.emit('new-message', newMessage);
+    // dispatch(gotMessage(newMessage)); I think we can delete this. -sh
+    socket.emit('new-message', { newMessage, channel: newMessage.channelId });
   } catch (error) {
     console.error(error);
   }

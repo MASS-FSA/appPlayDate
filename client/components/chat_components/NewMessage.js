@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { sendMessage } from '../../store/chat';
 
 function NewMessage(props) {
+  // console.log('these are my newMessage Props: ', props);
   const [message, setMessage] = useState({
     content: '',
+    // channelId: props.channelId,
+  });
+  const [channelId, setChannelId] = useState({
     channelId: props.channelId,
   });
+
+  useEffect(() => {
+    setChannelId(props.channelId);
+  }, [props.channelId]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -21,7 +29,7 @@ function NewMessage(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    props.submitMessage(message);
+    props.submitMessage({ content: message.content, channelId });
     setMessage((prevInfo) => {
       return {
         ...prevInfo,
@@ -51,10 +59,14 @@ function NewMessage(props) {
   );
 }
 
+const mapStateToProps = (state) => ({
+  messages: state.chat.messages,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     submitMessage: (message) => dispatch(sendMessage(message)),
   };
 };
 
-export default connect(null, mapDispatchToProps)(NewMessage);
+export default connect(mapStateToProps, mapDispatchToProps)(NewMessage);
