@@ -98,14 +98,14 @@ export const UserProfile = (props) => {
       {!edit ? (
         <div>
           <section className="user_profile_section">
-          <button
+            <button
         onClick={(e) => {
           e.preventDefault();
           edit ? handleSubmit() : handleEdit();
         }}
       >
         {edit ? `Save` : `Edit`}
-      </button>
+            </button>
             <div className="leftright">
               <div className="leftsideContainer">
                 <img src={user.image} />

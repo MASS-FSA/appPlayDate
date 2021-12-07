@@ -44,6 +44,12 @@ form div {
 }
 .leafMap {
   display: flex;
+  z-index: -9999;
   height: 500px;
   width: auto;
 }
+@media only screen and (max-width:500px){
+  .leafMap {
+      height: 250px;
+  }
+} 
