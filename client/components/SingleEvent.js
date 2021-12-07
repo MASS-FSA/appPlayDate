@@ -37,7 +37,7 @@ const SingleEvent = (props) => {
 
   async function handleUpdate(body) {
     try {
-      const [{ x, y }] = await parseAddress(infoObject.location);
+      const [{ x, y }] = await parseAddress(body.location);
       body.latitude = y.toFixed(7);
       body.longitude = x.toFixed(7);
 
@@ -46,6 +46,11 @@ const SingleEvent = (props) => {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async function parseAddress(address) {
+    const results = await provider.search({ query: address });
+    return results;
   }
 
   function handleEdit() {
