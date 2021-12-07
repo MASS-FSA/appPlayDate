@@ -11,7 +11,6 @@ let myMap
 
 const Places = (props) => {
   const [coords, setCoords] = useState([null, null]);
-  // const [thisLocation, setThisLocation] = useState(true)
   const [options, setOptions] = useState({
     seePlaces: false,
     seePeople: false,
@@ -35,7 +34,7 @@ const Places = (props) => {
   useEffect(()=>{
     if (props.me.id) {
       console.log('me: ', props.me)
-      props.fetchUsersWithinDistance(props.me.id, 3000)
+      props.fetchUsersWithinDistance(props.me.id, 60000)
     }
   }, [props.me])
 
@@ -61,25 +60,7 @@ const Places = (props) => {
     }
   }, [props.places]);
 
-  // useEffect(() => {
-  //   console.log('thislocation')
-  //   if(thisLocation) {
-  //     const call = (position) => {
-  //       const point = [];
-  //       point.push(position.coords.latitude);
-  //       point.push(position.coords.longitude);
-  //       setCoords(point);
-  //     };
-  //     // uses navigator method and uses `call` function as the callback
-  //     getGeoLocationFromBrowser(call);
-  //   } else {
-  //     setCoords([props.me.latitude, props.me.longitude, 1600])
-  //   }
-  // }, [thisLocation])
-
-  // function handleLocation() {
-  //   setThisLocation(!thisLocation)
-  // }
+  // use
 
   function handleCheckBox(event) {
     if(event.target.value) {
@@ -96,13 +77,6 @@ const Places = (props) => {
 
   return (
     <div>
-      {/* <div>
-        <label htmlFor="chooseLocation">Use Location</label>
-        <select name="locations" onChange={handleLocation}>
-          <option value="myLocation">My Location</option>
-          <option value="useHomeAddress">Use Home Address</option>
-        </select>
-      </div> */}
       <hr />
       <div className="leafMap" id="map" />
       <h2>Options</h2>
