@@ -57,12 +57,12 @@ router.delete('/:channelId', requireToken, async (req, res, next) => {
   try {
     const channel = await Channel.findByPk(req.params.channelId);
 
-    if (channel.createdby === req.user.id) {
-      await channel.destroy()
+    if (channel.createdBy === req.user.id) {
+      await channel.destroy();
+      res.send(202);
     } else {
       res.sendStatus(403);
     }
-    res.send(202)
   } catch (err) {
     next(err);
   }
