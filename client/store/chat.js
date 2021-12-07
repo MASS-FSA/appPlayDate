@@ -11,7 +11,13 @@ export const tokenHeader = {
 
 const GET_MESSAGES = 'GET_MESSAGES';
 const GET_CHANNELS = 'GET_CHANNELS';
+const ADD_CHANNEL = 'ADD_CHANNEL';
 const GOT_MESSAGE = 'GOT_MESSAGE';
+
+export const _addChannel = (newChannel) => ({
+  type: ADD_CHANNEL,
+  newChannel,
+});
 
 export const getMessages = (messages) => {
   return {
@@ -38,6 +44,17 @@ export const fetchMessages = () => async (dispatch) => {
     dispatch(getMessages(messages));
   } catch (err) {
     throw ('error something went wrong', err);
+  }
+};
+
+export const addChannel = (channel, history) => async (dispatch) => {
+  try {
+    const { data: newChannel } = await axios.post('/api/channels', channel);
+    dispatch(_addChannel(newChannel));
+    history.push(`/chat/channels/${newChannel.id}`);
+  } catch (err) {
+    console.error(error);
+    next(err);
   }
 };
 
@@ -76,6 +93,8 @@ export default (state = initialState, action) => {
       return { ...state, messages: action.messages };
     case GOT_MESSAGE:
       return { ...state, messages: [...state.messages, action.newMessage] };
+    case ADD_CHANNEL:
+      return { ...state, channels: [...state.channels, action.newChannel] };
     case GET_CHANNELS:
       return { ...state, channels: action.channels };
     default:

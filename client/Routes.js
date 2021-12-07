@@ -13,6 +13,7 @@ import SinglePlaceDetailedView from './components/SinglePlaceDetailedView';
 import UserProfile from './components/UserProfile';
 import { me } from './store';
 import OthersProfile from './components/OthersProfile';
+import CreateChannel from './components/chat_components/CreateChannel';
 
 /**
  * COMPONENT
@@ -45,6 +46,7 @@ class Routes extends Component {
             <Route path='/chat' component={Chat} />
             <Route exact path='/profile/:userId' component={OthersProfile} />
             <Route exact path='/myProfile' component={UserProfile} />
+            <Route exact path='/channels/create' component={CreateChannel} />
           </Switch>
         ) : (
           <Switch>

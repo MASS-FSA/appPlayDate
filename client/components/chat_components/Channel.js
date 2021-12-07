@@ -33,6 +33,9 @@ const Channel = (props) => {
             </NavLink>
           </a>
         ))}
+      <button>
+        <NavLink to='/channels/create'>Add New Channel</NavLink>
+      </button>
     </div>
   );
 };
