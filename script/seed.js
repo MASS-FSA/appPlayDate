@@ -37,6 +37,9 @@ const users = [
   {
     username: "Alex",
     password: "123",
+    email: 'anatoly.tsinker13@gmail.com',
+    state: 'North Carolina',
+    address: '88 BearBack Court',
     longitude: -77.1828725,
     latitude: 38.8125889,
     homeLongitude: -77.1828725,
