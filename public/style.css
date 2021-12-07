@@ -47,3 +47,8 @@ form div {
   height: 500px;
   width: auto;
 }
+
+.single_user_img {
+  width: 10em;
+  height: auto;
+}
