@@ -44,7 +44,7 @@ router.get("/friends/getAll", requireToken, async (req, res, next) => {
     if (allFriends.length) {
       res.send(allFriends);
     } else {
-      res.send(`none`);
+      res.send([]);
     }
   } catch (err) {
     next(err);
