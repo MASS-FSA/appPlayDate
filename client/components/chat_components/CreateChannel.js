@@ -7,23 +7,6 @@ export const CreateChannel = (props) => {
     name: '',
   });
 
-  // useEffect(()=>{
-  //     setEventInfo({
-  //       name: name,
-  //       location: vicinity,
-  //       time: "",
-  //       description: "",
-  //       image: icon,
-  //     })
-  // },[])
-
-  //  useEffect(()=> {
-  //   return () => {
-  //     props.clearSelectedPlace()
-  //     window.localStorage.setItem("selectedPlace", {})
-  //   }
-  // }, [])
-
   function handleChange(event) {
     const { name, value } = event.target;
 
@@ -62,13 +45,6 @@ export const CreateChannel = (props) => {
     </div>
   );
 };
-
-// const mapStateToProps = (state) => {
-//   return {
-//     event: state.events.singleEvent,
-//     selectedPlace: state.selectedPlace
-//   };
-// };
 
 const mapDispatchToProps = (dispatch, { history }) => {
   return {
