@@ -6,6 +6,7 @@ const Channel = db.define('channel', {
     type: Sequelize.STRING,
     allowNull: false,
     defaultValue: 'NewChannel',
+    unique: true,
     validate: {
       notEmpty: true,
     },

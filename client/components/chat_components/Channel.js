@@ -6,6 +6,7 @@ import { Socket } from 'socket.io-client';
 import socket from '../../socket';
 
 const Channel = (props) => {
+  const [selectedChannel, setChannel] = useState(1)
   useEffect(() => {
     async function fetchData() {
       try {
@@ -14,14 +15,16 @@ const Channel = (props) => {
         console.error(error);
       }
     }
-
     fetchData();
   }, []);
 
+  useEffect(() => {
+    console.log('selectedChannel: ',selectedChannel)
+  }, [selectedChannel])
+
   const handleClick = (id) => {
-    // console.log(id);
     socket.emit('join', id);
-    props._setChannel(id);
+    setChannel(id)
   };
 
   return (
@@ -33,7 +36,7 @@ const Channel = (props) => {
           <a key={channel.id}>
             <NavLink
               to={`/chat/channels/${channel.id}`}
-              onClick={handleClick(channel.id)}
+              onClick={() => handleClick(channel.id)}
             >
               {channel.name.split('_').join(' ')}
             </NavLink>
@@ -45,7 +48,7 @@ const Channel = (props) => {
       <button
         onClick={() => {
           console.log('This is my selected id: ', props.selected);
-          // props.removeChannel(props.selected.id);
+          props.removeChannel(selectedChannel);
         }}
       >
         Delete Channel
@@ -57,13 +60,11 @@ const Channel = (props) => {
 const mapStateToProps = (state) => {
   return {
     channels: state.chat.channels,
-    selected: state.chat.selectedChannel,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   getChannels: () => dispatch(getChannels()),
-  _setChannel: (id) => dispatch(_setChannel(id)),
   removeChannel: (id) => dispatch(removeChannel(id)),
 });
 

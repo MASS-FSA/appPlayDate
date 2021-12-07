@@ -56,12 +56,11 @@ router.get('/:channelId/messages', requireToken, async (req, res, next) => {
 router.delete('/:channelId', requireToken, async (req, res, next) => {
   try {
     const channel = await Channel.findByPk(req.params.channelId);
-    if (channel.createdby === req.user.id) {
-      await Channel.destroy({ where: { id } });
-      res.send('Channel Deleted').status(204).end();
-    } else {
-      res.send(`You don't have access`).status(403);
-    }
+    // if (channel.createdby === req.user.id) {
+      await channel.destroy()
+    // } else {
+    //   res.sendStatus(403);
+    // }
   } catch (err) {
     next(err);
   }

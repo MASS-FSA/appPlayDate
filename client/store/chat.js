@@ -21,13 +21,9 @@ export const _addChannel = (newChannel) => ({
   type: ADD_CHANNEL,
   newChannel,
 });
-export const _setChannel = (id) => ({
-  type: SET_CHANNEL,
-  id,
-});
-export const _removeChannel = (channel) => ({
+export const _removeChannel = (id) => ({
   type: REMOVE_CHANNEL,
-  channel,
+  id
 });
 
 export const getMessages = (messages) => {
@@ -72,9 +68,9 @@ export const addChannel = (channel, history) => async (dispatch) => {
     next(err);
   }
 };
-export const removeChannel = (channel, history) => async (dispatch) => {
+export const removeChannel = (id, history) => async (dispatch) => {
   try {
-    const channel = await authenticateRequest('post', '/api/channels', channel);
+    const channel = await authenticateRequest('delete', `api/channels/${id}`);
     dispatch(_removeChannel(channel));
     history.push(`/chat/channels/${1}`);
   } catch (err) {
@@ -110,7 +106,6 @@ export const sendMessage = (message) => async (dispatch) => {
 const initialState = {
   messages: [],
   channels: [],
-  selectedChannel: {},
 };
 
 export default (state = initialState, action) => {
@@ -124,17 +119,12 @@ export default (state = initialState, action) => {
     case REMOVE_CHANNEL:
       return {
         ...state,
-        channels: channels.filter(
-          (channel) => channel.id !== action.channel.id
+        channels: state.channels.filter(
+          (channel) => channel.id !== action.id
         ),
       };
     case GET_CHANNELS:
       return { ...state, channels: action.channels };
-    case SET_CHANNEL:
-      let channel = state.channels.find((channel) => {
-        channel.id === action.id;
-      });
-      return { ...state, selectedChannel: channel };
     default:
       return state;
   }
