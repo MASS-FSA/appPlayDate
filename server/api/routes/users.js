@@ -2,6 +2,7 @@ const router = require('express').Router();
 const {
   models: { User, Intake, Friend },
 } = require('../../db');
+const {requireToken} = require("../gatekeeping")
 
 module.exports = router;
 
@@ -16,6 +17,40 @@ router.get('/nearby/:userId/:distance', async (req, res, next) => {
     next(error);
   }
 });
+
+//  /api/users/friends/getall
+router.get('/friends/getAll', requireToken, async (req, res, next) => {
+  //  for getting all 'me' friends
+  try {
+    const me = req.user;
+    const myFriends = await Friend.findAll({
+      where: {
+        userId: me.id,
+        status: 'accepted'
+      }
+    })
+    const friendsMy = await Friend.findAll({
+      where: {
+        AddresseeId: me.id,
+        status: 'accepted'
+      }
+    })
+    const combinedFriends = [... myFriends, ... friendsMy]
+      .map(friendObj=> (friendObj.userId))
+      .filter(id => id !== me.id)
+    const allFriends = await Promise.all(
+      combinedFriends.map(
+        id => (User.findByPk(id))
+      ))
+    if(allFriends.length) {
+      res.send(allFriends)
+    } else {
+      res.send(`none`)
+    }
+  } catch (err) {
+    next(err)
+  }
+})
 
 // /api/users/requests/:userId
 router
@@ -155,7 +190,7 @@ router.get('/', async (req, res, next) => {
       // explicitly select only the id and username fields - even though
       // users' passwords are encrypted, it won't help if we just
       // send everything to anyone who asks!
-      attributes: ['id', 'username', 'email', 'image', 'longitude', 'latitude'],
+      attributes: ['id', 'username', 'email', 'image'],
     });
 
     res.send(users);

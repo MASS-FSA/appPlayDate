@@ -11,6 +11,8 @@ const users = [
     password: "123",
     longitude: -77.1618725,
     latitude: 38.8125889,
+    homeLongitude:-77.1618725,
+    homeLatitude:38.8125889,
     image: `https://www.awesomeinventions.com/wp-content/uploads/2018/04/photoshop-man-riding-chicken-silly-things-bored-people-do.jpg`,
   },
 
@@ -19,6 +21,8 @@ const users = [
     password: "123",
     longitude: -77.1618725,
     latitude: 38.8235889,
+    homeLongitude: -77.1618725,
+    homeLatitude: 38.8235889,
   },
 
   {
@@ -26,13 +30,21 @@ const users = [
     password: "123",
     longitude: -77.18318725,
     latitude: 38.8125889,
+    homeLongitude: -77.18318725,
+    homeLatitude: 38.8125889,
   },
 
   {
     username: "Alex",
     password: "123",
+    email: 'anatoly.tsinker13@gmail.com',
+    state: 'North Carolina',
+    address: '88 BearBack Court',
     longitude: -77.1828725,
     latitude: 38.8125889,
+    homeLongitude: -77.1828725,
+    homeLatitude: 38.8125889,
+    image: 'https://ih1.redbubble.net/image.469397349.2555/flat,750x,075,f-pad,750x1000,f8f8f8.u2.jpg'
   },
 ];
 

@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchPlaces } from "../store/places";
 import { fetchUsersWithinDistance } from "../store/users";
+import { fetchMyFriends } from "../store/users";
+import { fetchAllEvents, setSingleEvent } from "../store/events";
 const L = require("leaflet");
 import { getGeoLocationFromBrowser, loadMap } from "../../Util/loadMap";
+import EventSimpleView from "./eventSimpleView";
 import SinglePlaceView from "./singlePlace"
 import SinglePerson from "./singlePerson"
 
@@ -11,7 +14,6 @@ let myMap
 
 const Places = (props) => {
   const [coords, setCoords] = useState([null, null]);
-  // const [thisLocation, setThisLocation] = useState(true)
   const [options, setOptions] = useState({
     seePlaces: false,
     seePeople: false,
@@ -34,14 +36,14 @@ const Places = (props) => {
 
   useEffect(()=>{
     if (props.me.id) {
-      console.log('me: ', props.me)
-      props.fetchUsersWithinDistance(props.me.id, 10)
+      props.fetchUsersWithinDistance(props.me.id, 60000)
+      props.fetchMyFriends()
+      props.fetchAllEvents()
     }
   }, [props.me])
 
   useEffect(() => {
     if (!myMap && coords[0]) {
-      console.log(`from coords`, coords);
       props.fetchPlaces(coords, 16000)
       myMap = loadMap("map", coords[0], coords[1]);
     }
@@ -49,7 +51,6 @@ const Places = (props) => {
 
   useEffect(() => {
     if (props.palces !== []) {
-      console.log(props.places);
       props.places.map((place) => {
         return L.marker([
           place.lat,
@@ -60,26 +61,6 @@ const Places = (props) => {
       });
     }
   }, [props.places]);
-
-  // useEffect(() => {
-  //   console.log('thislocation')
-  //   if(thisLocation) {
-  //     const call = (position) => {
-  //       const point = [];
-  //       point.push(position.coords.latitude);
-  //       point.push(position.coords.longitude);
-  //       setCoords(point);
-  //     };
-  //     // uses navigator method and uses `call` function as the callback
-  //     getGeoLocationFromBrowser(call);
-  //   } else {
-  //     setCoords([props.me.latitude, props.me.longitude, 1600])
-  //   }
-  // }, [thisLocation])
-
-  // function handleLocation() {
-  //   setThisLocation(!thisLocation)
-  // }
 
   function handleCheckBox(event) {
     if(event.target.value) {
@@ -96,13 +77,6 @@ const Places = (props) => {
 
   return (
     <div>
-      {/* <div>
-        <label htmlFor="chooseLocation">Use Location</label>
-        <select name="locations" onChange={handleLocation}>
-          <option value="myLocation">My Location</option>
-          <option value="useHomeAddress">Use Home Address</option>
-        </select>
-      </div> */}
       <hr />
       <div className="leafMap" id="map" />
       <h2>Options</h2>
@@ -123,22 +97,60 @@ const Places = (props) => {
       </div>
       <div>
         {/* FOR DISPALYING NEARBY PLACES */}
+        <h3>NEARBY PLACES</h3>
         {options.seePlaces ?
-        props.places.map(place => (
-          <SinglePlaceView key={place.name} place={place} />
-        ))
-        :
-        null
+          (props.places.length ?
+            props.places.map(place => (
+              <SinglePlaceView key={place.name} place={place} />
+            ))
+            :
+            <p>No Places Found Near You. Let the Devs Know to increase the search radius</p>
+          )
+          :
+          null
         }
       </div>
       <div>
         {/* FOR DISPLAYING NEARBY PEOPLE */}
+        <h3>NEARBY PARENTS</h3>
         {options.seePeople ?
-        props.people.map(person => (
-          <SinglePerson key={person.id} person={person}/>
-        ))
-        :
-        null
+          (props.people.length ?
+            props.people.map(person => (
+              <SinglePerson key={person.id} person={person}/>
+            ))
+            :
+            <p>No People Near You Right Now. Please Try Again Later</p>
+          )
+          :
+          null
+        }
+      </div>
+      <div>
+        {/* FOR DISPLAYING ALL FRIENDS */}
+        <h3>FRIENDS</h3>
+        {options.seeFriends ?
+           props.myFriends.length ?
+            props.myFriends.map(friend => (
+              <SinglePerson key={friend.id} person={friend}/>
+            ))
+            :
+            <p>Place Holder</p>
+          :
+          null
+        }
+      </div>
+      <div>
+        {/* FOR DISPLAYING EVENTS */}
+        <h3>EVENTS</h3>
+        {options.seeEvents ?
+          props.events.length ?
+            props.events.map(event => (
+              <EventSimpleView key={event.id} event={event}/>
+            ))
+            :
+            <p>No Events Currently In Your Area</p>
+          :
+          null
         }
       </div>
     </div>
@@ -150,13 +162,19 @@ const mapStateToProps = (state) => {
     places: state.places,
     people: state.users.nearbyUsers,
     me: state.auth,
+    myFriends: state.users.myFriends,
+    events: state.events.allEvents,
+    singleEvent: state.events.singleEvent
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchPlaces: (loc, radius) => dispatch(fetchPlaces(loc, radius)),
-    fetchUsersWithinDistance: (id, distance) =>  dispatch(fetchUsersWithinDistance(id, distance))
+    fetchUsersWithinDistance: (id, distance) =>  dispatch(fetchUsersWithinDistance(id, distance)),
+    fetchMyFriends: () => dispatch(fetchMyFriends()),
+    fetchAllEvents: () => dispatch(fetchAllEvents()),
+    setSingleEvent: (event) => dispatch(setSingleEvent(event))
   };
 };
 

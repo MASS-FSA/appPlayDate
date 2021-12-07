@@ -1,4 +1,5 @@
 import axios from "axios";
+import { authenticateRequest } from "./gateKeepingMiddleWare";
 
 // ACTION TYPES
 const SET_ALL_USERS = `SET_ALL_USERS`;
@@ -7,6 +8,7 @@ const SET_SINGLE_USER = `SET_SINGLE_USER`;
 const SET_INTAKE = `SET_INTAKE`;
 const SET_STATUS = `SET_STATUS`;
 const SET_REQUESTS = `SET_REQUESTS`;
+const SET_MYFRIENDS = 'SET_MYFRIENDS'
 
 // ACTION CREATORS
 export const setAllUsers = (users) => {
@@ -15,6 +17,13 @@ export const setAllUsers = (users) => {
     allUsers: users,
   };
 };
+
+export const setMyFriends = (friends) => {
+  return {
+    type: SET_MYFRIENDS,
+    friends
+  }
+}
 
 export const setNearbyUsers = (users) => {
   return {
@@ -54,12 +63,10 @@ export const setRequests = (requests) => {
 // THUNKS
 
 export const fetchUsersWithinDistance = (userId, distance) => {
-  const distanceObj = { distance };
   return async (dispatch) => {
     try {
       const { data } = await axios.get(
         `/api/users/nearby/${userId}/${distance}`,
-        distanceObj
       );
 
       dispatch(setNearbyUsers(data));
@@ -142,6 +149,15 @@ export const updateFriendStatus = (userId, friendId, response) => {
   };
 };
 
+export const fetchMyFriends = () => async dispatch => {
+  try {
+    const data = await authenticateRequest('get', '/api/users/friends/getAll')
+    dispatch(setMyFriends(data))
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export const fetchFriendRequests = (userId) => {
   return async (dispatch) => {
     try {
@@ -160,6 +176,7 @@ const initialState = {
   intake: {},
   status: ``,
   requests: [],
+  myFriends: [],
 };
 
 export default (state = initialState, action) => {
@@ -176,6 +193,8 @@ export default (state = initialState, action) => {
       return { ...state, status: action.status };
     case SET_REQUESTS:
       return { ...state, requests: action.requests };
+    case SET_MYFRIENDS:
+      return {...state, myFriends: action.friends}
 
     default:
       return state;
