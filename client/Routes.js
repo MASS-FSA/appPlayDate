@@ -47,13 +47,14 @@ class Routes extends Component {
             <Route exact path='/profile/:userId' component={OthersProfile} />
             <Route exact path='/myProfile' component={UserProfile} />
             <Route exact path='/channels/create' component={CreateChannel} />
+            <Redirect to="/home" />
           </Switch>
         ) : (
-          <Switch>
-            <Route path='/' exact component={Login} />
+          <Switch >
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
-          </Switch>
+            <Redirect to="/login" />
+          </Switch >
         )}
       </div>
     );

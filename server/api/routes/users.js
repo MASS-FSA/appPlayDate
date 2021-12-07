@@ -168,7 +168,8 @@ router
     } catch (error) {
       next(error);
     }
-  });
+  })
+
 
 // /api/users/intakes/:userId
 
@@ -195,5 +196,17 @@ router.get("/", async (req, res, next) => {
     res.send(users);
   } catch (err) {
     next(err);
+  }
+});
+
+//  api/users/me
+router.put('/me', requireToken, async (req, res, next) => {
+  try {
+    const updatedUser = await req.user.update(req.body);
+    console.log('UPDATED USER !!!!' , typeof updatedUser)
+    // res.send(await updatedUser.reload({ include: Intake }));
+    res.send(updatedUser)
+  } catch (error) {
+    next(error);
   }
 });

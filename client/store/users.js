@@ -90,7 +90,7 @@ export const fetchSingleUser = (userId) => {
 export const updateSingleUser = (userId, body) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.post(`/api/users/${userId}`, body);
+      const data = await authenticateRequest('put', '/api/users/me', body)
       dispatch(setSingleUser(data));
     } catch (error) {
       console.log(error);

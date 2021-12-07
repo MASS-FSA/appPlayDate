@@ -39,6 +39,7 @@ export const UserPage = (props) => {
   async function handleChange(event) {
     const distance = event.target.value;
     try {
+      //   distance is in KM
       await props.getNearbyUsers(props.singleUser.id, distance);
     } catch (error) {
       console.error(error);
@@ -47,9 +48,12 @@ export const UserPage = (props) => {
 
   return (
     <div>
-      {loading ? (
-        <p>Loading Location...</p>
-      ) : (
+      {loading ?
+      (
+        <h2>Loading Location...</h2>
+      )
+      :
+      (
         <div>
           <div className="userSdashboard">
             <h4>Find Nearby Users</h4>
