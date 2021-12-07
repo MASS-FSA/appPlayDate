@@ -7,6 +7,11 @@ import {
 } from "../store/events";
 import EditEvent from "./EditEvent";
 
+import { OpenStreetMapProvider } from "leaflet-geosearch";
+
+// learn constant hook for this later
+let provider;
+
 const SingleEvent = (props) => {
   const [edit, setEdit] = useState(false);
 
@@ -19,6 +24,9 @@ const SingleEvent = (props) => {
       }
     }
 
+    // Geosearch with leaflet-geosearch
+    if (!provider) provider = new OpenStreetMapProvider();
+
     fetchData();
   }, []);
 
@@ -28,8 +36,21 @@ const SingleEvent = (props) => {
   }
 
   async function handleUpdate(body) {
-    await props.updateEvent(props.match.params.id, body);
-    handleEdit();
+    try {
+      const [{ x, y }] = await parseAddress(body.location);
+      body.latitude = y.toFixed(7);
+      body.longitude = x.toFixed(7);
+
+      await props.updateEvent(props.match.params.id, body);
+      handleEdit();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function parseAddress(address) {
+    const results = await provider.search({ query: address });
+    return results;
   }
 
   function handleEdit() {
@@ -47,7 +68,9 @@ const SingleEvent = (props) => {
       ) : (
         <div className="eventscontainer">
           <button onClick={(e) => handleEdit(e)}>Edit</button>
-          <button type="button" onClick={() => handleDelete()}>Delete</button>
+          <button type="button" onClick={() => handleDelete()}>
+            Delete
+          </button>
           <img src={props.event.image} />
           <div className="singleeventcasing">
             <h1>{props.event.name}</h1>
