@@ -72,15 +72,19 @@ export const UserProfile = (props) => {
 
   async function handleSubmit() {
     const infoObject = { ...profileInfo };
-    // make sure not to overuse OpenStreeAPI if User address already exists
-    if (profileInfo.address !== "" && !props.user.address) {
-      const [{ x, y }] = await parseAddress(infoObject.address);
-      infoObject.homeLongitude = x.toFixed(7);
-      infoObject.homeLatitude = y.toFixed(7);
-    }
-    props.updateUser(props.myId, infoObject);
+    try {
+      // make sure not to overuse OpenStreeAPI if User address already exists
+      if (profileInfo.address !== "" && !props.user.address) {
+        const [{ x, y }] = await parseAddress(infoObject.address);
+        infoObject.homeLongitude = x.toFixed(7);
+        infoObject.homeLatitude = y.toFixed(7);
+      }
+      props.updateUser(props.myId, infoObject);
 
-    setEdit((prevEdit) => !prevEdit);
+      setEdit((prevEdit) => !prevEdit);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function handleUpdateRequest(event, friendId) {
@@ -98,14 +102,14 @@ export const UserProfile = (props) => {
       {!edit ? (
         <div>
           <section className="user_profile_section">
-          <button
-        onClick={(e) => {
-          e.preventDefault();
-          edit ? handleSubmit() : handleEdit();
-        }}
-      >
-        {edit ? `Save` : `Edit`}
-      </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleEdit();
+              }}
+            >
+              Edit
+            </button>
             <div className="leftright">
               <div className="leftsideContainer">
                 <img src={user.image} />
@@ -113,15 +117,14 @@ export const UserProfile = (props) => {
               <div className="rightsideContainer">
                 <h3>{user.username}</h3>
                 <p>{user.bio}</p>
-              <div>
-                <p>Email: {user.email}</p>
-                <p>Address: {user.address}</p>
-                <p>State: {user.state}</p>
-                <p>Member Since: {user.createdAt?.slice(0, 10)}</p>
+                <div>
+                  <p>Email: {user.email}</p>
+                  <p>Address: {user.address}</p>
+                  <p>State: {user.state}</p>
+                  <p>Member Since: {user.createdAt?.slice(0, 10)}</p>
+                </div>
               </div>
             </div>
-            </div>
-            
           </section>
           <fieldset>
             <legend>Questionaire</legend>
@@ -129,17 +132,45 @@ export const UserProfile = (props) => {
             <h4>Favorite Color {user.intake?.favoriteColor}</h4>
             <h4>Vaccinated? {user.intake?.vaccination ? `Yes` : `No`}</h4>
           </fieldset>
+          {props.requests.map((request, index) => {
+            return (
+              <fieldset key={index}>
+                <p>Request from {request.requester.username}</p>
+                <img
+                  src={request.requester.image}
+                  height="50px"
+                  onClick={() =>
+                    props.history.push(`/profile/${request.requester.id}`)
+                  }
+                />
+                <button
+                  value="accepted"
+                  onClick={(e) => handleUpdateRequest(e, request.requester.id)}
+                >
+                  Accept
+                </button>
+                <button
+                  value="declined"
+                  onClick={(e) => handleUpdateRequest(e, request.requester.id)}
+                >
+                  Decline
+                </button>
+              </fieldset>
+            );
+          })}
         </div>
       ) : (
         <div>
           <form>
-              <label>Image</label>
+            <label>Image</label>
+            <img src={profileInfo.image} />
+            <br />
+            <div>
               <input
                 name="image"
                 value={profileInfo.image}
                 onChange={handleChange}
               />
-            <div>
               <label>Name</label>
               <input
                 name="username"
@@ -154,58 +185,39 @@ export const UserProfile = (props) => {
                 onChange={handleChange}
               />
               <br />
-              <div>
-                <label>Email</label>
-                <input
-                  name="email"
-                  value={profileInfo.email}
-                  onChange={handleChange}
-                />
-                <br />
-                <label>Address</label>
-                <input
-                  name="address"
-                  value={profileInfo.address}
-                  onChange={handleChange}
-                />
-                <br />
-                <label>State</label>
-                <input
-                  name="state"
-                  value={profileInfo.state}
-                  onChange={handleChange}
-                />
-              </div>
+
+              <label>Email</label>
+              <input
+                name="email"
+                value={profileInfo.email}
+                onChange={handleChange}
+              />
+              <br />
+              <label>Address</label>
+              <input
+                name="address"
+                value={profileInfo.address}
+                onChange={handleChange}
+              />
+              <br />
+              <label>State</label>
+              <input
+                name="state"
+                value={profileInfo.state}
+                onChange={handleChange}
+              />
             </div>
           </form>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
+            Save
+          </button>
         </div>
       )}
-      {props.requests.map((request, index) => {
-        return (
-          <fieldset key={index}>
-            <p>Request from {request.requester.username}</p>
-            <img
-              src={request.requester.image}
-              height="50px"
-              onClick={() =>
-                props.history.push(`/profile/${request.requester.id}`)
-              }
-            />
-            <button
-              value="accepted"
-              onClick={(e) => handleUpdateRequest(e, request.requester.id)}
-            >
-              Accept
-            </button>
-            <button
-              value="declined"
-              onClick={(e) => handleUpdateRequest(e, request.requester.id)}
-            >
-              Decline
-            </button>
-          </fieldset>
-        );
-      })}
     </div>
   );
 };
