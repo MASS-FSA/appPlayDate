@@ -35,7 +35,7 @@ const Places = (props) => {
   useEffect(()=>{
     if (props.me.id) {
       console.log('me: ', props.me)
-      props.fetchUsersWithinDistance(props.me.id, 10)
+      props.fetchUsersWithinDistance(props.me.id, 3000)
     }
   }, [props.me])
 
@@ -124,22 +124,34 @@ const Places = (props) => {
       <div>
         {/* FOR DISPALYING NEARBY PLACES */}
         {options.seePlaces ?
-        props.places.map(place => (
-          <SinglePlaceView key={place.name} place={place} />
-        ))
-        :
-        null
+          (props.places.length ?
+            props.places.map(place => (
+              <SinglePlaceView key={place.name} place={place} />
+            ))
+            :
+            <p>No Places Found Near You. Let the Devs Know to increase the search radius</p>
+          )
+          :
+          null
         }
       </div>
       <div>
         {/* FOR DISPLAYING NEARBY PEOPLE */}
         {options.seePeople ?
-        props.people.map(person => (
-          <SinglePerson key={person.id} person={person}/>
-        ))
-        :
-        null
+          (props.people.length ?
+            props.people.map(person => (
+              <SinglePerson key={person.id} person={person}/>
+            ))
+            :
+            <p>No People Near You Right Now. Please Try Again Later</p>
+          )
+          :
+          null
         }
+      </div>
+      <div>
+        {/* FOR DISPLAYING ALL FRIENDS */}
+
       </div>
     </div>
   );
