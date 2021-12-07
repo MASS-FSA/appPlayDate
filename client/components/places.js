@@ -47,7 +47,7 @@ const Places = (props) => {
   useEffect(() => {
     if (coords[0]) {
       props.fetchPlaces(coords, 16000);
-      myMap = loadMap("map").setView(coords);
+      (myMap = loadMap("map").setView(coords)), 12;
 
       const myIcon = L.icon({
         iconUrl: "here.png",
