@@ -12,7 +12,6 @@ export const tokenHeader = {
 
 const GET_MESSAGES = 'GET_MESSAGES';
 const GET_CHANNELS = 'GET_CHANNELS';
-const SET_CHANNEL = 'SET_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const GOT_MESSAGE = 'GOT_MESSAGE';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
@@ -70,11 +69,11 @@ export const addChannel = (channel, history) => async (dispatch) => {
 };
 export const removeChannel = (id, history) => async (dispatch) => {
   try {
-    const channel = await authenticateRequest('delete', `api/channels/${id}`);
-    dispatch(_removeChannel(channel));
+    await authenticateRequest('delete', `/api/channels/${id}`);
+    dispatch(_removeChannel(id));
     history.push(`/chat/channels/${1}`);
   } catch (err) {
-    console.error(error);
+    console.error(err);
     next(err);
   }
 };

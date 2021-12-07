@@ -4,6 +4,7 @@ import { getChannels, _setChannel, removeChannel } from '../../store/chat';
 import { NavLink } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
 import socket from '../../socket';
+import history from '../../history';
 
 const Channel = (props) => {
   const [selectedChannel, setChannel] = useState(1)
@@ -48,7 +49,7 @@ const Channel = (props) => {
       <button
         onClick={() => {
           console.log('This is my selected id: ', props.selected);
-          props.removeChannel(selectedChannel);
+          props.removeChannel(selectedChannel, history);
         }}
       >
         Delete Channel
@@ -65,7 +66,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   getChannels: () => dispatch(getChannels()),
-  removeChannel: (id) => dispatch(removeChannel(id)),
+  removeChannel: (id, history) => dispatch(removeChannel(id, history)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Channel);
