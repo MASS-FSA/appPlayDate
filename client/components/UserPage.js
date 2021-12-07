@@ -1,7 +1,12 @@
-import React, { createRef, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { fetchUsersWithinDistance, updateSingleUser } from '../store/users';
-import { getGeoLocationFromBrowser } from '../../Util/loadMap';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import {
+  fetchMyFriends,
+  fetchUsersWithinDistance,
+  updateSingleUser,
+} from "../store/users";
+import { getGeoLocationFromBrowser } from "../../Util/loadMap";
+import SinglePerson from "./singlePerson";
 
 export const UserPage = (props) => {
   const [coords, setCoords] = useState([null, null]);
@@ -16,6 +21,7 @@ export const UserPage = (props) => {
     };
     // uses navigator method and uses `call` function as the callback
     getGeoLocationFromBrowser(call);
+    props.getFriends();
   }, []);
 
   useEffect(() => {
@@ -39,29 +45,27 @@ export const UserPage = (props) => {
 
   return (
     <div>
-      <div className='userSdashboard'>
+      <div className="userSdashboard">
+        <h4>Find Nearby Users</h4>
         <select onChange={(e) => handleChange(e)}>
           <option></option>
-          <option value='1'>1 Mile</option>
-          <option value='5'>5 Miles</option>
-          <option value='10'>10 Miles</option>
+          <option value="1">1 Mile</option>
+          <option value="5">5 Miles</option>
+          <option value="10">10 Miles</option>
         </select>
       </div>
-      {/* <div className="leafMap" id="map"></div> */}
+      <section>
+        <h4>Friends</h4>
+        {props.friends?.map((friend) => {
+          return <SinglePerson key={friend.id} person={friend} />;
+        })}
+      </section>
       <div>
+        <h4>Nearby Users</h4>
         {props.nearbyUsers
           .filter((person) => person.username !== props.singleUser.username)
           .map((person) => {
-            return (
-              <div
-                key={person.id}
-                className='nearby_users'
-                onClick={() => props.history.push(`/profile/${person.id}`)}
-              >
-                <h3>{person.username}</h3>
-                <img src={person.image} />
-              </div>
-            );
+            return <SinglePerson key={person.id} person={person} />;
           })}
       </div>
     </div>
@@ -72,6 +76,7 @@ const mapStateToProps = (state) => {
   return {
     singleUser: state.auth,
     nearbyUsers: state.users.nearbyUsers,
+    friends: state.users.myFriends,
   };
 };
 
@@ -81,6 +86,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchUsersWithinDistance(userId, distance)),
     updateUser: (userId, coordsObj) =>
       dispatch(updateSingleUser(userId, coordsObj)),
+    getFriends: () => dispatch(fetchMyFriends()),
   };
 };
 
