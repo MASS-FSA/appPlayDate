@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { createSingleEvent } from "../store/events";
 import { clearSelectedPlace } from "../store/selectedPlace";
+import { OpenStreetMapProvider } from "leaflet-geosearch";
+
+// learn constant hook for this later
+let provider;
 
 const defaultUrl = `https://assets.rebelmouse.io/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbWFnZSI6Imh0dHBzOi8vYXNzZXRzLnJibC5tcy8xODMwNzc2My9vcmlnaW4uanBnIiwiZXhwaXJlc19hdCI6MTY3MTkzNTYwMX0.lHK0h7BhP9FgVrL0xNdfW9kyYEaCNRk8MLXzGv3VzVQ/img.jpg?width=1245&quality=85&coordinates=66%2C0%2C67%2C0&height=700`;
 
@@ -14,23 +18,35 @@ export const CreateEvent = (props) => {
     image: "",
   });
 
-  useEffect(()=>{
-      const {name, icon, rating, types, vicinity} = props.selectedPlace
-      setEventInfo({
-        name: name,
-        location: vicinity,
+  useEffect(() => {
+    const { name, icon, rating, types, vicinity } = props.selectedPlace;
+    setEventInfo((prevEventInfo) => {
+      return {
+        ...prevEventInfo,
+        name: name || "",
+        location: vicinity || "",
         time: "",
         description: "",
-        image: icon,
-      })
-  },[])
+        image: icon || "",
+      };
+    });
+    // Geosearch with leaflet-geosearch
+    if (!provider) provider = new OpenStreetMapProvider();
 
-   useEffect(()=> {
     return () => {
-      props.clearSelectedPlace()
-      window.localStorage.setItem("selectedPlace", {})
-    }
-  }, [])
+      props.clearSelectedPlace();
+      window.localStorage.setItem("selectedPlace", {});
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   // Geosearch with leaflet-geosearch
+  //   if (!provider) provider = new OpenStreetMapProvider();
+  //   return () => {
+  //     props.clearSelectedPlace();
+  //     window.localStorage.setItem("selectedPlace", {});
+  //   };
+  // }, []);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -47,31 +63,37 @@ export const CreateEvent = (props) => {
     try {
       if (body.image === "") body.image = defaultUrl;
       if (body.time === "") return alert("Select Time");
+      const [{ x, y }] = await parseAddress(body.location);
+      body.latitude = y.toFixed(7);
+      body.longitude = x.toFixed(7);
+
       await props.createEvent(body);
-
-      // setTimeout(() => {
-      //   props.history.push(`/events/${props.event.id}`);
-      // }, 300);
-
-      // console.log(props.singleEvent.id);
     } catch (error) {
       console.error(error);
     }
   }
 
-  function handleClear () {
-    setEventInfo({
-      name: "",
-      location: "",
-      time: "",
-      description: "",
-      image: "",
-    })
+  async function parseAddress(address) {
+    const results = await provider.search({ query: address });
+    return results;
+  }
+
+  function handleClear() {
+    setEventInfo((prevEventInfo) => {
+      return {
+        ...prevEventInfo,
+        name: "",
+        location: "",
+        time: "",
+        description: "",
+        image: "",
+      };
+    });
   }
 
   return (
     <div className="questioncontainer">
-      <div className="lines"/>
+      <div className="lines" />
       <form>
         <label>Name</label>
         <input name="name" value={eventInfo.name} onChange={handleChange} />
@@ -111,7 +133,12 @@ export const CreateEvent = (props) => {
         >
           Create This Event!
         </button>
-        <button onClick={handleClear}>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            handleClear();
+          }}
+        >
           Clear All
         </button>
       </form>
@@ -122,14 +149,14 @@ export const CreateEvent = (props) => {
 const mapStateToProps = (state) => {
   return {
     event: state.events.singleEvent,
-    selectedPlace: state.selectedPlace
+    selectedPlace: state.selectedPlace,
   };
 };
 
 const mapDispatchToProps = (dispatch, { history }) => {
   return {
     createEvent: (body) => dispatch(createSingleEvent(body, history)),
-    clearSelectedPlace: () => dispatch(clearSelectedPlace())
+    clearSelectedPlace: () => dispatch(clearSelectedPlace()),
   };
 };
 
