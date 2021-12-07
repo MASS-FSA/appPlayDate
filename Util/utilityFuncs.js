@@ -37,7 +37,7 @@ const findMidPoint = function(latitude1, longitude1, latitude2, longitude2) {
   };
 
   /**
-   * Returns the distance in kilometers [CHANGED TO METERS BY *1000] between two coordinates.
+   * Returns the distance in kilometers  between two coordinates.
    * @see: http://www.movable-type.co.uk/scripts/latlong.html
    * @param {!number} lat1 The latitude of the first point (in degrees).
    * @param {!number} lng1 The longitude of the first point.
@@ -59,7 +59,7 @@ const findMidPoint = function(latitude1, longitude1, latitude2, longitude2) {
     Math.cos(lat1) * Math.cos(lat2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    return RADIUS_EARTH * c * 1000;
+    return RADIUS_EARTH * c;
   };
 
   module.exports = {
