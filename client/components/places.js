@@ -126,11 +126,7 @@ const Places = (props) => {
     <div>
       {
         loading ? < LoadingSpinner /> : 
-
-      
     <div>
-      <hr />
-
       <div className="optionscontainer">
         <h2>Options</h2>
         <br />
