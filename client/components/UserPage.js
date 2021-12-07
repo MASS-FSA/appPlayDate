@@ -7,6 +7,7 @@ import {
 } from "../store/users";
 import { getGeoLocationFromBrowser } from "../../Util/loadMap";
 import SinglePerson from "./singlePerson";
+import LoadingSpinner from "./LoadingSpinner";
 
 export const UserPage = (props) => {
   const [coords, setCoords] = useState([null, null]);
@@ -48,7 +49,7 @@ export const UserPage = (props) => {
   return (
     <div>
       {loading ? (
-        <p>Loading Location...</p>
+        <LoadingSpinner />
       ) : (
         <div>
           <div className="userSdashboard">
