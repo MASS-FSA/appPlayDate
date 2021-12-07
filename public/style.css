@@ -48,7 +48,8 @@ form div {
   width: auto;
 }
 
-.openPopup {
+.openPopup,
+.you_are_here {
   cursor: pointer;
   background: white;
   width: 10rem;

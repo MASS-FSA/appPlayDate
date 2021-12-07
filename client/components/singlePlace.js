@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { setSelectedPlace } from "../store/selectedPlace";
 
+let defaultParkImg = `https://previews.123rf.com/images/sashazerg/sashazerg1706/sashazerg170600034/80505918-park-and-playground-cartoon.jpg`;
+
 const singlePlace = (props) => {
   const { name, icon, rating, types, vicinity } = props.place;
 
@@ -18,7 +20,7 @@ const singlePlace = (props) => {
       <p>{vicinity}</p>
       <p>{rating}</p>
       <p>{types}</p>
-      <img src={icon} />
+      <img src={defaultParkImg} width="100px" />
       <Link to="/place/view">
         <button onClick={handleClick}>View This Location</button>
       </Link>
