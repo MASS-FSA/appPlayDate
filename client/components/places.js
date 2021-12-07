@@ -124,7 +124,7 @@ const Places = (props) => {
   }
 
   return (
-    <div className="nearby_places_container">
+    <div>
       {loading ? (
         <LoadingSpinner />
       ) : (
