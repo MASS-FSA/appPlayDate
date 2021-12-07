@@ -163,12 +163,14 @@ export const UserProfile = (props) => {
         <div>
           <form>
             <label>Image</label>
-            <input
-              name="image"
-              value={profileInfo.image}
-              onChange={handleChange}
-            />
+            <img src={profileInfo.image} />
+            <br />
             <div>
+              <input
+                name="image"
+                value={profileInfo.image}
+                onChange={handleChange}
+              />
               <label>Name</label>
               <input
                 name="username"
@@ -183,28 +185,27 @@ export const UserProfile = (props) => {
                 onChange={handleChange}
               />
               <br />
-              <div>
-                <label>Email</label>
-                <input
-                  name="email"
-                  value={profileInfo.email}
-                  onChange={handleChange}
-                />
-                <br />
-                <label>Address</label>
-                <input
-                  name="address"
-                  value={profileInfo.address}
-                  onChange={handleChange}
-                />
-                <br />
-                <label>State</label>
-                <input
-                  name="state"
-                  value={profileInfo.state}
-                  onChange={handleChange}
-                />
-              </div>
+
+              <label>Email</label>
+              <input
+                name="email"
+                value={profileInfo.email}
+                onChange={handleChange}
+              />
+              <br />
+              <label>Address</label>
+              <input
+                name="address"
+                value={profileInfo.address}
+                onChange={handleChange}
+              />
+              <br />
+              <label>State</label>
+              <input
+                name="state"
+                value={profileInfo.state}
+                onChange={handleChange}
+              />
             </div>
           </form>
           <button
