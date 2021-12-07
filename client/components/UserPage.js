@@ -36,15 +36,15 @@ export const UserPage = (props) => {
     if (coords[0]) setLoading(false);
   }, [coords]);
 
-  async function handleChange(event) {
-    const distance = event.target.value;
-    try {
-      //   distance is in KM
-      await props.getNearbyUsers(props.singleUser.id, distance);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  // async function handleChange(event) {
+  //   const distance = event.target.value;
+  //   try {
+  //     //   distance is in KM
+  //     await props.getNearbyUsers(props.singleUser.id, distance);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   return (
     <div>
@@ -54,32 +54,15 @@ export const UserPage = (props) => {
       )
       :
       (
-        <div>
-          <div className="userSdashboard">
-            <h4>Find Nearby Users</h4>
-            <select onChange={(e) => handleChange(e)}>
-              <option></option>
-              <option value="1">1 Mile</option>
-              <option value="5">5 Miles</option>
-              <option value="10">10 Miles</option>
-            </select>
-          </div>
-          <section>
-            <h4>Friends</h4>
-            {props.friends !== `none`
-              ? props.friends?.map((friend) => {
-                  return <SinglePerson key={friend.id} person={friend} />;
-                })
-              : null}
-          </section>
-          <div>
-            <h4>Nearby Users</h4>
-            {props.nearbyUsers
-              .filter((person) => person.username !== props.singleUser.username)
-              .map((person) => {
-                return <SinglePerson key={person.id} person={person} />;
-              })}
-          </div>
+        <div className="userSdashboard">
+          <h4>My Friends List</h4>
+          {props.friends !== `none`?
+            props.friends?.map((friend) => {
+              return <SinglePerson key={friend.id} person={friend} />;
+            })
+          :
+          null
+          }
         </div>
       )}
     </div>
@@ -96,8 +79,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getNearbyUsers: (userId, distance) =>
-      dispatch(fetchUsersWithinDistance(userId, distance)),
     updateUser: (userId, coordsObj) =>
       dispatch(updateSingleUser(userId, coordsObj)),
     getFriends: () => dispatch(fetchMyFriends()),
