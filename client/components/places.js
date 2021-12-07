@@ -47,7 +47,8 @@ const Places = (props) => {
   useEffect(() => {
     if (coords[0]) {
       props.fetchPlaces(coords, 16000);
-      (myMap = loadMap("map").setView(coords)), 12;
+      // this is the Util function, not leaflet map function
+      myMap = loadMap("map", coords[0], coords[1]).setView(coords);
 
       const myIcon = L.icon({
         iconUrl: "here.png",
