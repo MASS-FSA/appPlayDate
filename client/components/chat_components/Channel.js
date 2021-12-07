@@ -19,9 +19,11 @@ const Channel = (props) => {
   }, []);
 
   return (
-    <div className = "dropdown-content">
+    <div className='dropdown-content'>
       <h1> Channels List </h1>
-        {props.channels.map((channel) => (
+      {props.channels
+        .sort((a, b) => a.id - b.id)
+        .map((channel) => (
           <a key={channel.id}>
             <NavLink
               to={`/chat/channels/${channel.id}`}

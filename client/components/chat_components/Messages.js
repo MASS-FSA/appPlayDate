@@ -33,9 +33,11 @@ export const Messages = (props) => {
   } else {
     return (
       <ScrollToBottom className='message-container'>
-        {filteredMessages.map((message) => {
-          return <Message key={message.id} message={message} />;
-        })}
+        {filteredMessages
+          .sort((a, b) => a.id - b.id)
+          .map((message) => {
+            return <Message key={message.id} message={message} />;
+          })}
         <NewMessage channelId={channelId} />
       </ScrollToBottom>
     );
