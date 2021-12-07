@@ -12,12 +12,22 @@ export const tokenHeader = {
 
 const GET_MESSAGES = 'GET_MESSAGES';
 const GET_CHANNELS = 'GET_CHANNELS';
+const SET_CHANNEL = 'SET_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const GOT_MESSAGE = 'GOT_MESSAGE';
+const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 
 export const _addChannel = (newChannel) => ({
   type: ADD_CHANNEL,
   newChannel,
+});
+export const _setChannel = (id) => ({
+  type: SET_CHANNEL,
+  id,
+});
+export const _removeChannel = (channel) => ({
+  type: REMOVE_CHANNEL,
+  channel,
 });
 
 export const getMessages = (messages) => {
@@ -62,6 +72,16 @@ export const addChannel = (channel, history) => async (dispatch) => {
     next(err);
   }
 };
+export const removeChannel = (channel, history) => async (dispatch) => {
+  try {
+    const channel = await authenticateRequest('post', '/api/channels', channel);
+    dispatch(_removeChannel(channel));
+    history.push(`/chat/channels/${1}`);
+  } catch (err) {
+    console.error(error);
+    next(err);
+  }
+};
 
 export const getChannels = () => async (dispatch) => {
   try {
@@ -90,6 +110,7 @@ export const sendMessage = (message) => async (dispatch) => {
 const initialState = {
   messages: [],
   channels: [],
+  selectedChannel: {},
 };
 
 export default (state = initialState, action) => {
@@ -100,8 +121,20 @@ export default (state = initialState, action) => {
       return { ...state, messages: [...state.messages, action.newMessage] };
     case ADD_CHANNEL:
       return { ...state, channels: [...state.channels, action.newChannel] };
+    case REMOVE_CHANNEL:
+      return {
+        ...state,
+        channels: channels.filter(
+          (channel) => channel.id !== action.channel.id
+        ),
+      };
     case GET_CHANNELS:
       return { ...state, channels: action.channels };
+    case SET_CHANNEL:
+      let channel = state.channels.find((channel) => {
+        channel.id === action.id;
+      });
+      return { ...state, selectedChannel: channel };
     default:
       return state;
   }

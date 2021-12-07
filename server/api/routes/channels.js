@@ -53,11 +53,15 @@ router.get('/:channelId/messages', requireToken, async (req, res, next) => {
 
 // DELETE /api/channels
 // create frontend " ARE YOU SURE YOU WANT TO DELETE ?"
-router.delete('/:channelId', async (req, res, next) => {
+router.delete('/:channelId', requireToken, async (req, res, next) => {
   try {
-    const id = req.params.channelId;
-    await Channel.destroy({ where: { id } });
-    res.send('Channel Deleted').status(204).end();
+    const channel = await Channel.findByPk(req.params.channelId);
+    if (channel.createdby === req.user.id) {
+      await Channel.destroy({ where: { id } });
+      res.send('Channel Deleted').status(204).end();
+    } else {
+      res.send(`You don't have access`).status(403);
+    }
   } catch (err) {
     next(err);
   }
