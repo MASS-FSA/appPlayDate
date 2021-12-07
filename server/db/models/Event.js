@@ -15,6 +15,19 @@ const Event = db.define("event", {
     defaultValue: new Date(),
   },
 
+  longitude: {
+    type: Sequelize.FLOAT,
+    validate: {
+      isNumeric: true,
+    },
+  },
+  latitude: {
+    type: Sequelize.FLOAT,
+    validate: {
+      isNumeric: true,
+    },
+  },
+
   description: {
     type: Sequelize.TEXT,
   },

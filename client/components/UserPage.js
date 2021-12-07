@@ -56,9 +56,11 @@ export const UserPage = (props) => {
       </div>
       <section>
         <h4>Friends</h4>
-        {props.friends?.map((friend) => {
-          return <SinglePerson key={friend.id} person={friend} />;
-        })}
+        {props.friends !== `none`
+          ? props.friends?.map((friend) => {
+              return <SinglePerson key={friend.id} person={friend} />;
+            })
+          : null}
       </section>
       <div>
         <h4>Nearby Users</h4>
