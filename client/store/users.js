@@ -158,6 +158,7 @@ const initialState = {
   intake: {},
   status: ``,
   requests: [],
+  myFriends: [],
 };
 
 export default (state = initialState, action) => {
