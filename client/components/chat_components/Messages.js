@@ -23,18 +23,25 @@ export const Messages = (props) => {
     (message) => message.channelId === channelId
   );
 
-  return (
-    <ScrollToBottom className="message-container">
-    {
-          filteredMessages.map((message) => {
-
-          return<Message key={message.id}  message={message}/>}
-          )
-    }
-    <NewMessage channelId={channelId} />
-    </ScrollToBottom>
-    
-  );
+  if (filteredMessages.length === 0) {
+    return (
+      <ScrollToBottom className='message-container'>
+        <h1>No Messages Here...</h1>
+        <NewMessage channelId={channelId} />
+      </ScrollToBottom>
+    );
+  } else {
+    return (
+      <ScrollToBottom className='message-container'>
+        {filteredMessages
+          .sort((a, b) => a.id - b.id)
+          .map((message) => {
+            return <Message key={message.id} message={message} />;
+          })}
+        <NewMessage channelId={channelId} />
+      </ScrollToBottom>
+    );
+  }
 };
 
 const mapStateToProps = (state) => ({
