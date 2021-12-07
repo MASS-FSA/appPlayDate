@@ -39,15 +39,6 @@ export const CreateEvent = (props) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   // Geosearch with leaflet-geosearch
-  //   if (!provider) provider = new OpenStreetMapProvider();
-  //   return () => {
-  //     props.clearSelectedPlace();
-  //     window.localStorage.setItem("selectedPlace", {});
-  //   };
-  // }, []);
-
   function handleChange(event) {
     const { name, value } = event.target;
 
@@ -66,6 +57,7 @@ export const CreateEvent = (props) => {
       const [{ x, y }] = await parseAddress(body.location);
       body.latitude = y.toFixed(7);
       body.longitude = x.toFixed(7);
+      body.createdBy = props.user.id;
 
       await props.createEvent(body);
     } catch (error) {
@@ -150,6 +142,7 @@ const mapStateToProps = (state) => {
   return {
     event: state.events.singleEvent,
     selectedPlace: state.selectedPlace,
+    user: state.auth,
   };
 };
 

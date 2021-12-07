@@ -67,10 +67,14 @@ const SingleEvent = (props) => {
         />
       ) : (
         <div className="eventscontainer">
-          <button onClick={(e) => handleEdit(e)}>Edit</button>
-          <button type="button" onClick={() => handleDelete()}>
-            Delete
-          </button>
+          {props.user.id === props.event.createdBy ? (
+            <div>
+              <button onClick={(e) => handleEdit(e)}>Edit</button>
+              <button type="button" onClick={() => handleDelete()}>
+                Delete
+              </button>
+            </div>
+          ) : null}
           <img src={props.event.image} />
           <div className="singleeventcasing">
             <h1>{props.event.name}</h1>
@@ -87,6 +91,7 @@ const SingleEvent = (props) => {
 const mapStateToProps = (state) => {
   return {
     event: state.events.singleEvent,
+    user: state.auth,
   };
 };
 
