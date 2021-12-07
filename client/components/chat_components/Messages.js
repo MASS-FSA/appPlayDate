@@ -26,7 +26,7 @@ export const Messages = (props) => {
   if (filteredMessages.length === 0) {
     return (
       <ScrollToBottom className='message-container'>
-        <h1>No Messages Here...</h1>
+        <h1>Be the first to write a message!</h1>
         <NewMessage channelId={channelId} />
       </ScrollToBottom>
     );
