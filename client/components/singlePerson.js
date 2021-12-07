@@ -1,9 +1,9 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 
 const SinglePerson = (props) => {
-  const {id, username, image} = props.person
-  const toProfile = `profile/${id}`
+  const { id, username, image } = props.person;
+  const toProfile = `profile/${id}`;
   return (
     <div className="filtercontainer">
       <Link to={toProfile}>
@@ -11,7 +11,7 @@ const SinglePerson = (props) => {
         <img id="personImg" src={image} />
       </Link>
     </div>
-  )
-}
+  );
+};
 
-export default SinglePerson
+export default SinglePerson;

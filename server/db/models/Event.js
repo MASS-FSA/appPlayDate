@@ -9,9 +9,23 @@ const Event = db.define("event", {
   location: {
     type: Sequelize.STRING,
   },
+
   time: {
     type: Sequelize.DATE,
     defaultValue: new Date(),
+  },
+
+  longitude: {
+    type: Sequelize.FLOAT,
+    validate: {
+      isNumeric: true,
+    },
+  },
+  latitude: {
+    type: Sequelize.FLOAT,
+    validate: {
+      isNumeric: true,
+    },
   },
 
   description: {

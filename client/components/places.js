@@ -9,11 +9,14 @@ import { getGeoLocationFromBrowser, loadMap } from "../../Util/loadMap";
 import EventSimpleView from "./eventSimpleView";
 import SinglePlaceView from "./singlePlace";
 import SinglePerson from "./singlePerson";
+import { setSelectedPlace } from "../store/selectedPlace";
+import LoadingSpinner from "./LoadingSpinner";
 
 let myMap;
 
 const Places = (props) => {
-  const [coords, setCoords] = useState([null, null]);
+  const [loading, setLoading] = useState(true);
+  const [coords, setCoords] = useState([]);
   const [options, setOptions] = useState({
     seePlaces: false,
     seePeople: false,
@@ -42,22 +45,71 @@ const Places = (props) => {
   }, [props.me]);
 
   useEffect(() => {
-    if (!myMap && coords[0]) {
+    if (coords[0]) {
       props.fetchPlaces(coords, 16000);
-      myMap = loadMap("map", coords[0], coords[1]);
+      // this is the Util function, not leaflet map function
+      myMap = loadMap("map", coords[0], coords[1]).setView(coords);
+
+      const myIcon = L.icon({
+        iconUrl: "here.png",
+        iconSize: [30, 30],
+        autoPan: true,
+      });
+      const marker = L.marker(coords, { icon: myIcon })
+        .addTo(myMap)
+        .bindPopup()
+        .setPopupContent(`<p class="you_are_here">You are here!</p>`)
+        .openPopup();
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (coords[0]) {
+      setLoading(false);
     }
   }, [coords]);
 
   useEffect(() => {
-    if (props.palces !== []) {
+    if (props.palces !== [] && options.seePlaces) {
       props.places.map((place) => {
         return L.marker([place.lat, place.lng])
           .addTo(myMap)
-          .bindPopup(`<p>${place.name}</p>`);
+          .bindPopup(
+            L.popup({
+              className: `openPopup`,
+            })
+          )
+          .setPopupContent(`<p class="openPopup">${place.name}</p>`)
+          .on(`popupopen`, () => {
+            // direct click from popup to single place page
+            document
+              .querySelector(".openPopup")
+              .addEventListener(`click`, (e) => {
+                e.preventDefault();
+                console.log(`click`);
+                handleSelectedPlace(place);
+              });
+          });
       });
+    } else if (myMap)
+      myMap.eachLayer((layer) => {
+        // prevents removal of map layout and `you are here` marker
+        if (
+          layer._latlng &&
+          layer._latlng.lat !== coords[0] &&
+          layer._latlng.lng !== coords[1]
+        )
+          layer.remove();
+      });
+  }, [options.seePlaces]);
+  async function handleSelectedPlace(place) {
+    try {
+      await props.setSelectedPlace(place);
+      props.history.push(`place/view`);
+    } catch (error) {
+      console.error(error);
     }
-  }, [props.places]);
-
+  }
   function handleCheckBox(event) {
     if (event.target.value) {
       setOptions((prevOptions) => {
@@ -71,6 +123,11 @@ const Places = (props) => {
   }
 
   return (
+    <div>
+      {
+        loading ? < LoadingSpinner /> : 
+
+      
     <div>
       <hr />
 
@@ -154,6 +211,8 @@ const Places = (props) => {
         ) : null}
       </div>
     </div>
+    }
+    </div>
   );
 };
 
@@ -165,6 +224,7 @@ const mapStateToProps = (state) => {
     myFriends: state.users.myFriends,
     events: state.events.allEvents,
     singleEvent: state.events.singleEvent,
+    selectedPlace: state.selectedPlace,
   };
 };
 
@@ -176,6 +236,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchMyFriends: () => dispatch(fetchMyFriends()),
     fetchAllEvents: () => dispatch(fetchAllEvents()),
     setSingleEvent: (event) => dispatch(setSingleEvent(event)),
+    setSelectedPlace: (place) => dispatch(setSelectedPlace(place)),
   };
 };
 

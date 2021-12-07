@@ -1,8 +1,9 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { setSelectedPlace } from "../store/selectedPlace";
+
+let defaultParkImg = `https://previews.123rf.com/images/sashazerg/sashazerg1706/sashazerg170600034/80505918-park-and-playground-cartoon.jpg`;
 
 const singlePlace = (props) => {
   const { name, icon, rating, types, vicinity } = props.place;
@@ -17,9 +18,9 @@ const singlePlace = (props) => {
       <Link to="/place/view">
         <p>{name}</p>
         <p>{vicinity}</p>
-        <p>{rating}</p>
+        <p className="labelname">{rating}</p>
         {/* <p>{types}</p> */}
-        <img src={icon} />
+        <img src={defaultParkImg} />
       </Link>
     </div>
   );

@@ -1,13 +1,13 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const {
   models: { User, Intake, Friend },
-} = require('../../db');
-const {requireToken} = require("../gatekeeping")
+} = require("../../db");
+const { requireToken } = require("../gatekeeping");
 
 module.exports = router;
 
-// /api/users/nearby/:userId
-router.get('/nearby/:userId/:distance', async (req, res, next) => {
+// /api/users/nearby/:userId/:distance
+router.get("/nearby/:userId/:distance", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId);
     const output = await user.findNearbyUsers(req.params.distance);
@@ -19,38 +19,37 @@ router.get('/nearby/:userId/:distance', async (req, res, next) => {
 });
 
 //  /api/users/friends/getall
-router.get('/friends/getAll', requireToken, async (req, res, next) => {
+router.get("/friends/getAll", requireToken, async (req, res, next) => {
   //  for getting all 'me' friends
   try {
     const me = req.user;
     const myFriends = await Friend.findAll({
       where: {
         userId: me.id,
-        status: 'accepted'
-      }
-    })
+        status: "accepted",
+      },
+    });
     const friendsMy = await Friend.findAll({
       where: {
         AddresseeId: me.id,
-        status: 'accepted'
-      }
-    })
-    const combinedFriends = [... myFriends, ... friendsMy]
-      .map(friendObj=> (friendObj.userId))
-      .filter(id => id !== me.id)
+        status: "accepted",
+      },
+    });
+    const combinedFriends = [...myFriends, ...friendsMy]
+      .map((friendObj) => friendObj.userId)
+      .filter((id) => id !== me.id);
     const allFriends = await Promise.all(
-      combinedFriends.map(
-        id => (User.findByPk(id))
-      ))
-    if(allFriends.length) {
-      res.send(allFriends)
+      combinedFriends.map((id) => User.findByPk(id))
+    );
+    if (allFriends.length) {
+      res.send(allFriends);
     } else {
-      res.send(`none`)
+      res.send(`none`);
     }
   } catch (err) {
-    next(err)
+    next(err);
   }
-})
+});
 
 // /api/users/requests/:userId
 router
@@ -184,13 +183,13 @@ router.route(`/intakes/:userId`).post(async (req, res, next) => {
 });
 
 // /api/users
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const users = await User.findAll({
       // explicitly select only the id and username fields - even though
       // users' passwords are encrypted, it won't help if we just
       // send everything to anyone who asks!
-      attributes: ['id', 'username', 'email', 'image'],
+      attributes: ["id", "username", "email", "image"],
     });
 
     res.send(users);

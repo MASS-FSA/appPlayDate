@@ -4,7 +4,10 @@ export const loadMap = (
   long = -77.18318725,
   zoom = 20
 ) => {
-  let myMap = L.map(element).setView([lat, long], 12);
+  let myMap = L.map(element, { scrollWheelZoom: false }).setView(
+    [lat, long],
+    12
+  );
   console.log(`map loaded`);
 
   const googleView = L.tileLayer(

@@ -26,6 +26,7 @@ export const OthersProfile = ({
     state: "",
     email: "",
     bio: "",
+    createdAt: "",
   });
 
   useEffect(() => {
@@ -46,6 +47,7 @@ export const OthersProfile = ({
         state: user.state || "",
         email: user.email || "",
         bio: user.bio || "",
+        createdAt: user.createdAt || "",
       };
     });
   }, [user]);
