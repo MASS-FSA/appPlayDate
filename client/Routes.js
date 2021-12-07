@@ -30,10 +30,9 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route exact path='/home' component={UserPage} />
-
+            <Route exact path='/home' component={Places} />
+            <Route exact path='/dash' component={UserPage} />
             <Route exact path='/events' component={AllEvents} />
-
             <Route exact path='/events/create' component={CreateEvent} />
             <Route exact path='/events/:id' component={SingleEvent} />
             <Route path='/questionaire' component={Questionaire} />
@@ -47,12 +46,14 @@ class Routes extends Component {
             <Route exact path='/profile/:userId' component={OthersProfile} />
             <Route exact path='/myProfile' component={UserProfile} />
             <Route exact path='/channels/create' component={CreateChannel} />
+            <Redirect to='places'/>
           </Switch>
         ) : (
           <Switch>
             <Route path='/' exact component={Login} />
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
+            <Redirect to='/login'/>
           </Switch>
         )}
       </div>
