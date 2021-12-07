@@ -1,5 +1,6 @@
 import axios from 'axios';
 import socket from '../socket';
+import { authenticateRequest } from './gateKeepingMiddleWare';
 
 const TOKEN = 'token';
 export const token = window.localStorage.getItem(TOKEN);
@@ -49,7 +50,11 @@ export const fetchMessages = () => async (dispatch) => {
 
 export const addChannel = (channel, history) => async (dispatch) => {
   try {
-    const { data: newChannel } = await axios.post('/api/channels', channel);
+    const newChannel = await authenticateRequest(
+      'post',
+      '/api/channels',
+      channel
+    );
     dispatch(_addChannel(newChannel));
     history.push(`/chat/channels/${newChannel.id}`);
   } catch (err) {

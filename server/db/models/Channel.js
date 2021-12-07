@@ -11,7 +11,7 @@ const Channel = db.define('channel', {
     },
   },
   createdBy: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
   },
 });
 
