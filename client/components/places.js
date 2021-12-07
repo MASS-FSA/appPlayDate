@@ -3,9 +3,10 @@ import { connect } from "react-redux";
 import { fetchPlaces } from "../store/places";
 import { fetchUsersWithinDistance } from "../store/users";
 import { fetchMyFriends } from "../store/users";
+import { fetchAllEvents, setSingleEvent } from "../store/events";
 const L = require("leaflet");
 import { getGeoLocationFromBrowser, loadMap } from "../../Util/loadMap";
-import { authenticateRequest } from "../store/gateKeepingMiddleWare";
+import EventSimpleView from "./eventSimpleView";
 import SinglePlaceView from "./singlePlace"
 import SinglePerson from "./singlePerson"
 
@@ -35,15 +36,14 @@ const Places = (props) => {
 
   useEffect(()=>{
     if (props.me.id) {
-      console.log('me: ', props.me)
       props.fetchUsersWithinDistance(props.me.id, 60000)
       props.fetchMyFriends()
+      props.fetchAllEvents()
     }
   }, [props.me])
 
   useEffect(() => {
     if (!myMap && coords[0]) {
-      console.log(`from coords`, coords);
       props.fetchPlaces(coords, 16000)
       myMap = loadMap("map", coords[0], coords[1]);
     }
@@ -51,7 +51,6 @@ const Places = (props) => {
 
   useEffect(() => {
     if (props.palces !== []) {
-      console.log(props.places);
       props.places.map((place) => {
         return L.marker([
           place.lat,
@@ -130,11 +129,28 @@ const Places = (props) => {
         {/* FOR DISPLAYING ALL FRIENDS */}
         <h3>FRIENDS</h3>
         {options.seeFriends ?
-         props.myFriends.map(friend => (
-           <SinglePerson key={friend.id} person={friend}/>
-         ))
-         :
-         <p>Place Holder</p>
+           props.myFriends.length ?
+            props.myFriends.map(friend => (
+              <SinglePerson key={friend.id} person={friend}/>
+            ))
+            :
+            <p>Place Holder</p>
+          :
+          null
+        }
+      </div>
+      <div>
+        {/* FOR DISPLAYING EVENTS */}
+        <h3>EVENTS</h3>
+        {options.seeEvents ?
+          props.events.length ?
+            props.events.map(event => (
+              <EventSimpleView key={event.id} event={event}/>
+            ))
+            :
+            <p>No Events Currently In Your Area</p>
+          :
+          null
         }
       </div>
     </div>
@@ -146,7 +162,9 @@ const mapStateToProps = (state) => {
     places: state.places,
     people: state.users.nearbyUsers,
     me: state.auth,
-    myFriends: state.users.myFriends
+    myFriends: state.users.myFriends,
+    events: state.events.allEvents,
+    singleEvent: state.events.singleEvent
   };
 };
 
@@ -154,7 +172,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchPlaces: (loc, radius) => dispatch(fetchPlaces(loc, radius)),
     fetchUsersWithinDistance: (id, distance) =>  dispatch(fetchUsersWithinDistance(id, distance)),
-    fetchMyFriends: () => dispatch(fetchMyFriends())
+    fetchMyFriends: () => dispatch(fetchMyFriends()),
+    fetchAllEvents: () => dispatch(fetchAllEvents()),
+    setSingleEvent: (event) => dispatch(setSingleEvent(event))
   };
 };
 

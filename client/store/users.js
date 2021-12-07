@@ -152,7 +152,6 @@ export const updateFriendStatus = (userId, friendId, response) => {
 export const fetchMyFriends = () => async dispatch => {
   try {
     const data = await authenticateRequest('get', '/api/users/friends/getAll')
-    console.log('DATA!!: ' , data)
     dispatch(setMyFriends(data))
   } catch (err) {
     console.log(err)
