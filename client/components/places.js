@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchPlaces } from "../store/places";
 import { fetchUsersWithinDistance } from "../store/users";
+import { fetchMyFriends } from "../store/users";
 const L = require("leaflet");
 import { getGeoLocationFromBrowser, loadMap } from "../../Util/loadMap";
+import { authenticateRequest } from "../store/gateKeepingMiddleWare";
 import SinglePlaceView from "./singlePlace"
 import SinglePerson from "./singlePerson"
 
@@ -35,6 +37,7 @@ const Places = (props) => {
     if (props.me.id) {
       console.log('me: ', props.me)
       props.fetchUsersWithinDistance(props.me.id, 60000)
+      props.fetchMyFriends()
     }
   }, [props.me])
 
@@ -59,8 +62,6 @@ const Places = (props) => {
       });
     }
   }, [props.places]);
-
-  // use
 
   function handleCheckBox(event) {
     if(event.target.value) {
@@ -97,6 +98,7 @@ const Places = (props) => {
       </div>
       <div>
         {/* FOR DISPALYING NEARBY PLACES */}
+        <h3>NEARBY PLACES</h3>
         {options.seePlaces ?
           (props.places.length ?
             props.places.map(place => (
@@ -111,6 +113,7 @@ const Places = (props) => {
       </div>
       <div>
         {/* FOR DISPLAYING NEARBY PEOPLE */}
+        <h3>NEARBY PARENTS</h3>
         {options.seePeople ?
           (props.people.length ?
             props.people.map(person => (
@@ -125,7 +128,14 @@ const Places = (props) => {
       </div>
       <div>
         {/* FOR DISPLAYING ALL FRIENDS */}
-
+        <h3>FRIENDS</h3>
+        {options.seeFriends ?
+         props.myFriends.map(friend => (
+           <SinglePerson key={friend.id} person={friend}/>
+         ))
+         :
+         <p>Place Holder</p>
+        }
       </div>
     </div>
   );
@@ -136,13 +146,15 @@ const mapStateToProps = (state) => {
     places: state.places,
     people: state.users.nearbyUsers,
     me: state.auth,
+    myFriends: state.users.myFriends
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchPlaces: (loc, radius) => dispatch(fetchPlaces(loc, radius)),
-    fetchUsersWithinDistance: (id, distance) =>  dispatch(fetchUsersWithinDistance(id, distance))
+    fetchUsersWithinDistance: (id, distance) =>  dispatch(fetchUsersWithinDistance(id, distance)),
+    fetchMyFriends: () => dispatch(fetchMyFriends())
   };
 };
 

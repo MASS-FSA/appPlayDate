@@ -18,6 +18,7 @@ router.get('/nearby/:userId/:distance', async (req, res, next) => {
   }
 });
 
+//  /api/users/friends/getall
 router.get('/friends/getAll', requireToken, async (req, res, next) => {
   //  for getting all 'me' friends
   try {
@@ -25,18 +26,24 @@ router.get('/friends/getAll', requireToken, async (req, res, next) => {
     const myFriends = await Friend.findAll({
       where: {
         userId: me.id,
-        status: 'pending'
+        status: 'accepted'
       }
     })
     const friendsMy = await Friend.findAll({
       where: {
         AddresseeId: me.id,
-        status: 'pending'
+        status: 'accepted'
       }
     })
-    const combineFriends = [... myFriends, ... friendsMy]
-    if(combineFriends.length) {
-      res.send(combineFriends)
+    const combinedFriends = [... myFriends, ... friendsMy]
+      .map(friendObj=> (friendObj.userId))
+      .filter(id => id !== me.id)
+    const allFriends = await Promise.all(
+      combinedFriends.map(
+        id => (User.findByPk(id))
+      ))
+    if(allFriends.length) {
+      res.send(allFriends)
     } else {
       res.send(`none`)
     }
