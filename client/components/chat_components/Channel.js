@@ -44,7 +44,7 @@ const Channel = (props) => {
       </button>
       <button
         onClick={() => {
-          console.log('This is my selected id: ', props.selected.id);
+          console.log('This is my selected id: ', props.selected);
           // props.removeChannel(props.selected.id);
         }}
       >
