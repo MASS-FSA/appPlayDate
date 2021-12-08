@@ -1,14 +1,21 @@
-'use strict';
+"use strict";
 
+// const { use } = require('chai');
 const {
   db,
   models: { User, Event, Message, Channel },
-} = require('../server/db');
+} = require("../server/db");
+const Friend = require("../server/db/models/Friend");
 
 const users = [
   {
-    username: 'Mehron',
-    password: '123',
+    username: "Chat Bot",
+    image: `https://static.botsrv2.com/website/img/quriobot_favicon.1727b193.png`,
+  },
+
+  {
+    username: "Mehron",
+    password: "123",
     longitude: -77.1618725,
     latitude: 38.8125889,
     homeLongitude: -77.1618725,
@@ -17,19 +24,19 @@ const users = [
   },
 
   {
-    username: 'Sean',
-    password: '123',
+    username: "Sean",
+    password: "123",
     longitude: -77.1618725,
     latitude: 38.8235889,
     homeLongitude: -77.1618725,
     homeLatitude: 38.8235889,
     image:
-      'https://tjn-blog-images.s3.amazonaws.com/wp-content/uploads/2015/11/20001006/15-most-hilarious-things-people-have-put-on-their-resume-810x539.jpg',
+      "https://tjn-blog-images.s3.amazonaws.com/wp-content/uploads/2015/11/20001006/15-most-hilarious-things-people-have-put-on-their-resume-810x539.jpg",
   },
 
   {
-    username: 'Steven',
-    password: '123',
+    username: "Steven",
+    password: "123",
     longitude: -77.18318725,
     latitude: 38.8125889,
     homeLongitude: -77.18318725,
@@ -37,48 +44,48 @@ const users = [
   },
 
   {
-    username: 'Alex',
-    password: '123',
-    email: 'anatoly.tsinker13@gmail.com',
-    state: 'North Carolina',
-    address: '88 BearBack Court',
+    username: "Alex",
+    password: "123",
+    email: "anatoly.tsinker13@gmail.com",
+    state: "North Carolina",
+    address: "88 BearBack Court",
     longitude: -77.1828725,
     latitude: 38.8125889,
     homeLongitude: -77.1828725,
     homeLatitude: 38.8125889,
     image:
-      'https://ih1.redbubble.net/image.469397349.2555/flat,750x,075,f-pad,750x1000,f8f8f8.u2.jpg',
+      "https://ih1.redbubble.net/image.469397349.2555/flat,750x,075,f-pad,750x1000,f8f8f8.u2.jpg",
   },
 ];
 
 const events = [
   {
-    name: 'Fun Event',
-    location: 'Iowa',
+    name: "Fun Event",
+    location: "Iowa",
   },
   {
-    name: 'Super Fun Event',
-    location: 'Virginia',
+    name: "Super Fun Event",
+    location: "Virginia",
   },
   {
-    name: 'Soccer Game',
-    location: 'New York',
+    name: "Soccer Game",
+    location: "New York",
   },
   {
-    name: 'Yugioh YCS',
-    location: 'Vegas',
+    name: "Yugioh YCS",
+    location: "Vegas",
   },
   {
-    name: 'Football Game',
-    location: 'New England',
+    name: "Football Game",
+    location: "New England",
   },
   {
-    name: 'Marathon',
-    location: 'Boston',
+    name: "Marathon",
+    location: "Boston",
   },
 ];
 
-const channels = [{ name: 'Public_Chat' }];
+const channels = [{ name: "Public_Chat" }];
 
 const id = () => Math.round(Math.random() * (users.length - 1)) + 1;
 
@@ -119,7 +126,7 @@ const id = () => Math.round(Math.random() * (users.length - 1)) + 1;
  */
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
-  console.log('db synced!');
+  console.log("db synced!");
 
   // Creating Users
   await Promise.all(
@@ -146,13 +153,27 @@ async function seed() {
   // );
 
   const allUsers = await User.findAll();
-  const singleUser = await User.findByPk(1);
-  const secondUser = await User.findByPk(2);
+  const userPairs = [];
+  for (let i = 1; i < allUsers.length + 1; i++) {
+    for (let j = 1; j < allUsers.length + 1; j++) {
+      if (i !== j) {
+        userPairs.push([i, j]);
+      }
+    }
+  }
 
-  // await singleUser.addFriend(allUsers);
-  await secondUser.addAddressee(allUsers, {
-    through: { specifierId: secondUser.id },
-  });
+  for (let i = 0; i < userPairs.length; i++) {
+    let user1 = await User.findByPk(userPairs[i][0]);
+    let user2 = await User.findByPk(userPairs[i][1]);
+    await user1.addAddressee(user2);
+  }
+
+  const friendsTable = await Friend.findAll();
+  await Promise.all(
+    friendsTable.map((friendship) => {
+      return friendship.update({ status: "accepted" });
+    })
+  );
 
   console.log(`seeded successfully`);
 }
@@ -163,16 +184,16 @@ async function seed() {
  The `seed` function is concerned only with modifying the database.
 */
 async function runSeed() {
-  console.log('seeding...');
+  console.log("seeding...");
   try {
     await seed();
   } catch (err) {
     console.error(err);
     process.exitCode = 1;
   } finally {
-    console.log('closing db connection');
+    console.log("closing db connection");
     await db.close();
-    console.log('db connection closed');
+    console.log("db connection closed");
   }
 }
 

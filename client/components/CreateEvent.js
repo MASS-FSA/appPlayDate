@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { createSingleEvent } from "../store/events";
 import { clearSelectedPlace } from "../store/selectedPlace";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
+import history from '../history'
 
 // learn constant hook for this later
 let provider;
@@ -19,7 +20,7 @@ export const CreateEvent = (props) => {
   });
 
   useEffect(() => {
-    const { name, icon, rating, types, vicinity } = props.selectedPlace;
+    const { name, rating, types, vicinity } = props.selectedPlace;
     setEventInfo((prevEventInfo) => {
       return {
         ...prevEventInfo,
@@ -27,7 +28,7 @@ export const CreateEvent = (props) => {
         location: vicinity || "",
         time: "",
         description: "",
-        image: icon || "",
+        image: defaultUrl || "",
       };
     });
     // Geosearch with leaflet-geosearch
@@ -38,15 +39,6 @@ export const CreateEvent = (props) => {
       window.localStorage.setItem("selectedPlace", {});
     };
   }, []);
-
-  // useEffect(() => {
-  //   // Geosearch with leaflet-geosearch
-  //   if (!provider) provider = new OpenStreetMapProvider();
-  //   return () => {
-  //     props.clearSelectedPlace();
-  //     window.localStorage.setItem("selectedPlace", {});
-  //   };
-  // }, []);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -66,8 +58,9 @@ export const CreateEvent = (props) => {
       const [{ x, y }] = await parseAddress(body.location);
       body.latitude = y.toFixed(7);
       body.longitude = x.toFixed(7);
+      body.createdBy = props.user.id;
 
-      await props.createEvent(body);
+      await props.createEvent(body, history);
     } catch (error) {
       console.error(error);
     }
@@ -90,6 +83,8 @@ export const CreateEvent = (props) => {
       };
     });
   }
+
+  console.log(props.friends);
 
   return (
     <div className="questioncontainer">
@@ -150,12 +145,13 @@ const mapStateToProps = (state) => {
   return {
     event: state.events.singleEvent,
     selectedPlace: state.selectedPlace,
+    user: state.auth,
   };
 };
 
-const mapDispatchToProps = (dispatch, { history }) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    createEvent: (body) => dispatch(createSingleEvent(body, history)),
+    createEvent: (body, history) => dispatch(createSingleEvent(body, history)),
     clearSelectedPlace: () => dispatch(clearSelectedPlace()),
   };
 };

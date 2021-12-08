@@ -18,6 +18,15 @@ body {
   justify-content: center;
 }
 
+button {
+  display: inline-block;
+  text-align: center;
+}
+
+select {
+  width: 200px;
+}
+
 div {
   display: inline;
 }
@@ -61,6 +70,10 @@ form div {
   height: auto;
 }
 
+.event_people {
+  display: flex;
+}
+
 /* Load Spinner */
 .loader_div {
   height: 100vh;
@@ -90,8 +103,8 @@ form div {
   }
 }
 
-@media only screen and (max-width:500px){
+@media only screen and (max-width: 500px) {
   .leafMap {
-      height: 250px;
+    height: 250px;
   }
 }

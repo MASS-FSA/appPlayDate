@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 const SinglePerson = (props) => {
   const { id, username, image } = props.person;
-  const toProfile = `profile/${id}`;
+  const toProfile = `/profile/${id}`;
   return (
-    <div className="filtercontainer">
-      <Link to={toProfile}>
+    <Link to={toProfile}>
+      <div className="filtercontainer">
         <p id="idname">{username}</p>
         <img id="personImg" src={image} />
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 };
 
