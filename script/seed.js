@@ -8,10 +8,6 @@ const {
 const Friend = require("../server/db/models/Friend");
 
 const users = [
-  {
-    username: "Chat Bot",
-    image: `https://static.botsrv2.com/website/img/quriobot_favicon.1727b193.png`,
-  },
 
   {
     username: "Mehron",
@@ -85,40 +81,45 @@ const events = [
   },
 ];
 
-const channels = [{ name: "Public_Chat" }];
+const channels = [
+  { name: "Public_Chat" },
+  { name: "Discuss Your kids favorite Toys!"},
+  { name: "What your favorite Park?"},
+  { name: "Great Books For Kids"}
+];
 
 const id = () => Math.round(Math.random() * (users.length - 1)) + 1;
 
-// const messages = [
-//   { userId: id(), content: 'This is the public Channel', channelId: 1 },
-// { userId: id(), content: 'I like swings!', channelId: 1 },
-// {
-//   userId: id(),
-//   content: 'I like going down the slide!',
-//   channelId: 1,
-// },
-// { userId: id(), content: 'I like playing tag!', channelId: 2 },
-// { userId: id(), content: "Let's get together soon!", channelId: 2 },
-// { userId: id(), content: 'Sounds great!', channelId: 2 },
-// { userId: id(), content: 'Looks like it might rain!', channelId: 3 },
-// { userId: 4, content: 'Bring an umbrella!', channelId: 3 },
-// {
-//   userId: id(),
-//   content: "Why don't we meet at the indoor basketball court?",
-//   channelId: 3,
-// },
-// { userId: id(), content: 'I want to get tacos!', channelId: 4 },
-// {
-//   userId: id(),
-//   content: 'Salad sounds like a better option!',
-//   channelId: 4,
-// },
-// {
-//   userId: id(),
-//   content: "The kids won't stop yelling about taco salad!",
-//   channelId: 4,
-// },
-// ];
+const messages = [
+  { userId: id(), content: 'This is the public Channel', channelId: 1 },
+{ userId: id(), content: 'I like swings!', channelId: 1 },
+{
+  userId: id(),
+  content: 'I like going down the slide!',
+  channelId: 1,
+},
+{ userId: id(), content: 'I like playing tag!', channelId: 2 },
+{ userId: id(), content: "Let's get together soon!", channelId: 2 },
+{ userId: id(), content: 'Sounds great!', channelId: 2 },
+{ userId: id(), content: 'Looks like it might rain!', channelId: 3 },
+{ userId: 4, content: 'Bring an umbrella!', channelId: 3 },
+{
+  userId: id(),
+  content: "Why don't we meet at the indoor basketball court?",
+  channelId: 3,
+},
+{ userId: id(), content: 'I want to get tacos!', channelId: 4 },
+{
+  userId: id(),
+  content: 'Salad sounds like a better option!',
+  channelId: 4,
+},
+{
+  userId: id(),
+  content: "The kids won't stop yelling about taco salad!",
+  channelId: 4,
+},
+];
 
 /**
  * seed - this function clears the database, updates tables to
@@ -133,7 +134,6 @@ async function seed() {
     users.map((user) => {
       return User.create(user);
     }),
-
     events.map((event) => {
       return Event.create(event);
     })
@@ -143,14 +143,7 @@ async function seed() {
         return Channel.create(channel);
       })
     )
-  );
-  // .then(() =>
-  //   Promise.all(
-  //     messages.map((message) => {
-  //       return Message.create(message);
-  //     })
-  //   )
-  // );
+  )
 
   const allUsers = await User.findAll();
   const userPairs = [];
@@ -174,6 +167,15 @@ async function seed() {
       return friendship.update({ status: "accepted" });
     })
   );
+
+  await User.create({
+    username: "Chat Bot",
+    image: `https://static.botsrv2.com/website/img/quriobot_favicon.1727b193.png`,
+  })
+
+  await Promise.all(messages.map(msg => {
+    return Message.create(msg)
+  }))
 
   console.log(`seeded successfully`);
 }
