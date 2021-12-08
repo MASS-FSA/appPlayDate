@@ -19,7 +19,7 @@ export const CreateEvent = (props) => {
   });
 
   useEffect(() => {
-    const { name, icon, rating, types, vicinity } = props.selectedPlace;
+    const { name, rating, types, vicinity } = props.selectedPlace;
     setEventInfo((prevEventInfo) => {
       return {
         ...prevEventInfo,
@@ -27,7 +27,7 @@ export const CreateEvent = (props) => {
         location: vicinity || "",
         time: "",
         description: "",
-        image: icon || "",
+        image: defaultUrl || "",
       };
     });
     // Geosearch with leaflet-geosearch
@@ -82,6 +82,8 @@ export const CreateEvent = (props) => {
       };
     });
   }
+
+  console.log(props.friends);
 
   return (
     <div className="questioncontainer">

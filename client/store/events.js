@@ -32,10 +32,10 @@ export const fetchAllEvents = () => {
   };
 };
 
-export const fetchSingleEvent = (id) => {
+export const fetchSingleEvent = (eventId) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`/api/events/${id}`);
+      const { data } = await axios.get(`/api/events/${eventId}`);
 
       dispatch(setSingleEvent(data));
     } catch (error) {
@@ -71,6 +71,18 @@ export const createSingleEvent = (body, history) => {
       const { data } = await axios.put(`/api/events`, body);
       dispatch(setSingleEvent(data));
       history.push(`/events/${data.id}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const addUserToEvent = (eventId, userId) => {
+  const body = { userId };
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.put(`/api/events/${eventId}`, body);
+      dispatch(setSingleEvent(data));
     } catch (error) {
       console.error(error);
     }
