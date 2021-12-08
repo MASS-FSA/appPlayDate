@@ -3,10 +3,8 @@ import { connect } from 'react-redux';
 import { sendMessage } from '../../store/chat';
 
 function NewMessage(props) {
-  // console.log('these are my newMessage Props: ', props);
   const [message, setMessage] = useState({
     content: '',
-    // channelId: props.channelId,
   });
   const [channelId, setChannelId] = useState({
     channelId: props.channelId,
@@ -51,7 +49,7 @@ function NewMessage(props) {
         />
         <span className='input-group-btn'>
           <button className='btn btn-default' type='submit'>
-          <h1>CHAT</h1>
+            <h1>CHAT</h1>
           </button>
         </span>
       </div>

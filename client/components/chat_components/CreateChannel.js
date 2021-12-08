@@ -25,6 +25,7 @@ export const CreateChannel = (props) => {
       console.error(error);
     }
   }
+  console.log('Create Channel Props: ', props);
 
   return (
     <div className='questioncontainer'>
