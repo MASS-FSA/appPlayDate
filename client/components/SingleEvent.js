@@ -11,7 +11,7 @@ import SinglePerson from "./singlePerson";
 import { fetchMyFriends } from "../store/users";
 
 import { OpenStreetMapProvider } from "leaflet-geosearch";
-import { addChannel } from "../store/chat";
+import { addChannel, getChannels } from "../store/chat";
 
 // learn constant hook for this later
 let provider;
@@ -20,12 +20,14 @@ const SingleEvent = (props) => {
   const [edit, setEdit] = useState(false);
   const [existingUsers, setExistingUsers] = useState([]);
   const [friendId, setFriendId] = useState(``);
+  const [chatId, setChatId] = useState(``);
 
   useEffect(() => {
     async function fetchData() {
       try {
         await props.getEvent(props.match.params.id);
         await props.getFriends();
+        await props.getChannels();
       } catch (error) {
         console.error(error);
       }
@@ -43,6 +45,15 @@ const SingleEvent = (props) => {
       setExistingUsers(usersId);
     }
   }, [props.event]);
+
+  useEffect(() => {
+    if (props.channels !== []) {
+      const names = props.channels.filter(
+        (channel) => channel.name === props.event.name
+      );
+      if (names !== []) setChatId(names[0]?.id);
+    }
+  }, [props.channels]);
 
   function handleDelete() {
     props.deleteEvent(props.match.params.id);
@@ -102,43 +113,60 @@ const SingleEvent = (props) => {
               </button>
             </div>
           ) : null}
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              addFriend(props.user.id);
-            }}
-          >
-            Join Event
-          </button>
-          <select onChange={(e) => handleChange(e)} value={friendId}>
-            <option>Add Friend To Event</option>
-            {props.friends
-              ?.filter((friend) => !existingUsers.includes(friend.id))
-              .map((friend) => {
-                return (
-                  <option key={friend.id} value={friend.id}>
-                    {friend.username}
-                  </option>
-                );
-              })}
-          </select>
+          <section>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                addFriend(props.user.id);
+              }}
+            >
+              Join Event
+            </button>
 
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              addFriend(friendId);
-            }}
-          >
-            Add Friend To Event
-          </button>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              props.createChat({ name: props.event.name });
-            }}
-          >
-            Create Event Chat
-          </button>
+            {chatId ? (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.history.push(`/chat/channels/${chatId}`);
+                }}
+              >
+                Join Chat
+              </button>
+            ) : (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.createChat({ name: props.event.name });
+                }}
+              >
+                Create Chat
+              </button>
+            )}
+          </section>
+          <section>
+            <select onChange={(e) => handleChange(e)} value={friendId}>
+              <option>Add Friend To Event</option>
+              {props.friends
+                ?.filter((friend) => !existingUsers.includes(friend.id))
+                .map((friend) => {
+                  return (
+                    <option key={friend.id} value={friend.id}>
+                      {friend.username}
+                    </option>
+                  );
+                })}
+            </select>
+            <br />
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                addFriend(friendId);
+              }}
+            >
+              Add
+            </button>
+          </section>
+
           <img src={props.event.image} />
           <div className="singleeventcasing">
             <h1>{props.event.name}</h1>
@@ -163,6 +191,7 @@ const mapStateToProps = (state) => {
     event: state.events.singleEvent,
     user: state.auth,
     friends: state.users.myFriends,
+    channels: state.chat.channels,
   };
 };
 
@@ -174,6 +203,7 @@ const mapDispatchToProps = (dispatch, { history }) => {
     getFriends: () => dispatch(fetchMyFriends()),
     addFriend: (eventId, userId) => dispatch(addUserToEvent(eventId, userId)),
     createChat: (channelName) => dispatch(addChannel(channelName, history)),
+    getChannels: () => dispatch(getChannels()),
   };
 };
 

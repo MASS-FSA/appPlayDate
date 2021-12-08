@@ -102,6 +102,7 @@ const Places = (props) => {
           layer.remove();
       });
   }, [options.seePlaces]);
+
   async function handleSelectedPlace(place) {
     try {
       await props.setSelectedPlace(place);
