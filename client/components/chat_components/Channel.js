@@ -30,7 +30,7 @@ const Channel = (props) => {
     <div className="dropdown-content">
       <h1> Channels List </h1>
       {props.channels
-        .sort((a, b) => a.id - b.id)
+        ?.sort((a, b) => a.id - b.id)
         .map((channel) => (
           <div key={channel.id}>
             <NavLink
