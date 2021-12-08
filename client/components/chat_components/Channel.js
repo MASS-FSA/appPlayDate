@@ -32,14 +32,14 @@ const Channel = (props) => {
       {props.channels
         .sort((a, b) => a.id - b.id)
         .map((channel) => (
-          <a key={channel.id}>
+          <div key={channel.id}>
             <NavLink
               to={`/chat/channels/${channel.id}`}
               onClick={() => handleClick(channel.id)}
             >
               {channel.name.split("_").join(" ")}
             </NavLink>
-          </a>
+          </div>
         ))}
       <button>
         <NavLink to="/channels/create">Add New Channel</NavLink>
