@@ -72,6 +72,7 @@ const SingleEvent = (props) => {
   }
 
   async function addFriend(userId) {
+    if (!userId) return alert(`Please Select Friend`);
     try {
       await props.addFriend(props.event.id, userId);
     } catch (error) {
@@ -101,6 +102,14 @@ const SingleEvent = (props) => {
               </button>
             </div>
           ) : null}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              addFriend(props.user.id);
+            }}
+          >
+            Join Event
+          </button>
           <select onChange={(e) => handleChange(e)} value={friendId}>
             <option>Add Friend To Event</option>
             {props.friends
@@ -113,13 +122,14 @@ const SingleEvent = (props) => {
                 );
               })}
           </select>
+
           <button
             onClick={(e) => {
               e.preventDefault();
               addFriend(friendId);
             }}
           >
-            Add Friend
+            Add Friend To Event
           </button>
           <button
             onClick={(e) => {
