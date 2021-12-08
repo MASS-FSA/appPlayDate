@@ -2,8 +2,9 @@
 
 const {
   db,
-  models: { User, Event, Message, Channel },
+  models: { User, Event, Message, Channel},
 } = require('../server/db');
+const Friend = require('../server/db/models/Friend');
 
 const users = [
   {
@@ -153,6 +154,10 @@ async function seed() {
   await secondUser.addAddressee(allUsers, {
     through: { specifierId: secondUser.id },
   });
+  const friendsTable = await Friend.findAll()
+  await Promise.all(friendsTable.map((friendship)=>{
+    return friendship.update({status:'accepted'})
+  }))
 
   console.log(`seeded successfully`);
 }

@@ -27,25 +27,16 @@ router.get("/friends/getAll", requireToken, async (req, res, next) => {
       where: {
         userId: me.id,
         status: "accepted",
-      },
-    });
-    const friendsMy = await Friend.findAll({
-      where: {
-        AddresseeId: me.id,
-        status: "accepted",
-      },
-    });
-    const combinedFriends = [...myFriends, ...friendsMy]
-      .map((friendObj) => friendObj.userId)
-      .filter((id) => id !== me.id);
-    const allFriends = await Promise.all(
-      combinedFriends.map((id) => User.findByPk(id))
-    );
-    if (allFriends.length) {
-      res.send(allFriends);
-    } else {
-      res.send([]);
-    }
+      }
+    })
+    const userIds = await Promise.all(myFriends.map(friend => {
+      return friend.AddresseeId
+    }))
+    const friendList = await Promise.all(userIds.map(id => {
+      return User.findByPk(id)
+    }))
+    res.send(friendList);
+
   } catch (err) {
     next(err);
   }
