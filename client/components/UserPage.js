@@ -7,7 +7,7 @@ import {
   updateSingleUser,
 } from "../store/users";
 import { fetchOwnedEvents, fetchParticipantIn } from "../store/events";
-import { fetchOwnedChannels } from "../store/chat";
+import { fetchOwnedChannels, fetchParticipantChannels } from "../store/chat";
 import { getGeoLocationFromBrowser } from "../../Util/loadMap";
 import SinglePerson from "./singlePerson";
 import LoadingSpinner from "./LoadingSpinner";
@@ -32,6 +32,7 @@ export const UserPage = (props) => {
     props.fetchOwnedEvents();
     props.fetchOwnedChannels();
     props.fetchParticipantIn();
+    props.fetchParticipantChannels();
   }, []);
 
   useEffect(() => {
@@ -95,6 +96,24 @@ export const UserPage = (props) => {
             :
             <p>Currently None</p>}
           </div>
+          {/* CHANNELS I HAVE A CONVERSATION IN */}
+          <div className="userSdashboard">
+            <h4>Continue A Conversation</h4>
+            {props.participantChannels.length ?
+              props.participantChannels.map(channel => {
+                const goToChannel = `/chat/channels/${channel.id}`
+                  return <div key={channel.id}>
+                    <Link to={goToChannel}>
+                      <button>Go To Channel: {channel.name}</button>
+                    </Link>
+                  </div>
+                })
+            :
+            <Link to="/chat/channels">
+              <button>Start Chatting With Other Parents!</button>
+            </Link>
+            }
+          </div>
         </div>
       )}
     </div>
@@ -107,7 +126,8 @@ const mapStateToProps = (state) => {
     friends: state.users.myFriends,
     myEvents: state.events.myEvents,
     participantIn: state.events.participantIn,
-    ownedChannels: state.chat.ownedChannels
+    ownedChannels: state.chat.ownedChannels,
+    participantChannels: state.chat.participantChannels
   };
 };
 
@@ -118,7 +138,8 @@ const mapDispatchToProps = (dispatch) => {
     getFriends: () => dispatch(fetchMyFriends()),
     fetchOwnedEvents: () => dispatch(fetchOwnedEvents()),
     fetchParticipantIn: () => dispatch(fetchParticipantIn()),
-    fetchOwnedChannels: () => dispatch(fetchOwnedChannels())
+    fetchOwnedChannels: () => dispatch(fetchOwnedChannels()),
+    fetchParticipantChannels: () => dispatch(fetchParticipantChannels())
   };
 };
 
