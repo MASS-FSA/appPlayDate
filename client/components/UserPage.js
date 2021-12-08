@@ -5,9 +5,11 @@ import {
   fetchUsersWithinDistance,
   updateSingleUser,
 } from "../store/users";
+import { fetchOwnedEvents, fetchParticipantIn } from "../store/events";
 import { getGeoLocationFromBrowser } from "../../Util/loadMap";
 import SinglePerson from "./singlePerson";
 import LoadingSpinner from "./LoadingSpinner";
+import EventSimpleView from "./eventSimpleView"
 
 export const UserPage = (props) => {
   const [coords, setCoords] = useState([null, null]);
@@ -24,6 +26,8 @@ export const UserPage = (props) => {
     // uses navigator method and uses `call` function as the callback
     getGeoLocationFromBrowser(call);
     props.getFriends();
+    props.fetchOwnedEvents();
+    props.fetchParticipantIn();
   }, []);
 
   useEffect(() => {
@@ -37,21 +41,13 @@ export const UserPage = (props) => {
     if (coords[0]) setLoading(false);
   }, [coords]);
 
-  async function handleChange(event) {
-    const distance = event.target.value;
-    try {
-      await props.getNearbyUsers(props.singleUser.id, distance);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   return (
     <div>
       {loading ? (
         <LoadingSpinner />
       ) : (
         <div>
+          {/* FRIENDS */}
           <div className="userSdashboard">
             <h4>Friends</h4>
             {props.friends.length ?
@@ -60,6 +56,26 @@ export const UserPage = (props) => {
                 })
             :
             <p>Currently No Friends</p>}
+          </div>
+          {/* EVENTS I MADE */}
+          <div className="userSdashboard">
+            <h4>Events I Made</h4>
+            {props.myEvents.length ?
+              props.myEvents.map(event => {
+                  return <EventSimpleView key={event.id} event={event} />;
+                })
+            :
+            <p>Currently None</p>}
+          </div>
+          {/* EVENTS I AM PARTICIPATING IN */}
+          <div className="userSdashboard">
+            <h4>My Events</h4>
+            {props.participantIn.length ?
+              props.participantIn.map(event => {
+                  return <EventSimpleView key={event.id} event={event} />;
+                })
+            :
+            <p>Currently None</p>}
           </div>
         </div>
       )}
@@ -70,18 +86,19 @@ export const UserPage = (props) => {
 const mapStateToProps = (state) => {
   return {
     singleUser: state.auth,
-    nearbyUsers: state.users.nearbyUsers,
     friends: state.users.myFriends,
+    myEvents: state.events.myEvents,
+    participantIn: state.events.participantIn,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getNearbyUsers: (userId, distance) =>
-      dispatch(fetchUsersWithinDistance(userId, distance)),
     updateUser: (userId, coordsObj) =>
       dispatch(updateSingleUser(userId, coordsObj)),
     getFriends: () => dispatch(fetchMyFriends()),
+    fetchOwnedEvents: () => dispatch(fetchOwnedEvents()),
+    fetchParticipantIn: () => dispatch(fetchParticipantIn())
   };
 };
 

@@ -1,12 +1,46 @@
 const router = require("express").Router();
+const { reset } = require("nodemon");
 const {
-  models: { User, Event },
+  models: { User, Event, UserEvents },
 } = require("../../db");
 const {requireToken} = require("../gatekeeping")
 
 module.exports = router;
 
 // /api/events
+
+router.get('/myEvents', requireToken, async (req, res, next) => {
+  try {
+    const myEvents = await Event.findAll({
+      where: {
+        createdBy: req.user.id
+      }
+    })
+    res.send(myEvents)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/participating', requireToken, async (req, res, next) => {
+
+  try {
+    const participantIn = await UserEvents.findAll({
+      where: {
+        userId: req.user.id
+      }
+    })
+    const stepTwo = participantIn.map(userEvent => {
+      return userEvent.eventId
+    })
+    const events = await Promise.all(stepTwo.map(id => {
+      return Event.findByPk(id)
+    }))
+    res.send(events)
+  } catch (err) {
+    next(err)
+  }
+})
 
 router
   .route(`/`)
