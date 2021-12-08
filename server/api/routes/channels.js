@@ -24,12 +24,13 @@ router
     // Creating a channel based off of req.body
     try {
       const channel = await Channel.create(req.body);
-      const chatBot = await
+      const chatBot = await User.findOne({ where: { username: `Chat Bot` } });
       const message = await Message.create({
         where: { content: `Welcome to ${channel.name} chat!` },
       });
-      await channel.addMessage(message);
-      res.send(await channel.reload());
+      await message.setChannel(channel);
+      await message.setUser(chatBot);
+      res.send(channel);
     } catch (err) {
       next(err);
     }
