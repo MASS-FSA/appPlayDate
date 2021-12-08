@@ -22,13 +22,17 @@ export const Messages = (props) => {
   const filteredMessages = messages.filter(
     (message) => message.channelId === channelId
   );
+  console.log(props);
 
   if (filteredMessages.length === 0) {
     return (
-      <ScrollToBottom className='message-container'>
-        <h1>Be the first to write a message!</h1>
-        <NewMessage channelId={channelId} />
-      </ScrollToBottom>
+      <div className='message-container'>
+        <h1>{props.match.params.channelId}</h1>
+        <ScrollToBottom className='message-container'>
+          <h1>Be the first to write a message!</h1>
+          <NewMessage channelId={channelId} />
+        </ScrollToBottom>
+      </div>
     );
   } else {
     return (
