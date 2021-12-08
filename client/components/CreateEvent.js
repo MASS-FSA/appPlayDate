@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { createSingleEvent } from "../store/events";
 import { clearSelectedPlace } from "../store/selectedPlace";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
+import history from '../history'
 
 // learn constant hook for this later
 let provider;
@@ -59,7 +60,7 @@ export const CreateEvent = (props) => {
       body.longitude = x.toFixed(7);
       body.createdBy = props.user.id;
 
-      await props.createEvent(body);
+      await props.createEvent(body, history);
     } catch (error) {
       console.error(error);
     }
@@ -148,9 +149,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { history }) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    createEvent: (body) => dispatch(createSingleEvent(body, history)),
+    createEvent: (body, history) => dispatch(createSingleEvent(body, history)),
     clearSelectedPlace: () => dispatch(clearSelectedPlace()),
   };
 };

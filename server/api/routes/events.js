@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {
   models: { User, Event },
 } = require("../../db");
+const {requireToken} = require("../gatekeeping")
 
 module.exports = router;
 
@@ -18,12 +19,12 @@ router
       next(error);
     }
   })
-  .put(async (req, res, next) => {
+  .post(requireToken, async (req, res, next) => {
     try {
-      // find creator and add to event
-      const creator = await User.findByPk(req.body.createdBy);
+      // use token and add to event
+      req.body.createdBy = req.user.id
       const newEvent = await Event.create(req.body);
-      await creator.addEvent(newEvent);
+      await req.user.addEvent(newEvent);
       res.send(newEvent);
     } catch (error) {
       next(error);

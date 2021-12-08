@@ -22,10 +22,10 @@ Message.belongsTo(Channel);
 Message.belongsTo(User);
 
 User.belongsToMany(Event, {
-  through: `UserEvents`,
+  through: 'UserEvents',
 });
 Event.belongsToMany(User, {
-  through: `UserEvents`,
+  through: 'UserEvents',
 });
 
 User.hasMany(Review);
