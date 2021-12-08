@@ -1,8 +1,7 @@
 const router = require("express").Router();
 const {
-  models: { Channel, Message },
+  models: { Channel, Message, User },
 } = require("../../db");
-const User = require("../../db/models/User");
 const { requireToken } = require("../gatekeeping");
 
 module.exports = router;
@@ -25,7 +24,12 @@ router
     // Creating a channel based off of req.body
     try {
       const channel = await Channel.create(req.body);
-      res.send(channel);
+      const chatBot = await
+      const message = await Message.create({
+        where: { content: `Welcome to ${channel.name} chat!` },
+      });
+      await channel.addMessage(message);
+      res.send(await channel.reload());
     } catch (err) {
       next(err);
     }
@@ -52,7 +56,7 @@ router.get("/:channelId/messages", requireToken, async (req, res, next) => {
 
 // DELETE /api/channels
 // create frontend " ARE YOU SURE YOU WANT TO DELETE ?"
-router.delete("/:channelId", async (req, res, next) => {
+router.delete("/:channelId", requireToken, async (req, res, next) => {
   try {
     const id = req.params.channelId;
     await Channel.destroy({ where: { id } });
