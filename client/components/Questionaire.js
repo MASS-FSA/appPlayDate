@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { createUserIntake } from "../store/users";
+import { createUserIntake, updateSingleUser } from "../store/users";
+import { OpenStreetMapProvider } from "leaflet-geosearch";
+// learn constant hook for this later
+let provider;
 
 export const Questionaire = (props) => {
   const [intake, setIntake] = useState({
     age: "",
     vaccination: false,
     favoriteColor: "",
+    address: "",
   });
+
+  useEffect(() => {
+    if (!provider) provider = new OpenStreetMapProvider();
+  }, []);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -22,7 +30,12 @@ export const Questionaire = (props) => {
 
   async function handleSubmit(body) {
     if (body.age === "") return alert(`Please add child's age`);
+    const userLocation = { address: body.address };
     try {
+      const [{ x, y }] = await parseAddress(userLocation.address);
+      userLocation.homeLatitude = y.toFixed(7);
+      userLocation.homeLongitude = x.toFixed(7);
+      props.updateUser(props.me.id, userLocation);
       props.addIntake(props.me.id, body);
       props.history.push(`/home`);
     } catch (error) {
@@ -30,10 +43,18 @@ export const Questionaire = (props) => {
     }
   }
 
+  async function parseAddress(address) {
+    const results = await provider.search({ query: address });
+    return results;
+  }
+
   return (
     <div className="questioncontainer">
       <div className="lines" />
       <form>
+        <label>Address</label>
+        <input name="address" value={intake.address} onChange={handleChange} />
+        <br />
         <label>What is your child's age?</label>
         <input name="age" value={intake.age} onChange={handleChange} />
         <br />
@@ -76,6 +97,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addIntake: (userId, body) => dispatch(createUserIntake(userId, body)),
+    updateUser: (userId, body) => dispatch(updateSingleUser(userId, body)),
   };
 };
 
