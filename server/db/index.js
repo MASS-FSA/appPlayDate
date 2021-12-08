@@ -17,6 +17,7 @@ Channel.hasMany(Message, {
 });
 
 User.hasMany(Message);
+Channel.hasMany(Message);
 
 Message.belongsTo(Channel);
 Message.belongsTo(User);
