@@ -1,14 +1,14 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const {
   models: { User, Channel, Message },
-} = require('../../db');
-const { requireToken } = require('../gatekeeping');
+} = require("../../db");
+const { requireToken } = require("../gatekeeping");
 
 module.exports = router;
 
 // GET /api/messages
 // all messages...
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     // fix later
     // const users = await User.findAll()
@@ -21,7 +21,7 @@ router.get('/', async (req, res, next) => {
 
 // GET /api/routes/messages/:channelId
 // messages by channel id
-router.get('/:channelId/', async (req, res, next) => {
+router.get("/:channelId/", async (req, res, next) => {
   try {
     const channelId = req.params.channelId;
     const messages = await Message.findAll({
@@ -36,12 +36,13 @@ router.get('/:channelId/', async (req, res, next) => {
 
 // POST /api/messages
 // Creating a message based off of req.body
-router.post('/', requireToken, async (req, res, next) => {
+router.post("/", requireToken, async (req, res, next) => {
   try {
+    req.body.userId = req.user.id;
     const message = await Message.create(req.body);
-    await message.setUser(req.user.id);
+    await message.setUser(req.user);
     const newMessage = await Message.findOne({
-      order: [['id', 'DESC']],
+      order: [["id", "DESC"]],
       include: User,
     });
     res.json(newMessage);
@@ -54,11 +55,11 @@ router.post('/', requireToken, async (req, res, next) => {
 
 // DELETE /api/routes/channels
 // create frontend " ARE YOU SURE YOU WANT TO DELETE ?"
-router.delete('/:messageId', async (req, res, next) => {
+router.delete("/:messageId", async (req, res, next) => {
   try {
     const id = req.params.messageId;
     await Message.destroy({ where: { id } });
-    res.send('Message Deleted').status(204).end();
+    res.send("Message Deleted").status(204).end();
   } catch (err) {
     next(err);
   }
