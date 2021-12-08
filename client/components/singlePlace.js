@@ -14,17 +14,14 @@ const singlePlace = (props) => {
   };
 
   return (
-    <div>
-      <hr />
-      <p>{name}</p>
-      <p>{vicinity}</p>
-      <p>{rating}</p>
-      <p>{types}</p>
-      <img src={defaultParkImg} width="100px" />
+    <div className="filtercontainer" onClick={handleClick}>
       <Link to="/place/view">
-        <button onClick={handleClick}>View This Location</button>
+        <p>{name}</p>
+        <p>{vicinity}</p>
+        <p className="labelname">{rating}</p>
+        {/* <p>{types}</p> */}
+        <img src={defaultParkImg} />
       </Link>
-      <hr />
     </div>
   );
 };

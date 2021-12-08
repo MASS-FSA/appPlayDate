@@ -1,5 +1,6 @@
 import axios from 'axios';
 import socket from '../socket';
+import { authenticateRequest } from './gateKeepingMiddleWare';
 
 const TOKEN = 'token';
 export const token = window.localStorage.getItem(TOKEN);
@@ -13,10 +14,15 @@ const GET_MESSAGES = 'GET_MESSAGES';
 const GET_CHANNELS = 'GET_CHANNELS';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const GOT_MESSAGE = 'GOT_MESSAGE';
+const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 
 export const _addChannel = (newChannel) => ({
   type: ADD_CHANNEL,
   newChannel,
+});
+export const _removeChannel = (id) => ({
+  type: REMOVE_CHANNEL,
+  id
 });
 
 export const getMessages = (messages) => {
@@ -49,11 +55,25 @@ export const fetchMessages = () => async (dispatch) => {
 
 export const addChannel = (channel, history) => async (dispatch) => {
   try {
-    const { data: newChannel } = await axios.post('/api/channels', channel);
+    const newChannel = await authenticateRequest(
+      'post',
+      '/api/channels',
+      channel
+    );
     dispatch(_addChannel(newChannel));
     history.push(`/chat/channels/${newChannel.id}`);
   } catch (err) {
     console.error(error);
+    next(err);
+  }
+};
+export const removeChannel = (id, history) => async (dispatch) => {
+  try {
+    await authenticateRequest('delete', `/api/channels/${id}`);
+    dispatch(_removeChannel(id));
+    history.push(`/chat/channels/${1}`);
+  } catch (err) {
+    console.error(err);
     next(err);
   }
 };
@@ -95,6 +115,13 @@ export default (state = initialState, action) => {
       return { ...state, messages: [...state.messages, action.newMessage] };
     case ADD_CHANNEL:
       return { ...state, channels: [...state.channels, action.newChannel] };
+    case REMOVE_CHANNEL:
+      return {
+        ...state,
+        channels: state.channels.filter(
+          (channel) => channel.id !== action.id
+        ),
+      };
     case GET_CHANNELS:
       return { ...state, channels: action.channels };
     default:

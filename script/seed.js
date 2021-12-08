@@ -1,33 +1,35 @@
-"use strict";
+'use strict';
 
 const {
   db,
   models: { User, Event, Message, Channel },
-} = require("../server/db");
+} = require('../server/db');
 
 const users = [
   {
-    username: "Mehron",
-    password: "123",
+    username: 'Mehron',
+    password: '123',
     longitude: -77.1618725,
     latitude: 38.8125889,
-    homeLongitude:-77.1618725,
-    homeLatitude:38.8125889,
+    homeLongitude: -77.1618725,
+    homeLatitude: 38.8125889,
     image: `https://www.awesomeinventions.com/wp-content/uploads/2018/04/photoshop-man-riding-chicken-silly-things-bored-people-do.jpg`,
   },
 
   {
-    username: "Sean",
-    password: "123",
+    username: 'Sean',
+    password: '123',
     longitude: -77.1618725,
     latitude: 38.8235889,
     homeLongitude: -77.1618725,
     homeLatitude: 38.8235889,
+    image:
+      'https://tjn-blog-images.s3.amazonaws.com/wp-content/uploads/2015/11/20001006/15-most-hilarious-things-people-have-put-on-their-resume-810x539.jpg',
   },
 
   {
-    username: "Steven",
-    password: "123",
+    username: 'Steven',
+    password: '123',
     longitude: -77.18318725,
     latitude: 38.8125889,
     homeLongitude: -77.18318725,
@@ -35,8 +37,8 @@ const users = [
   },
 
   {
-    username: "Alex",
-    password: "123",
+    username: 'Alex',
+    password: '123',
     email: 'anatoly.tsinker13@gmail.com',
     state: 'North Carolina',
     address: '88 BearBack Court',
@@ -44,76 +46,72 @@ const users = [
     latitude: 38.8125889,
     homeLongitude: -77.1828725,
     homeLatitude: 38.8125889,
-    image: 'https://ih1.redbubble.net/image.469397349.2555/flat,750x,075,f-pad,750x1000,f8f8f8.u2.jpg'
+    image:
+      'https://ih1.redbubble.net/image.469397349.2555/flat,750x,075,f-pad,750x1000,f8f8f8.u2.jpg',
   },
 ];
 
 const events = [
   {
-    name: "Fun Event",
-    location: "Iowa",
+    name: 'Fun Event',
+    location: 'Iowa',
   },
   {
-    name: "Super Fun Event",
-    location: "Virginia",
+    name: 'Super Fun Event',
+    location: 'Virginia',
   },
   {
-    name: "Soccer Game",
-    location: "New York",
+    name: 'Soccer Game',
+    location: 'New York',
   },
   {
-    name: "Yugioh YCS",
-    location: "Vegas",
+    name: 'Yugioh YCS',
+    location: 'Vegas',
   },
   {
-    name: "Football Game",
-    location: "New England",
+    name: 'Football Game',
+    location: 'New England',
   },
   {
-    name: "Marathon",
-    location: "Boston",
+    name: 'Marathon',
+    location: 'Boston',
   },
 ];
 
-const channels = [
-  { name: "really_random" },
-  { name: "generally_speaking" },
-  { name: "upcoming_birthday" },
-  { name: "park_planning" },
-];
+const channels = [{ name: 'Public_Chat' }];
 
 const id = () => Math.round(Math.random() * (users.length - 1)) + 1;
 
-const messages = [
-  { userId: id(), content: "I like parks!", channelId: 1 },
-  { userId: id(), content: "I like swings!", channelId: 1 },
-  {
-    userId: id(),
-    content: "I like going down the slide!",
-    channelId: 1,
-  },
-  { userId: id(), content: "I like playing tag!", channelId: 2 },
-  { userId: id(), content: "Let's get together soon!", channelId: 2 },
-  { userId: id(), content: "Sounds great!", channelId: 2 },
-  { userId: id(), content: "Looks like it might rain!", channelId: 3 },
-  { userId: 4, content: "Bring an umbrella!", channelId: 3 },
-  {
-    userId: id(),
-    content: "Why don't we meet at the indoor basketball court?",
-    channelId: 3,
-  },
-  { userId: id(), content: "I want to get tacos!", channelId: 4 },
-  {
-    userId: id(),
-    content: "Salad sounds like a better option!",
-    channelId: 4,
-  },
-  {
-    userId: id(),
-    content: "The kids won't stop yelling about taco salad!",
-    channelId: 4,
-  },
-];
+// const messages = [
+//   { userId: id(), content: 'This is the public Channel', channelId: 1 },
+// { userId: id(), content: 'I like swings!', channelId: 1 },
+// {
+//   userId: id(),
+//   content: 'I like going down the slide!',
+//   channelId: 1,
+// },
+// { userId: id(), content: 'I like playing tag!', channelId: 2 },
+// { userId: id(), content: "Let's get together soon!", channelId: 2 },
+// { userId: id(), content: 'Sounds great!', channelId: 2 },
+// { userId: id(), content: 'Looks like it might rain!', channelId: 3 },
+// { userId: 4, content: 'Bring an umbrella!', channelId: 3 },
+// {
+//   userId: id(),
+//   content: "Why don't we meet at the indoor basketball court?",
+//   channelId: 3,
+// },
+// { userId: id(), content: 'I want to get tacos!', channelId: 4 },
+// {
+//   userId: id(),
+//   content: 'Salad sounds like a better option!',
+//   channelId: 4,
+// },
+// {
+//   userId: id(),
+//   content: "The kids won't stop yelling about taco salad!",
+//   channelId: 4,
+// },
+// ];
 
 /**
  * seed - this function clears the database, updates tables to
@@ -121,7 +119,7 @@ const messages = [
  */
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
-  console.log("db synced!");
+  console.log('db synced!');
 
   // Creating Users
   await Promise.all(
@@ -132,21 +130,20 @@ async function seed() {
     events.map((event) => {
       return Event.create(event);
     })
-  )
-    .then(() =>
-      Promise.all(
-        channels.map((channel) => {
-          return Channel.create(channel);
-        })
-      )
+  ).then(() =>
+    Promise.all(
+      channels.map((channel) => {
+        return Channel.create(channel);
+      })
     )
-    .then(() =>
-      Promise.all(
-        messages.map((message) => {
-          return Message.create(message);
-        })
-      )
-    );
+  );
+  // .then(() =>
+  //   Promise.all(
+  //     messages.map((message) => {
+  //       return Message.create(message);
+  //     })
+  //   )
+  // );
 
   const allUsers = await User.findAll();
   const singleUser = await User.findByPk(1);
@@ -166,16 +163,16 @@ async function seed() {
  The `seed` function is concerned only with modifying the database.
 */
 async function runSeed() {
-  console.log("seeding...");
+  console.log('seeding...');
   try {
     await seed();
   } catch (err) {
     console.error(err);
     process.exitCode = 1;
   } finally {
-    console.log("closing db connection");
+    console.log('closing db connection');
     await db.close();
-    console.log("db connection closed");
+    console.log('db connection closed');
   }
 }
 

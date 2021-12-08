@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
+  addUserToEvent,
   deleteSingleEvent,
   fetchSingleEvent,
   updateSingleEvent,
 } from "../store/events";
 import EditEvent from "./EditEvent";
+import SinglePerson from "./singlePerson";
+import { fetchMyFriends } from "../store/users";
 
 import { OpenStreetMapProvider } from "leaflet-geosearch";
+import { addChannel } from "../store/chat";
 
 // learn constant hook for this later
 let provider;
 
 const SingleEvent = (props) => {
   const [edit, setEdit] = useState(false);
+  const [existingUsers, setExistingUsers] = useState([]);
+  const [friendId, setFriendId] = useState(``);
 
   useEffect(() => {
     async function fetchData() {
       try {
         await props.getEvent(props.match.params.id);
+        await props.getFriends();
       } catch (error) {
         console.error(error);
       }
@@ -29,6 +36,13 @@ const SingleEvent = (props) => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (props.event.users) {
+      const usersId = props.event.users.map((user) => user.id);
+      setExistingUsers(usersId);
+    }
+  }, [props.event]);
 
   function handleDelete() {
     props.deleteEvent(props.match.params.id);
@@ -57,6 +71,19 @@ const SingleEvent = (props) => {
     setEdit((prevEdit) => !prevEdit);
   }
 
+  async function addFriend(userId) {
+    if (!userId) return alert(`Please Select Friend`);
+    try {
+      await props.addFriend(props.event.id, userId);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function handleChange(event) {
+    setFriendId(event.target.value);
+  }
+
   return (
     <div>
       {edit ? (
@@ -67,9 +94,50 @@ const SingleEvent = (props) => {
         />
       ) : (
         <div className="eventscontainer">
-          <button onClick={(e) => handleEdit(e)}>Edit</button>
-          <button type="button" onClick={() => handleDelete()}>
-            Delete
+          {props.user.id === props.event.createdBy ? (
+            <div>
+              <button onClick={(e) => handleEdit(e)}>Edit</button>
+              <button type="button" onClick={() => handleDelete()}>
+                Delete
+              </button>
+            </div>
+          ) : null}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              addFriend(props.user.id);
+            }}
+          >
+            Join Event
+          </button>
+          <select onChange={(e) => handleChange(e)} value={friendId}>
+            <option>Add Friend To Event</option>
+            {props.friends
+              ?.filter((friend) => !existingUsers.includes(friend.id))
+              .map((friend) => {
+                return (
+                  <option key={friend.id} value={friend.id}>
+                    {friend.username}
+                  </option>
+                );
+              })}
+          </select>
+
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              addFriend(friendId);
+            }}
+          >
+            Add Friend To Event
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              props.createChat({ name: props.event.name });
+            }}
+          >
+            Create Event Chat
           </button>
           <img src={props.event.image} />
           <div className="singleeventcasing">
@@ -77,6 +145,12 @@ const SingleEvent = (props) => {
             <h4>Description</h4>
             <h4>{props.event.description}</h4>
             <h4>{props.event.location}</h4>
+          </div>
+          <h4>People Attending Event</h4>
+          <div className="event_people">
+            {props.event.users?.map((person) => {
+              return <SinglePerson key={person.id} person={person} />;
+            })}
           </div>
         </div>
       )}
@@ -87,14 +161,19 @@ const SingleEvent = (props) => {
 const mapStateToProps = (state) => {
   return {
     event: state.events.singleEvent,
+    user: state.auth,
+    friends: state.users.myFriends,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, { history }) => {
   return {
-    getEvent: (id) => dispatch(fetchSingleEvent(id)),
+    getEvent: (eventId) => dispatch(fetchSingleEvent(eventId)),
     deleteEvent: (id) => dispatch(deleteSingleEvent(id)),
     updateEvent: (id, body) => dispatch(updateSingleEvent(id, body)),
+    getFriends: () => dispatch(fetchMyFriends()),
+    addFriend: (eventId, userId) => dispatch(addUserToEvent(eventId, userId)),
+    createChat: (channelName) => dispatch(addChannel(channelName, history)),
   };
 };
 

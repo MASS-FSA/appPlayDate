@@ -70,7 +70,7 @@ const Places = (props) => {
   }, [coords]);
 
   useEffect(() => {
-    if (props.palces !== [] && options.seePlaces) {
+    if (props.places !== [] && options.seePlaces) {
       props.places.map((place) => {
         return L.marker([place.lat, place.lng])
           .addTo(myMap)
@@ -102,7 +102,6 @@ const Places = (props) => {
           layer.remove();
       });
   }, [options.seePlaces]);
-
   async function handleSelectedPlace(place) {
     try {
       await props.setSelectedPlace(place);
@@ -111,7 +110,6 @@ const Places = (props) => {
       console.error(error);
     }
   }
-
   function handleCheckBox(event) {
     if (event.target.value) {
       setOptions((prevOptions) => {
@@ -130,35 +128,33 @@ const Places = (props) => {
         <LoadingSpinner />
       ) : (
         <div>
-          <hr />
-          <div className="leafMap" id="map" />
-          <h2>Options</h2>
-          <br />
-          <div onClick={handleCheckBox}>
-            <input type="checkbox" name="selectionOne" value="seePlaces" />
-            <label htmlFor="seePlaces">
-              {" "}
-              View Possible Meet Up
-              <br /> Spots Near Me
-            </label>
-            <br></br>
+          <div className="optionscontainer">
+            <h2>Options</h2>
+            <br />
+            <div className="optionsdropdown" onClick={handleCheckBox}>
+              <input type="checkbox" name="selectionOne" value="seePlaces" />
+              <label htmlFor="seePlaces">
+                {" "}
+                View Possible Meet Up
+                <br /> Spots Near Me
+              </label>
 
-            <input type="checkbox" name="selectionTwo" value="seePeople" />
-            <label htmlFor="seePeople"> View People Near Me</label>
-            <br></br>
+              <input type="checkbox" name="selectionTwo" value="seePeople" />
+              <label htmlFor="seePeople"> View People Near Me</label>
 
-            <input type="checkbox" name="selectionThree" value="seeFriends" />
-            <label htmlFor="seeFriends"> View Friends</label>
-            <br></br>
+              <input type="checkbox" name="selectionThree" value="seeFriends" />
+              <label htmlFor="seeFriends"> View Friends</label>
 
-            <input type="checkbox" name="selectionFour" value="seeEvents" />
-            <label htmlFor="seeEvents"> View Events in My Area</label>
-            <br></br>
-            <hr />
+              <input type="checkbox" name="selectionFour" value="seeEvents" />
+              <label htmlFor="seeEvents"> View Events in My Area</label>
+
+              <hr />
+            </div>
           </div>
-          <div>
+          <div className="leafMap" id="map" />
+          <h3 className="labelname">NEARBY PLACES</h3>
+          <div className="bigfilterContainer">
             {/* FOR DISPALYING NEARBY PLACES */}
-            <h3>NEARBY PLACES</h3>
             {options.seePlaces ? (
               props.places.length ? (
                 props.places.map((place) => (
@@ -172,9 +168,9 @@ const Places = (props) => {
               )
             ) : null}
           </div>
-          <div>
+          <h3 className="labelname">NEARBY PARENTS</h3>
+          <div className="bigfilterContainer">
             {/* FOR DISPLAYING NEARBY PEOPLE */}
-            <h3>NEARBY PARENTS</h3>
             {options.seePeople ? (
               props.people.length ? (
                 props.people.map((person) => (
@@ -185,9 +181,9 @@ const Places = (props) => {
               )
             ) : null}
           </div>
-          <div>
+          <h3 className="labelname">FRIENDS</h3>
+          <div className="bigfilterContainer">
             {/* FOR DISPLAYING ALL FRIENDS */}
-            <h3>FRIENDS</h3>
             {options.seeFriends ? (
               props.myFriends.length ? (
                 props.myFriends.map((friend) => (
@@ -198,9 +194,9 @@ const Places = (props) => {
               )
             ) : null}
           </div>
-          <div>
+          <h3 className="labelname">EVENTS</h3>
+          <div className="bigfilterContainer">
             {/* FOR DISPLAYING EVENTS */}
-            <h3>EVENTS</h3>
             {options.seeEvents ? (
               props.events.length ? (
                 props.events.map((event) => (

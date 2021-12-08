@@ -6,13 +6,14 @@ const EventSimpleView = (props) => {
   const {id, name, image, location, time} = props.event
   const goTo = `/events/${id}`
   return (
-    <div>
-      <h6>{name}</h6>
+    <div className="filtercontainer">
       <Link to={goTo}>
-        <img src={image}/>
+        <p>{name}</p>
+        <img id="personImg" src={image}/>
+        <p>Where: {location}</p>
+        <p>At: {time}</p>
       </Link>
-      <p>Where: {location}</p>
-      <p>At: {time}</p>
+      
     </div>
   )
 
