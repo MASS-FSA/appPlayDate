@@ -54,8 +54,10 @@ const getOwnedChannels = (channels) => {
 
 export const fetchOwnedChannels = () => async (dispatch) => {
   try {
-    const data = authenticateRequest("get", "/api/channels/owned");
-    getOwnedChannels(data);
+    console.log('here??')
+    const data = await authenticateRequest("get", "/api/channels/owned");
+    dispatch(getOwnedChannels(data));
+    console.log('fetch owned channels: ' , data)
   } catch (err) {
     console.log(err);
   }
