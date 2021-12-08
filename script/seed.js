@@ -150,7 +150,7 @@ async function seed() {
   const allUsers = await User.findAll();
   const userPairs = []
   for(let i = 1; i< allUsers.length + 1; i++) {
-    for(let j = 2; j< allUsers.length + 1; j++) {
+    for(let j = 1; j< allUsers.length + 1; j++) {
       if(i !== j) {
         userPairs.push([i, j])
       }

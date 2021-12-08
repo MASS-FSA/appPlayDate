@@ -54,11 +54,12 @@ export const UserPage = (props) => {
         <div>
           <div className="userSdashboard">
             <h4>Friends</h4>
-            {props.friends !== `none`
-              ? props.friends?.map((friend) => {
+            {props.friends.length ?
+              props.friends.map((friend) => {
                   return <SinglePerson key={friend.id} person={friend} />;
                 })
-              : null}
+            :
+            <p>Currently No Friends</p>}
           </div>
         </div>
       )}
