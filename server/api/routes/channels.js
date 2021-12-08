@@ -23,6 +23,7 @@ router
   .post(async (req, res, next) => {
     // Creating a channel based off of req.body
     try {
+      req.body.createdBy = req.user.id;
       const channel = await Channel.create(req.body);
       const chatBot = await User.findOne({ where: { username: `Chat Bot` } });
       const message = await Message.create({
