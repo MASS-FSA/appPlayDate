@@ -118,7 +118,7 @@ export const CreateEvent = (props) => {
         <label>Image</label>
         <input name="image" value={eventInfo.image} onChange={handleChange} />
         <br />
-        <img src={eventInfo.image} height="300px" />
+        <img src={eventInfo.image} height="250px" />
         <br />
         <button
           onClick={(e) => {
