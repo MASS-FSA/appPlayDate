@@ -9,6 +9,11 @@ const Friend = require("../server/db/models/Friend");
 
 const users = [
   {
+    username: "Chat Bot",
+    image: `https://static.botsrv2.com/website/img/quriobot_favicon.1727b193.png`,
+  },
+
+  {
     username: "Mehron",
     password: "123",
     longitude: -77.1618725,
