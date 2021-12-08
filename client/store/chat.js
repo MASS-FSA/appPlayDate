@@ -12,6 +12,7 @@ export const tokenHeader = {
 
 const GET_MESSAGES = 'GET_MESSAGES';
 const GET_CHANNELS = 'GET_CHANNELS';
+const GET_OWNED_CHANNELS = 'GET_OWNED_CHANNELS'
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const GOT_MESSAGE = 'GOT_MESSAGE';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
@@ -43,6 +44,22 @@ export const _getChannels = (channels) => {
     channels,
   };
 };
+
+const getOwnedChannels = (channels) => {
+  return {
+    type: GET_OWNED_CHANNELS,
+    channels
+  }
+}
+
+export const fetchOwnedChannels = () => async (dispatch) => {
+  try {
+    const data = authenticateRequest('get', '/api/channels/owned')
+    getOwnedChannels(data)
+  } catch(err) {
+    console.log(err)
+  }
+}
 
 export const fetchMessages = () => async (dispatch) => {
   try {
@@ -105,6 +122,7 @@ export const sendMessage = (message) => async (dispatch) => {
 const initialState = {
   messages: [],
   channels: [],
+  ownedChannels: []
 };
 
 export default (state = initialState, action) => {
@@ -124,6 +142,8 @@ export default (state = initialState, action) => {
       };
     case GET_CHANNELS:
       return { ...state, channels: action.channels };
+    case GET_OWNED_CHANNELS:
+      return { ...state, ownedChannels: action.channels}
     default:
       return state;
   }

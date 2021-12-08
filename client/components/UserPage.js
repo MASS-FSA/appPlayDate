@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom"
 import {
   fetchMyFriends,
   fetchUsersWithinDistance,
   updateSingleUser,
 } from "../store/users";
 import { fetchOwnedEvents, fetchParticipantIn } from "../store/events";
+import { fetchOwnedChannels } from "../store/chat";
 import { getGeoLocationFromBrowser } from "../../Util/loadMap";
 import SinglePerson from "./singlePerson";
 import LoadingSpinner from "./LoadingSpinner";
 import EventSimpleView from "./eventSimpleView"
 
 export const UserPage = (props) => {
+  // const goToChannel = `/chat/channel/${}`
   const [coords, setCoords] = useState([null, null]);
   const [loading, setLoading] = useState(true);
 
@@ -77,6 +80,20 @@ export const UserPage = (props) => {
             :
             <p>Currently None</p>}
           </div>
+          {/* CHANNELS I OWN */}
+          <div className="userSdashboard">
+            <h4>My Chat Channels</h4>
+            {props.ownedChannels.length ?
+              props.ownedChannels.map(channel => {
+                  <div key={channel.id}>
+                    <Link to="/chat/channels">
+                      <button>Go To {channel.name}</button>
+                    </Link>
+                  </div>
+                })
+            :
+            <p>Currently None</p>}
+          </div>
         </div>
       )}
     </div>
@@ -89,6 +106,7 @@ const mapStateToProps = (state) => {
     friends: state.users.myFriends,
     myEvents: state.events.myEvents,
     participantIn: state.events.participantIn,
+    ownedChannels: state.chat.ownedChannels
   };
 };
 
@@ -98,7 +116,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(updateSingleUser(userId, coordsObj)),
     getFriends: () => dispatch(fetchMyFriends()),
     fetchOwnedEvents: () => dispatch(fetchOwnedEvents()),
-    fetchParticipantIn: () => dispatch(fetchParticipantIn())
+    fetchParticipantIn: () => dispatch(fetchParticipantIn()),
+    fetchOwnedChannels: () => dispatch(fetchOwnedChannels())
   };
 };
 
