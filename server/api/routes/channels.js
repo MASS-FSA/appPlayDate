@@ -1,9 +1,9 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const {
   models: { Channel, Message },
-} = require('../../db');
-const User = require('../../db/models/User');
-const { requireToken } = require('../gatekeeping');
+} = require("../../db");
+const User = require("../../db/models/User");
+const { requireToken } = require("../gatekeeping");
 
 module.exports = router;
 
@@ -26,6 +26,13 @@ router
     try {
       req.body.createdBy = req.user.id;
       const channel = await Channel.create(req.body);
+
+      const chatBot = await User.findOne({ where: { username: `Chat Bot` } });
+      const message = await Message.create({
+        content: `Welcome to ${channel.name} chat!`,
+      });
+      await message.setChannel(channel);
+      await message.setUser(chatBot);
       res.send(channel);
     } catch (err) {
       next(err);
@@ -33,7 +40,7 @@ router
   });
 
 // GET /api/channels/:channelId/messages
-router.get('/:channelId/messages', requireToken, async (req, res, next) => {
+router.get("/:channelId/messages", requireToken, async (req, res, next) => {
   try {
     const user = req.user;
     const channelId = req.params.channelId;
@@ -41,7 +48,7 @@ router.get('/:channelId/messages', requireToken, async (req, res, next) => {
       where: { channelId, userId: user.id },
     });
     if (!findUser) {
-      res.send('access denied');
+      res.send("access denied");
     } else {
       const messages = await Message.findAll({ where: { channelId } });
       res.send(messages);
@@ -53,7 +60,7 @@ router.get('/:channelId/messages', requireToken, async (req, res, next) => {
 
 // DELETE /api/channels
 // create frontend " ARE YOU SURE YOU WANT TO DELETE ?"
-router.delete('/:channelId', requireToken, async (req, res, next) => {
+router.delete("/:channelId", requireToken, async (req, res, next) => {
   try {
     const channel = await Channel.findByPk(req.params.channelId);
 
