@@ -21,14 +21,16 @@
 }
 .channel {
   display: flex;
-  background-color: saddlebrown;
+  box-shadow: 2px 2px 2px 1px black;
   height: 40px;
   width: 40px;
   border-radius: 50%;
+  margin-top: 4px;
   margin-left: 4px;
   margin-right: 4px;
   padding: 10px;
 }
+
 .dropdown-content {
   display: none;
   position: absolute;
@@ -51,6 +53,8 @@
 }
 
 .channel:hover .dropdown-content {
+
+  background-position: right center; /* change the direction of the change here */
   display: block;
 }
 

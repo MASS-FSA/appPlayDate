@@ -25,12 +25,12 @@ const Chat = (props) => {
 
   return (
     <div className='chatcontainer'>
-      <h1> Chat </h1>
+      <h1> Chat {window.location.pathname}</h1>
       <div className='ChatParent'>
           
         <div className='Chat'>
         <div className='channel'>
-            <Channel />
+          ☰<Channel />
           </div>
           <Route path='/chat/channels/:channelId' component={Messages} />
           <div className='newmessage'></div>

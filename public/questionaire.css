@@ -17,7 +17,10 @@
 }
 
 .questioncontainer form label{
+    display: flex;
+    justify-content: center;
     list-style: none;
+    width: 100%;
     border-bottom: 1px dotted #ccc;
     text-indent: 25px;
     height: auto;
@@ -56,6 +59,9 @@
     box-sizing: border-box;
 
 }
+.questioncontainer form textarea{
+  width: 100%;
+}
 .questioncontainer form button{
     display:flex;
     margin: auto;
@@ -74,7 +80,7 @@
     border-right: 1px solid #ffaa9f;
     width: 2px;
     float: left;
-    height: 495px;
+    height: 595px;
     margin-left: 40px;
 }
 
