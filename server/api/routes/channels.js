@@ -1,31 +1,26 @@
 const router = require("express").Router();
 const {
-<<<<<<< HEAD
-  models: { Channel, Message, User },
-} = require("../../db");
-=======
   models: { Channel, Message },
 } = require("../../db");
 const User = require("../../db/models/User");
->>>>>>> main
 const { requireToken } = require("../gatekeeping");
 
 module.exports = router;
 
 //  /api/channels/
 
-router.get('/owned', requireToken, async (req, res, next) => {
+router.get("/owned", requireToken, async (req, res, next) => {
   try {
     const owned = await Channel.findAll({
       where: {
-        createdBy: req.user.id
-      }
-    })
-    res.send(owned)
-  } catch(err) {
-    next(err)
+        createdBy: req.user.id,
+      },
+    });
+    res.send(owned);
+  } catch (err) {
+    next(err);
   }
-})
+});
 
 router
   .route(`/`)
@@ -42,16 +37,10 @@ router
     try {
       req.body.createdBy = req.user.id;
       const channel = await Channel.create(req.body);
-<<<<<<< HEAD
-      const chatBot = await User.findOne({ where: { username: `Chat Bot` } });
-      const message = await Message.create({
-        where: { content: `Welcome to ${channel.name} chat!` },
-=======
 
       const chatBot = await User.findOne({ where: { username: `Chat Bot` } });
       const message = await Message.create({
         content: `Welcome to ${channel.name} chat!`,
->>>>>>> main
       });
       await message.setChannel(channel);
       await message.setUser(chatBot);
