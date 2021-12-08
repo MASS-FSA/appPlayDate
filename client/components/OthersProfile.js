@@ -59,7 +59,7 @@ export const OthersProfile = ({
   function statusSetter() {
     switch (status) {
       case `none`:
-        return <button onClick={() => handleAddFriend()}>Add Friend</button>;
+        return <button onClick={() => handleAddFriend()}>Add</button>;
       case `pending`:
         return <h4>Friend Request Pending...</h4>;
       case `declined`:
@@ -87,31 +87,37 @@ export const OthersProfile = ({
       ) : (
         <div>
           <section className="user_profile_section">
-            <div>
-              <img src={profileInfo.image} height="300px" />
-            </div>
-            <div>
-              <h3>{profileInfo.username}</h3>
-              <p>{profileInfo.bio}</p>
-              <div>
-                <p>Email: {profileInfo.email}</p>
-                <p>State: {profileInfo.state}</p>
+            <div className="leftright">
+              <div className="leftsideContainer">
+                <img src={profileInfo.image} height="150px" />
                 <p>Member Since: {profileInfo.createdAt?.slice(0, 10)}</p>
+              </div>
+              <div className="rightsideContainer">
+                <h3>{profileInfo.username}</h3>
+                <p className="hideoverflow">{profileInfo.bio}</p>
+                <div>
+                  <p className="hideoverflow">Email: {profileInfo.email}</p>
+                  <p>State: {profileInfo.state}</p>
+                </div>
               </div>
             </div>
           </section>
-          <button value="blocked" onClick={(e) => handleBlock(e)}>
-            Block User
-          </button>
-          <fieldset>
+          <div className="buttoncontainer">
+            <button value="blocked" onClick={(e) => handleBlock(e)}>
+              Block
+            </button>
+            {statusSetter()}
+          </div>
+          <div className="bottomProfileContainer">
+          <div className="bottomR">
             <legend>Questionaire</legend>
-            <h4>Child Age {profileInfo.intake?.age}</h4>
-            <h4>Favorite Color {profileInfo.intake?.favoriteColor}</h4>
+            <h4>Child Age : {profileInfo.intake?.age}</h4>
+            <h4>Favorite Color : {profileInfo.intake?.favoriteColor}</h4>
             <h4>
-              Vaccinated? {profileInfo.intake?.vaccination ? `Yes` : `No`}
+              Vaccinated : {profileInfo.intake?.vaccination ? `Yes` : `No`}
             </h4>
-          </fieldset>
-          {statusSetter()}
+          </div>
+          </div>
         </div>
       )}
     </div>

@@ -9,17 +9,19 @@ const SinglePlaceDetailedView = (props) => {
     props.selectedPlace || window.localStorage.selectedPlace;
 
   return (
-    <div>
-      <hr />
-      <p>{name}</p>
-      <p>{vicinity}</p>
-      <p>{rating}</p>
-      <p>{types}</p>
+    <div className="placesingleContainer">
       <img src={defaultParkImg} width="100px" />
+      <div className="attributescontainer">
+        <p>{name}</p>
+        <p>{vicinity}</p>
+        <p>{rating}</p>
+        <p>{types}</p>
+      </div>
+      <div className="eventscontainer">
       <Link to="/events/create">
-        <button>Create An Event For This Venue!</button>
+        <button>Create Event</button>
       </Link>
-      <hr />
+      </div>
     </div>
   );
 };

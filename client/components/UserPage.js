@@ -30,6 +30,7 @@ export const UserPage = (props) => {
     getGeoLocationFromBrowser(call);
     props.getFriends();
     props.fetchOwnedEvents();
+    props.fetchOwnedChannels();
     props.fetchParticipantIn();
   }, []);
 
@@ -85,9 +86,9 @@ export const UserPage = (props) => {
             <h4>My Chat Channels</h4>
             {props.ownedChannels.length ?
               props.ownedChannels.map(channel => {
-                  <div key={channel.id}>
+                  return <div key={channel.id}>
                     <Link to="/chat/channels">
-                      <button>Go To {channel.name}</button>
+                      <button>Go To Channel: {channel.name}</button>
                     </Link>
                   </div>
                 })

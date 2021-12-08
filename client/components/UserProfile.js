@@ -102,120 +102,132 @@ export const UserProfile = (props) => {
       {!edit ? (
         <div>
           <section className="user_profile_section">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleEdit();
-              }}
-            >
-              Edit
-            </button>
             <div className="leftright">
               <div className="leftsideContainer">
                 <img src={user.image} />
+                <p>Member Since: {user.createdAt?.slice(0, 10)}</p>
               </div>
               <div className="rightsideContainer">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleEdit();
+                  }}
+                >
+                  ☰Edit
+                </button>
                 <h3>{user.username}</h3>
-                <p>{user.bio}</p>
+                <p className="hideoverflow">{user.bio}</p>
                 <div>
-                  <p>Email: {user.email}</p>
-                  <p>Address: {user.address}</p>
+                  <p className="hideoverflow">Email: {user.email}</p>
+                  <p className="hideoverflow">Address: {user.address}</p>
                   <p>State: {user.state}</p>
-                  <p>Member Since: {user.createdAt?.slice(0, 10)}</p>
                 </div>
               </div>
             </div>
           </section>
-          <fieldset>
-            <legend>Questionaire</legend>
-            <h4>Child Age {user.intake?.age}</h4>
-            <h4>Favorite Color {user.intake?.favoriteColor}</h4>
-            <h4>Vaccinated? {user.intake?.vaccination ? `Yes` : `No`}</h4>
-          </fieldset>
-          {props.requests.map((request, index) => {
-            return (
-              <fieldset key={index}>
-                <p>Request from {request.requester.username}</p>
-                <img
-                  src={request.requester.image}
-                  height="50px"
-                  onClick={() =>
-                    props.history.push(`/profile/${request.requester.id}`)
-                  }
-                />
-                <button
-                  value="accepted"
-                  onClick={(e) => handleUpdateRequest(e, request.requester.id)}
-                >
-                  Accept
-                </button>
-                <button
-                  value="declined"
-                  onClick={(e) => handleUpdateRequest(e, request.requester.id)}
-                >
-                  Decline
-                </button>
-              </fieldset>
-            );
-          })}
+          <div className="bottomProfileContainer">
+            <div className="bottomQ">
+              <legend>Questionaire</legend>
+              <h4>Child Age {user.intake?.age}</h4>
+              <h4>Favorite Color {user.intake?.favoriteColor}</h4>
+              <h4>Vaccinated? {user.intake?.vaccination ? `Yes` : `No`}</h4>
+            </div>
+
+            {props.requests.map((request, index) => {
+              return (
+                <div className="bottomR" key={index}>
+                  <div>
+                    <h4>Request</h4>
+                    <p>{request.requester.username}</p>
+                  </div>  
+                  <img
+                    src={request.requester.image}
+                    height="50px"
+                    onClick={() =>
+                      props.history.push(`/profile/${request.requester.id}`)
+                    }
+                  />
+                  <div className="buttoncontainer">
+                    <button
+                      value="accepted"
+                      onClick={(e) =>
+                        handleUpdateRequest(e, request.requester.id)
+                      }
+                    >
+                      ✔️
+                    </button>
+                    <button
+                      value="declined"
+                      onClick={(e) =>
+                        handleUpdateRequest(e, request.requester.id)
+                      }
+                    >
+                      ❌
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       ) : (
-        <div>
+        <div className="questioncontainer">
+          <div className="lines" />
           <form>
-            <label>Image</label>
-            <img src={profileInfo.image} />
+            {/* <label>Image</label>
+            <img src={profileInfo.image} /> */}
             <br />
-            <div>
-              <input
-                name="image"
-                value={profileInfo.image}
-                onChange={handleChange}
-              />
-              <label>Name</label>
-              <input
-                name="username"
-                value={profileInfo.username}
-                onChange={handleChange}
-              />
-              <br />
-              <label>User Bio</label>
-              <textarea
-                name="bio"
-                value={profileInfo.bio}
-                onChange={handleChange}
-              />
-              <br />
 
-              <label>Email</label>
-              <input
-                name="email"
-                value={profileInfo.email}
-                onChange={handleChange}
-              />
-              <br />
-              <label>Address</label>
-              <input
-                name="address"
-                value={profileInfo.address}
-                onChange={handleChange}
-              />
-              <br />
-              <label>State</label>
-              <input
-                name="state"
-                value={profileInfo.state}
-                onChange={handleChange}
-              />
-            </div>
+            <input
+              name="image"
+              value={profileInfo.image}
+              onChange={handleChange}
+            />
+            <label>Name</label>
+            <input
+              name="username"
+              value={profileInfo.username}
+              onChange={handleChange}
+            />
+            <br />
+            <label>User Bio</label>
+            <textarea
+              name="bio"
+              value={profileInfo.bio}
+              onChange={handleChange}
+            />
+            <br />
+
+            <label>Email</label>
+            <input
+              name="email"
+              value={profileInfo.email}
+              onChange={handleChange}
+            />
+            <br />
+            <label>Address</label>
+            <input
+              name="address"
+              value={profileInfo.address}
+              onChange={handleChange}
+            />
+            <br />
+            <label>State</label>
+            <input
+              name="state"
+              value={profileInfo.state}
+              onChange={handleChange}
+            />
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+            >
+              Save
+            </button>
           </form>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              handleSubmit();
-            }}
-          >
-            Save
-          </button>
         </div>
       )}
     </div>
