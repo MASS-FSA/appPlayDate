@@ -1,4 +1,4 @@
-/* .optionscontainer{
+.optionscontainer{
     display: flex;
     justify-content: center;
     margin: auto;
@@ -23,11 +23,7 @@
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-  } */
-
-.optionsdropdown {
-  display: flex;
-}
+  }
 
 .bigfilterContainer {
   display: flex;
@@ -64,7 +60,14 @@
     justify-content: center;
     margin:auto
 }
-
+.optionsdropdown a:hover {
+    background-color: rgb(172, 31, 97);
+  }
+  
+  .optionscontainer:hover .optionsdropdown {
+    display: block;
+  }
+  
 .optionsdropdown a:hover {background-color: rgb(172, 31, 97);}
 
 .filtercontainer:hover {
