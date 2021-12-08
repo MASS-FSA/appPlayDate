@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { Route } from 'react-router-dom';
-import { fetchMessages } from '../store/chat';
-import Channel from './chat_components/Channel';
-import Messages from './chat_components/Messages';
-
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { Route } from "react-router-dom";
+import { fetchMessages } from "../store/chat";
+import Channel from "./chat_components/Channel";
+import Messages from "./chat_components/Messages";
 
 const Chat = (props) => {
   const [messages, setMessages] = useState(props);
@@ -24,19 +23,18 @@ const Chat = (props) => {
   }, [props.messages]);
 
   return (
-    <div className='chatcontainer'>
-      <h1> Chat {window.location.pathname}</h1>
-      <div className='ChatParent'>
-          
-        <div className='Chat'>
-        <div className='channel'>
-          ☰<Channel />
+    <div className="chatcontainer">
+      <h1> Chat </h1>
+      <div className="ChatParent">
+        <div className="Chat">
+          <div className="channel">
+            ☰<Channel />
           </div>
-          <Route path='/chat/channels/:channelId' component={Messages} />
-          <div className='newmessage'></div>
+          <Route path="/chat/channels/:channelId" component={Messages} />
+          <div className="newmessage"></div>
         </div>
       </div>
-      <div >
+      <div>
         <img id="MASSMasscot" src="trasparentdino.png" />
       </div>
     </div>
