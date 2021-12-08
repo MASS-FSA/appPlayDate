@@ -18,16 +18,13 @@ export const Messages = (props) => {
   }, [props.messages]);
 
   const channelId = Number(props.match.params.channelId);
-  // //We'll need to move this logic to the thunk and backend, but it renders for now. -sh
   const filteredMessages = messages.filter(
     (message) => message.channelId === channelId
   );
-  console.log(props);
 
   if (filteredMessages.length === 0) {
     return (
       <div className='message-container'>
-        <h1>{props.match.params.channelId}</h1>
         <ScrollToBottom className='message-container'>
           <h1>Be the first to write a message!</h1>
           <NewMessage channelId={channelId} />
@@ -50,6 +47,7 @@ export const Messages = (props) => {
 
 const mapStateToProps = (state) => ({
   messages: state.chat.messages,
+  channels: state.chat.channels,
 });
 
 const mapDispatchToProps = (dispatch) => {
