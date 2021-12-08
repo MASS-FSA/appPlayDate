@@ -1,19 +1,19 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import AllEvents from './components/AllEvents';
-import { Login, Signup } from './components/AuthForm';
-import Chat from './components/Chat';
-import CreateEvent from './components/CreateEvent';
-import Questionaire from './components/Questionaire';
-import SingleEvent from './components/SingleEvent';
-import UserPage from './components/UserPage';
-import Places from './components/places';
-import SinglePlaceDetailedView from './components/SinglePlaceDetailedView';
-import UserProfile from './components/UserProfile';
-import { me } from './store';
-import OthersProfile from './components/OthersProfile';
-import CreateChannel from './components/chat_components/CreateChannel';
+import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import AllEvents from "./components/AllEvents";
+import { Login, Signup } from "./components/AuthForm";
+import Chat from "./components/Chat";
+import CreateEvent from "./components/CreateEvent";
+import Questionaire from "./components/Questionaire";
+import SingleEvent from "./components/SingleEvent";
+import UserPage from "./components/UserPage";
+import Places from "./components/places";
+import SinglePlaceDetailedView from "./components/SinglePlaceDetailedView";
+import UserProfile from "./components/UserProfile";
+import { me } from "./store";
+import OthersProfile from "./components/OthersProfile";
+import CreateChannel from "./components/chat_components/CreateChannel";
 
 /**
  * COMPONENT
@@ -30,30 +30,30 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route exact path='/home' component={Places} />
-            <Route exact path='/dash' component={UserPage} />
-            <Route exact path='/events' component={AllEvents} />
-            <Route exact path='/events/create' component={CreateEvent} />
-            <Route exact path='/events/:id' component={SingleEvent} />
-            <Route path='/questionaire' component={Questionaire} />
-            <Route exact path='/places' component={Places} />
+            <Route exact path="/home" component={Places} />
+            <Route exact path="/dash" component={UserPage} />
+            <Route exact path="/events" component={AllEvents} />
+            <Route exact path="/events/create" component={CreateEvent} />
+            <Route exact path="/events/:id" component={SingleEvent} />
+            <Route path="/questionaire" component={Questionaire} />
+            <Route exact path="/places" component={Places} />
             <Route
               exact
-              path='/place/view'
+              path="/place/view"
               component={SinglePlaceDetailedView}
             />
-            <Route path='/chat' component={Chat} />
-            <Route exact path='/profile/:userId' component={OthersProfile} />
-            <Route exact path='/myProfile' component={UserProfile} />
-            <Route exact path='/channels/create' component={CreateChannel} />
-            <Redirect to='places'/>
+            <Route path="/chat" component={Chat} />
+            <Route exact path="/profile/:userId" component={OthersProfile} />
+            <Route exact path="/myProfile" component={UserProfile} />
+            <Route exact path="/channels/create" component={CreateChannel} />
+            {/* <Redirect to='places'/> */}
           </Switch>
         ) : (
           <Switch>
-            <Route path='/' exact component={Login} />
-            <Route path='/login' component={Login} />
-            <Route path='/signup' component={Signup} />
-            <Redirect to='/login'/>
+            <Route path="/" exact component={Login} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            {/* <Redirect to="/login" /> */}
           </Switch>
         )}
       </div>
