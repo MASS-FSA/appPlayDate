@@ -17,6 +17,15 @@ body {
   justify-content: center;
 }
 
+button {
+  display: inline-block;
+  text-align: center;
+}
+
+select {
+  width: 200px;
+}
+
 div {
   display: inline;
 }

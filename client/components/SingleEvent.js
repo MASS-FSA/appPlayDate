@@ -113,54 +113,60 @@ const SingleEvent = (props) => {
               </button>
             </div>
           ) : null}
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              addFriend(props.user.id);
-            }}
-          >
-            Join Event
-          </button>
-          <select onChange={(e) => handleChange(e)} value={friendId}>
-            <option>Add Friend To Event</option>
-            {props.friends
-              ?.filter((friend) => !existingUsers.includes(friend.id))
-              .map((friend) => {
-                return (
-                  <option key={friend.id} value={friend.id}>
-                    {friend.username}
-                  </option>
-                );
-              })}
-          </select>
+          <section>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                addFriend(props.user.id);
+              }}
+            >
+              Join Event
+            </button>
 
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              addFriend(friendId);
-            }}
-          >
-            Add Friend To Event
-          </button>
-          {chatId ? (
+            {chatId ? (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.history.push(`/chat/channels/${chatId}`);
+                }}
+              >
+                Join Chat
+              </button>
+            ) : (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.createChat({ name: props.event.name });
+                }}
+              >
+                Create Chat
+              </button>
+            )}
+          </section>
+          <section>
+            <select onChange={(e) => handleChange(e)} value={friendId}>
+              <option>Add Friend To Event</option>
+              {props.friends
+                ?.filter((friend) => !existingUsers.includes(friend.id))
+                .map((friend) => {
+                  return (
+                    <option key={friend.id} value={friend.id}>
+                      {friend.username}
+                    </option>
+                  );
+                })}
+            </select>
+            <br />
             <button
               onClick={(e) => {
                 e.preventDefault();
-                props.history.push(`/chat/channels/${chatId}`);
+                addFriend(friendId);
               }}
             >
-              Join Event Chat
+              Add
             </button>
-          ) : (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                props.createChat({ name: props.event.name });
-              }}
-            >
-              Create Event Chat
-            </button>
-          )}
+          </section>
+
           <img src={props.event.image} />
           <div className="singleeventcasing">
             <h1>{props.event.name}</h1>
