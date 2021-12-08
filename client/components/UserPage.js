@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import {
   fetchMyFriends,
   fetchUsersWithinDistance,
@@ -11,7 +11,7 @@ import { fetchOwnedChannels } from "../store/chat";
 import { getGeoLocationFromBrowser } from "../../Util/loadMap";
 import SinglePerson from "./singlePerson";
 import LoadingSpinner from "./LoadingSpinner";
-import EventSimpleView from "./eventSimpleView"
+import EventSimpleView from "./eventSimpleView";
 
 export const UserPage = (props) => {
   // const goToChannel = `/chat/channel/${}`
@@ -50,56 +50,64 @@ export const UserPage = (props) => {
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <div>
+        <div className="dashContainer">
           {/* FRIENDS */}
-          <div className="userSdashboard">
-            <h4>Friends</h4>
-            {props.friends.length ?
-              props.friends.map((friend) => {
+            <div >
+              <h4 className="labelname">Friends</h4>
+              {props.friends.length ? (
+                props.friends.map((friend) => {
                   return <SinglePerson key={friend.id} person={friend} />;
                 })
-            :
-            <p>Currently No Friends</p>}
-          </div>
+              ) : (
+                <p>Currently No Friends</p>
+              )}
+            </div>
           {/* EVENTS I MADE */}
           <div className="userSdashboard">
-            <h4>Events I Made</h4>
-            {props.myEvents.length ?
-              props.myEvents.map(event => {
-                  return <EventSimpleView key={event.id} event={event} />;
-                })
-            :
-            <p>Currently None</p>}
+            <h4 className="labelname">Events I Made</h4>
+            {props.myEvents.length ? (
+              props.myEvents.map((event) => {
+                return <EventSimpleView key={event.id} event={event} />;
+              })
+            ) : (
+              <h4 className="labelname">Currently None</h4>
+            )}
           </div>
           {/* EVENTS I AM PARTICIPATING IN */}
           <div className="userSdashboard">
-            <h4>My Events</h4>
-            {props.participantIn.length ?
-              props.participantIn.map(event => {
-                  return <EventSimpleView key={event.id} event={event} />;
-                })
-            :
-            <p>Currently None</p>}
+            <h4 className="labelname">My Events</h4>
+            {props.participantIn.length ? (
+              props.participantIn.map((event) => {
+                return <EventSimpleView key={event.id} event={event} />;
+              })
+            ) : (
+              <p>Currently None</p>
+            )}
           </div>
           {/* CHANNELS I OWN */}
           <div className="userSdashboard">
-            <h4>My Chat Channels</h4>
-            {props.ownedChannels.length ?
-              props.ownedChannels.map(channel => {
-                  return <div key={channel.id}>
-                    <Link to="/chat/channels">
-                      <button>Go To Channel: {channel.name}</button>
-                    </Link>
+            <h4 className="labelname">My Chat Channels</h4>
+            {props.ownedChannels.length ? (
+              props.ownedChannels.map((channel) => {
+                return (
+                  <div key={channel.id}>
+                    <div className="buttoncontainer">
+                      <Link to="/chat/channels">
+                        <button>{channel.name}</button>
+                      </Link>
+                    </div>
                   </div>
-                })
-            :
-            <p>Currently None</p>}
+                );
+              })
+            ) : (
+              <p>Currently None</p>
+            )}
           </div>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
@@ -107,7 +115,7 @@ const mapStateToProps = (state) => {
     friends: state.users.myFriends,
     myEvents: state.events.myEvents,
     participantIn: state.events.participantIn,
-    ownedChannels: state.chat.ownedChannels
+    ownedChannels: state.chat.ownedChannels,
   };
 };
 
@@ -118,7 +126,7 @@ const mapDispatchToProps = (dispatch) => {
     getFriends: () => dispatch(fetchMyFriends()),
     fetchOwnedEvents: () => dispatch(fetchOwnedEvents()),
     fetchParticipantIn: () => dispatch(fetchParticipantIn()),
-    fetchOwnedChannels: () => dispatch(fetchOwnedChannels())
+    fetchOwnedChannels: () => dispatch(fetchOwnedChannels()),
   };
 };
 

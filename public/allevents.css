@@ -36,7 +36,7 @@
   transform: translateY(4px);
   border-bottom: none;
 }
-/* .eventscontainer select {
+.eventscontainer select {
   display: flex;
   margin: auto;
   justify-content: center;
@@ -48,7 +48,7 @@
   font-size: 16pt;
   margin-top: 5px;
   margin-bottom: 5px;
-} */
+}
 .singleEvent {
   border-radius: 15px 50px;
   display: flex;
