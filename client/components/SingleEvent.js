@@ -11,6 +11,7 @@ import SinglePerson from "./singlePerson";
 import { fetchMyFriends } from "../store/users";
 
 import { OpenStreetMapProvider } from "leaflet-geosearch";
+import { addChannel } from "../store/chat";
 
 // learn constant hook for this later
 let provider;
@@ -120,6 +121,14 @@ const SingleEvent = (props) => {
           >
             Add Friend
           </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              props.createChat({ name: props.event.name });
+            }}
+          >
+            Create Event Chat
+          </button>
           <img src={props.event.image} />
           <div className="singleeventcasing">
             <h1>{props.event.name}</h1>
@@ -147,13 +156,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, { history }) => {
   return {
     getEvent: (eventId) => dispatch(fetchSingleEvent(eventId)),
     deleteEvent: (id) => dispatch(deleteSingleEvent(id)),
     updateEvent: (id, body) => dispatch(updateSingleEvent(id, body)),
     getFriends: () => dispatch(fetchMyFriends()),
     addFriend: (eventId, userId) => dispatch(addUserToEvent(eventId, userId)),
+    createChat: (channelName) => dispatch(addChannel(channelName, history)),
   };
 };
 
