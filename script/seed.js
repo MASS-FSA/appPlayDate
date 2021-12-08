@@ -1,9 +1,11 @@
 'use strict';
 
+const { use } = require('chai');
 const {
   db,
-  models: { User, Event, Message, Channel },
+  models: { User, Event, Message, Channel},
 } = require('../server/db');
+const Friend = require('../server/db/models/Friend');
 
 const users = [
   {
@@ -146,13 +148,25 @@ async function seed() {
   // );
 
   const allUsers = await User.findAll();
-  const singleUser = await User.findByPk(1);
-  const secondUser = await User.findByPk(2);
+  const userPairs = []
+  for(let i = 1; i< allUsers.length + 1; i++) {
+    for(let j = 1; j< allUsers.length + 1; j++) {
+      if(i !== j) {
+        userPairs.push([i, j])
+      }
+    }
+  }
 
-  // await singleUser.addFriend(allUsers);
-  await secondUser.addAddressee(allUsers, {
-    through: { specifierId: secondUser.id },
-  });
+  for (let i = 0; i < userPairs.length; i++) {
+    let user1 = await User.findByPk(userPairs[i][0])
+    let user2 = await User.findByPk(userPairs[i][1])
+    await user1.addAddressee(user2)
+  }
+
+  const friendsTable = await Friend.findAll()
+  await Promise.all(friendsTable.map((friendship)=>{
+    return friendship.update({status:'accepted'})
+  }))
 
   console.log(`seeded successfully`);
 }

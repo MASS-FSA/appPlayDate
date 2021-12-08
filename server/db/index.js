@@ -9,7 +9,7 @@ const Review = require("./models/Review");
 const Event = require("./models/Event");
 const Friend = require("./models/Friend");
 const Intake = require("./models/Intake");
-// const UserEvents = require("./models/UserEvents");
+const UserEvents = require("./models/UserEvents");
 //associations could go here!
 Channel.hasMany(Message, {
   onDelete: "cascade",
@@ -22,10 +22,10 @@ Message.belongsTo(Channel);
 Message.belongsTo(User);
 
 User.belongsToMany(Event, {
-  through: `UserEvents`,
+  through: UserEvents,
 });
 Event.belongsToMany(User, {
-  through: `UserEvents`,
+  through: UserEvents,
 });
 
 User.hasMany(Review);
@@ -52,5 +52,6 @@ module.exports = {
     Event,
     Friend,
     Intake,
+    UserEvents
   },
 };

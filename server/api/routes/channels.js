@@ -7,15 +7,26 @@ const { requireToken } = require("../gatekeeping");
 
 module.exports = router;
 
-// GET /api/channels/
+//  /api/channels/
+
+router.get('/owned', requireToken, async (req, res, next) => {
+  try {
+    const owned = await Channel.findAll({
+      where: {
+        createdBy: req.user.id
+      }
+    })
+    res.send(owned)
+  } catch(err) {
+    next(err)
+  }
+})
+
 router
   .route(`/`)
   .get(async (req, res, next) => {
     try {
-      // fix later
-      // const users = await User.findAll()
       const channels = await Channel.findAll();
-
       res.send(channels);
     } catch (err) {
       next(err);
