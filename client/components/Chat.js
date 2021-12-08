@@ -7,6 +7,7 @@ import Messages from "./chat_components/Messages";
 
 const Chat = (props) => {
   const [messages, setMessages] = useState(props);
+
   useEffect(() => {
     async function callmessages() {
       try {
@@ -22,9 +23,14 @@ const Chat = (props) => {
     setMessages(props.messages);
   }, [props.messages]);
 
+  const channelId = Number(props.location.pathname.slice(-1));
+  const channel = props.channels.filter((channel) => {
+    return channel.id === channelId;
+  });
+
   return (
     <div className="chatcontainer">
-      <h1> Chat </h1>
+      <h1>{channel[0]?.name.split("_").join(" ")}</h1>
       <div className="ChatParent">
         <div className="Chat">
           <div className="channel">
@@ -44,6 +50,7 @@ const Chat = (props) => {
 const mapStateToProps = (state) => {
   return {
     messages: state.chat.messages,
+    channels: state.chat.channels,
   };
 };
 
