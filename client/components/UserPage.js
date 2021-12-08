@@ -87,8 +87,9 @@ export const UserPage = (props) => {
             <h4>My Chat Channels</h4>
             {props.ownedChannels.length ?
               props.ownedChannels.map(channel => {
+                const goToChannel = `/chat/channels/${channel.id}`
                   return <div key={channel.id}>
-                    <Link to="/chat/channels">
+                    <Link to={goToChannel}>
                       <button>Go To Channel: {channel.name}</button>
                     </Link>
                   </div>
