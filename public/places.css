@@ -48,7 +48,10 @@
   border-radius: 10px 10px 10px 10px;
 }
 .filtercontainer #personImg{
-    left:50%;
+    position: absolute;
+    border-radius: 50%;
+    top:20%;
+    right:20%;
     width:80px;
     height: 80px;
     z-index: -1;
