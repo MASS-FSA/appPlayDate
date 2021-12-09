@@ -51,7 +51,7 @@ const Channel = (props) => {
           props.removeChannel(selectedChannel, history);
         }}
       >
-     <a>- Channel</a>
+     <a>Remove</a>
       </button>
     </div>
   );
