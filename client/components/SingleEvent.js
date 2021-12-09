@@ -144,8 +144,8 @@ const SingleEvent = (props) => {
             )}
           </section>
           <section>
-            <select onChange={(e) => handleChange(e)} value={friendId}>
-              <option>Add Friend To Event</option>
+            <select className="selectorx" onChange={(e) => handleChange(e)} value={friendId}>
+              <option>Invite Friend</option>
               {props.friends
                 ?.filter((friend) => !existingUsers.includes(friend.id))
                 .map((friend) => {
@@ -164,7 +164,7 @@ const SingleEvent = (props) => {
                 addFriend(friendId);
               }}
             >
-              Add friend
+              Add Friend
             </button>
             </div>
           </section>

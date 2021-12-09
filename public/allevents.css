@@ -114,7 +114,10 @@
   color: rgb(82, 80, 80);
   opacity: 0.8;
 }
-
+.selectorx{
+  box-shadow: 1px 1px 1px 1px black;
+  border-radius: 10px 10px 10px 10px;
+}
 @media only screen and (max-width: 500px) {
   .eventscontainer {
     width: 60%;
