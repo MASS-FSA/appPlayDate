@@ -8,7 +8,7 @@ const Navbar = ({ handleClick, isLoggedIn, user }) => (
     <h1>PLAYDATE</h1>
     <nav className='navContainer'>
       {isLoggedIn ? (
-        <div>
+        <div className="navitems">
           {/* The navbar will show these links after you log in */}
 
           <Link to='/home'>Home</Link>
@@ -23,9 +23,7 @@ const Navbar = ({ handleClick, isLoggedIn, user }) => (
       ) : (
         <div className='Login_signupContainer'>
           {/* The navbar will show these links before you log in */}
-          <button>
             <Link to='/login'>Login</Link>
-          </button>
         </div>
       )}
     </nav>

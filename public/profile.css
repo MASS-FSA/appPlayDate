@@ -1,5 +1,4 @@
 /* user dashboard */
-
 .userSdashboard select{
     display: flex;
     margin: auto;
@@ -13,7 +12,13 @@
     margin-bottom: 5px;
 }
 
-/* User profile */
+/* User profile
+
+  <div className="buttoncontainer">
+                      <Link to="/chat/channels">
+                        <button>{channel.name}</button>
+                      </Link>
+*/
 
 
 /* User profile */
