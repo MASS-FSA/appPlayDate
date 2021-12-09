@@ -3,7 +3,8 @@
     display: flex;
     background-image: linear-gradient(315deg, #486156 0%, #28313b 74%);
     background-blend-mode: darken;
-    width: 100%;
+    width: 100vw;
+    max-width: 100%;
     display: inline-block;
     
   }
@@ -27,6 +28,9 @@
 }  
 
 @media only screen and (max-width:500px) {
+  .Navbar{
+    width: 100%;
+  }
   .Navbar h1{
     font-size: 5em;
     width: 100%;
