@@ -108,7 +108,7 @@ const Places = (props) => {
               .querySelector(".openPopup")
               .addEventListener(`click`, (e) => {
                 e.preventDefault();
-                console.log(`click`);
+
                 handleSelectedPlace(place);
               });
           });
@@ -145,8 +145,6 @@ const Places = (props) => {
     }
   }
 
-  console.log("these are my places: ", props.events);
-
   return (
     <div>
       {loading ? (
@@ -156,29 +154,29 @@ const Places = (props) => {
           <div className="optionscontainer">
             <h2>☰Options</h2>
             <br />
-            <div className='optionsdropdown' onClick={handleCheckBox}>
-              <input type='checkbox' name='selectionOne' value='seePlaces' />
-              <label htmlFor='seePlaces'>
+            <div className="optionsdropdown" onClick={handleCheckBox}>
+              <input type="checkbox" name="selectionOne" value="seePlaces" />
+              <label htmlFor="seePlaces">
                 {" "}
                 View Possible Meet Up
                 <br /> Spots Near Me
               </label>
 
-              <input type='checkbox' name='selectionTwo' value='seePeople' />
-              <label htmlFor='seePeople'> View People Near Me</label>
+              <input type="checkbox" name="selectionTwo" value="seePeople" />
+              <label htmlFor="seePeople"> View People Near Me</label>
 
-              <input type='checkbox' name='selectionThree' value='seeFriends' />
-              <label htmlFor='seeFriends'> View Friends</label>
+              <input type="checkbox" name="selectionThree" value="seeFriends" />
+              <label htmlFor="seeFriends"> View Friends</label>
 
-              <input type='checkbox' name='selectionFour' value='seeEvents' />
-              <label htmlFor='seeEvents'> View Events in My Area</label>
+              <input type="checkbox" name="selectionFour" value="seeEvents" />
+              <label htmlFor="seeEvents"> View Events in My Area</label>
 
               <hr />
             </div>
           </div>
-          <div className='leafMap' id='map' />
-          <h3 className='labelname'>NEARBY PLACES</h3>
-          <div className='bigfilterContainer'>
+          <div className="leafMap" id="map" />
+          <h3 className="labelname">NEARBY PLACES</h3>
+          <div className="bigfilterContainer">
             {/* FOR DISPALYING NEARBY PLACES */}
             {options.seePlaces ? (
               props.places.length ? (
@@ -193,8 +191,8 @@ const Places = (props) => {
               )
             ) : null}
           </div>
-          <h3 className='labelname'>NEARBY PARENTS</h3>
-          <div className='bigfilterContainer'>
+          <h3 className="labelname">NEARBY PARENTS</h3>
+          <div className="bigfilterContainer">
             {/* FOR DISPLAYING NEARBY PEOPLE */}
             {options.seePeople ? (
               props.people.length ? (
@@ -206,8 +204,8 @@ const Places = (props) => {
               )
             ) : null}
           </div>
-          <h3 className='labelname'>FRIENDS</h3>
-          <div className='bigfilterContainer'>
+          <h3 className="labelname">FRIENDS</h3>
+          <div className="bigfilterContainer">
             {/* FOR DISPLAYING ALL FRIENDS */}
             {options.seeFriends ? (
               props.myFriends.length ? (
@@ -219,8 +217,8 @@ const Places = (props) => {
               )
             ) : null}
           </div>
-          <h3 className='labelname'>EVENTS</h3>
-          <div className='bigfilterContainer'>
+          <h3 className="labelname">EVENTS</h3>
+          <div className="bigfilterContainer">
             {/* FOR DISPLAYING EVENTS */}
             {options.seeEvents ? (
               props.events.length ? (
