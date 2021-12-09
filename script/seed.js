@@ -36,6 +36,7 @@ const users = [
     latitude: 38.8125889,
     homeLongitude: -77.18318725,
     homeLatitude: 38.8125889,
+    image: `https://png.pngtree.com/png-clipart/20190520/original/pngtree-funny-react-png-image_3530386.jpg`,
   },
 
   {
