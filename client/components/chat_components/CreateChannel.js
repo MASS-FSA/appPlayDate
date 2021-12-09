@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { addChannel } from '../../store/chat';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { addChannel } from "../../store/chat";
 
 export const CreateChannel = (props) => {
   const [channelInfo, setChannelInfo] = useState({
-    name: '',
+    name: "",
   });
 
   function handleChange(event) {
@@ -25,14 +25,13 @@ export const CreateChannel = (props) => {
       console.error(error);
     }
   }
-  console.log('Create Channel Props: ', props);
 
   return (
-    <div className='questioncontainer'>
-      <div className='lines' />
+    <div className="questioncontainer">
+      <div className="lines" />
       <form>
         <label>Name:</label>
-        <input name='name' value={channelInfo.name} onChange={handleChange} />
+        <input name="name" value={channelInfo.name} onChange={handleChange} />
         <br />
         <button
           onClick={(e) => {

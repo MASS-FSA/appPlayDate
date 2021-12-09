@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { createSingleEvent } from "../store/events";
 import { clearSelectedPlace } from "../store/selectedPlace";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
-import history from '../history'
+import history from "../history";
 
 // learn constant hook for this later
 let provider;
@@ -83,8 +83,6 @@ export const CreateEvent = (props) => {
       };
     });
   }
-
-  console.log(props.friends);
 
   return (
     <div className="questioncontainer">
