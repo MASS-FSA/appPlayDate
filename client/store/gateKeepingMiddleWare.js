@@ -25,7 +25,7 @@ const authenticateRequest = async (request, url, body) => {
       }
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 

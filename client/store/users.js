@@ -8,7 +8,7 @@ const SET_SINGLE_USER = `SET_SINGLE_USER`;
 const SET_INTAKE = `SET_INTAKE`;
 const SET_STATUS = `SET_STATUS`;
 const SET_REQUESTS = `SET_REQUESTS`;
-const SET_MYFRIENDS = 'SET_MYFRIENDS'
+const SET_MYFRIENDS = "SET_MYFRIENDS";
 
 // ACTION CREATORS
 export const setAllUsers = (users) => {
@@ -21,9 +21,9 @@ export const setAllUsers = (users) => {
 export const setMyFriends = (friends) => {
   return {
     type: SET_MYFRIENDS,
-    friends
-  }
-}
+    friends,
+  };
+};
 
 export const setNearbyUsers = (users) => {
   return {
@@ -66,7 +66,7 @@ export const fetchUsersWithinDistance = (userId, distance) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(
-        `/api/users/nearby/${userId}/${distance}`,
+        `/api/users/nearby/${userId}/${distance}`
       );
 
       dispatch(setNearbyUsers(data));
@@ -93,7 +93,7 @@ export const updateSingleUser = (userId, body) => {
       const { data } = await axios.post(`/api/users/${userId}`, body);
       dispatch(setSingleUser(data));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 };
@@ -149,14 +149,14 @@ export const updateFriendStatus = (userId, friendId, response) => {
   };
 };
 
-export const fetchMyFriends = () => async dispatch => {
+export const fetchMyFriends = () => async (dispatch) => {
   try {
-    const data = await authenticateRequest('get', '/api/users/friends/getAll')
-    dispatch(setMyFriends(data))
+    const data = await authenticateRequest("get", "/api/users/friends/getAll");
+    dispatch(setMyFriends(data));
   } catch (err) {
-    console.log(err)
+    console.error(err);
   }
-}
+};
 
 export const fetchFriendRequests = (userId) => {
   return async (dispatch) => {
@@ -194,7 +194,7 @@ export default (state = initialState, action) => {
     case SET_REQUESTS:
       return { ...state, requests: action.requests };
     case SET_MYFRIENDS:
-      return {...state, myFriends: action.friends}
+      return { ...state, myFriends: action.friends };
 
     default:
       return state;

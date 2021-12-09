@@ -13,7 +13,7 @@ export const tokenHeader = {
 const GET_MESSAGES = "GET_MESSAGES";
 const GET_CHANNELS = "GET_CHANNELS";
 const GET_OWNED_CHANNELS = "GET_OWNED_CHANNELS";
-const GET_PARTICIPANT_CHANNELS = "GET_PARTICIPANT_CHANNELS"
+const GET_PARTICIPANT_CHANNELS = "GET_PARTICIPANT_CHANNELS";
 const ADD_CHANNEL = "ADD_CHANNEL";
 const GOT_MESSAGE = "GOT_MESSAGE";
 const REMOVE_CHANNEL = "REMOVE_CHANNEL";
@@ -56,26 +56,28 @@ const getOwnedChannels = (channels) => {
 const getParticipantChannels = (channels) => {
   return {
     type: GET_PARTICIPANT_CHANNELS,
-    channels
-  }
-}
+    channels,
+  };
+};
 
 export const fetchOwnedChannels = () => async (dispatch) => {
   try {
     const data = await authenticateRequest("get", "/api/channels/owned");
     dispatch(getOwnedChannels(data));
-  } catch (err) {
-  }
+  } catch (err) {}
 };
 
 export const fetchParticipantChannels = () => async (dispatch) => {
   try {
-    const data = await authenticateRequest('get', 'api/messages/channels/participant')
-    dispatch(getParticipantChannels(data))
+    const data = await authenticateRequest(
+      "get",
+      "api/messages/channels/participant"
+    );
+    dispatch(getParticipantChannels(data));
   } catch (err) {
-    console.log(err)
+    console.error(err);
   }
-}
+};
 
 export const fetchMessages = () => async (dispatch) => {
   try {
@@ -134,7 +136,7 @@ export const sendMessage = (message) => async (dispatch) => {
       `/api/messages`,
       message
     );
-    console.log(`from thunk`, newMessage);
+
     // dispatch(gotMessage(newMessage)); I think we can delete this. -sh
     socket.emit("new-message", { newMessage, channel: newMessage.channelId });
   } catch (error) {
@@ -146,7 +148,7 @@ const initialState = {
   messages: [],
   channels: [],
   ownedChannels: [],
-  participantChannels: []
+  participantChannels: [],
 };
 
 export default (state = initialState, action) => {
@@ -167,7 +169,7 @@ export default (state = initialState, action) => {
     case GET_OWNED_CHANNELS:
       return { ...state, ownedChannels: action.channels };
     case GET_PARTICIPANT_CHANNELS:
-      return { ... state, participantChannels: action.channels}
+      return { ...state, participantChannels: action.channels };
     default:
       return state;
   }

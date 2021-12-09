@@ -76,7 +76,7 @@ export const OthersProfile = ({
 
   function handleBlock(event) {
     event.preventDefault();
-    console.log(myId);
+
     blockUser(myId, user.id, event.target.value);
   }
 
@@ -109,14 +109,14 @@ export const OthersProfile = ({
             {statusSetter()}
           </div>
           <div className="bottomProfileContainer">
-          <div className="bottomR">
-            <legend>Questionaire</legend>
-            <h4>Child Age : {profileInfo.intake?.age}</h4>
-            <h4>Favorite Color : {profileInfo.intake?.favoriteColor}</h4>
-            <h4>
-              Vaccinated : {profileInfo.intake?.vaccination ? `Yes` : `No`}
-            </h4>
-          </div>
+            <div className="bottomR">
+              <legend>Questionaire</legend>
+              <h4>Child Age : {profileInfo.intake?.age}</h4>
+              <h4>Favorite Color : {profileInfo.intake?.favoriteColor}</h4>
+              <h4>
+                Vaccinated : {profileInfo.intake?.vaccination ? `Yes` : `No`}
+              </h4>
+            </div>
           </div>
         </div>
       )}

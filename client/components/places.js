@@ -28,7 +28,24 @@ const Places = (props) => {
   useEffect(() => {
     if (options.seeEvents) {
       props.events.map((event) => {
-        return L.marker([event.latitude, event.longitude]).addTo(myMap);
+        return L.marker([event.latitude, event.longitude])
+          .addTo(myMap)
+          .bindPopup(
+            L.popup({
+              className: `openPopup`,
+            })
+          )
+          .setPopupContent(`<p class="openPopup">${event.name}</p>`)
+          .on(`popupopen`, () => {
+            // direct click from popup to single place page
+            document
+              .querySelector(".openPopup")
+              .addEventListener(`click`, (e) => {
+                e.preventDefault();
+
+                props.history.push(`/events/${event.id}`);
+              });
+          });
       });
       // const markers = L.markerClusterGroup();
       // const marker = L.marker(new L.LatLng(-84, 35));
@@ -79,8 +96,12 @@ const Places = (props) => {
       });
       const marker = L.marker(coords, { icon: myIcon })
         .addTo(myMap)
-        .bindPopup()
-        .setPopupContent(`<p class="you_are_here">You are here!</p>`)
+        .bindPopup(
+          L.popup({
+            className: `openPopup`,
+          })
+        )
+        .setPopupContent(`<p class="openPopup">You are here!</p>`)
         .openPopup();
     }
   }, [loading]);
@@ -133,6 +154,7 @@ const Places = (props) => {
       console.error(error);
     }
   }
+
   function handleCheckBox(event) {
     if (event.target.value) {
       setOptions((prevOptions) => {

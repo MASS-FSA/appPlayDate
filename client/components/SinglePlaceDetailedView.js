@@ -14,13 +14,13 @@ const SinglePlaceDetailedView = (props) => {
       <div className="attributescontainer">
         <p>{name}</p>
         <p>{vicinity}</p>
-        <p>{rating}</p>
-        <p>{types}</p>
+        <p>Rating: {rating}</p>
+        <p>{types[0].slice(0, 1).toUpperCase() + types[0].slice(1)}</p>
       </div>
       <div className="eventscontainer">
-      <Link to="/events/create">
-        <button>Create Event</button>
-      </Link>
+        <Link to="/events/create">
+          <button>Create Event</button>
+        </Link>
       </div>
     </div>
   );
