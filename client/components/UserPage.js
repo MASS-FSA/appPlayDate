@@ -17,6 +17,12 @@ export const UserPage = (props) => {
   // const goToChannel = `/chat/channel/${}`
   const [coords, setCoords] = useState([null, null]);
   const [loading, setLoading] = useState(true);
+  const [options, setOptions] = useState({
+    seeFriends: true,
+    seeEvents: true,
+    seeOwnChannel: true,
+    seePartChannel: true
+  })
 
   useEffect(() => {
     // this is a callback to give position of user
@@ -46,6 +52,12 @@ export const UserPage = (props) => {
     if (coords[0]) setLoading(false);
   }, [coords]);
 
+  const handleHeader = (event) => {
+    const val = event
+    console.log(val)
+    event.persist()
+  }
+
   return (
     <div>
       {loading ? (
@@ -54,7 +66,8 @@ export const UserPage = (props) => {
         <div>
           {/* FRIENDS */}
           <div className="userSdashboard">
-            <h4>Friends</h4>
+            <input type='button' name='friends' value='seeFriends'/>
+            <h4 onClick={(e)=>handleHeader(e)} value="seeFriends">Friends</h4>
             {props.friends.length ?
               props.friends.map((friend) => {
                   return <SinglePerson key={friend.id} person={friend} />;
