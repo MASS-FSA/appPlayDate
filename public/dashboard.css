@@ -4,22 +4,26 @@
     margin-top: 5px;
     margin: auto ;
     flex-flow: row;
-    max-width: 900px;
+    max-width: 1200px;
     border:2px solid black
 }
 .userD{
-    display: flex;
-    align-items:stretch;
-    flex-flow: row;
-    
+    overflow-y: scroll;
+    margin: auto;
+    width: 400px;
+    max-height: 800px;
 }
 @media only screen and (max-width: 500px){
-    .dashContainer{
+     .dashContainer{
         width:97%;
         flex-flow: column;
         margin: auto;
         margin-left: auto;
         margin-right: auto;
-
     }
+    .userD{
+        height: 200px;
+        width: 200px;
+    }
+
 }

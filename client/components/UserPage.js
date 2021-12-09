@@ -7,7 +7,7 @@ import {
   updateSingleUser,
 } from "../store/users";
 import { fetchOwnedEvents, fetchParticipantIn } from "../store/events";
-import { fetchOwnedChannels } from "../store/chat";
+import { fetchOwnedChannels, fetchParticipantChannels } from "../store/chat";
 import { getGeoLocationFromBrowser } from "../../Util/loadMap";
 import SinglePerson from "./singlePerson";
 import LoadingSpinner from "./LoadingSpinner";
@@ -32,6 +32,7 @@ export const UserPage = (props) => {
     props.fetchOwnedEvents();
     props.fetchOwnedChannels();
     props.fetchParticipantIn();
+    props.fetchParticipantChannels();
   }, []);
 
   useEffect(() => {
@@ -52,7 +53,7 @@ export const UserPage = (props) => {
       ) : (
         <div className="dashContainer">
           {/* FRIENDS */}
-            <div >
+            <div className="userD">
               <h4 className="labelname">Friends</h4>
               {props.friends.length ? (
                 props.friends.map((friend) => {
@@ -63,7 +64,7 @@ export const UserPage = (props) => {
               )}
             </div>
           {/* EVENTS I MADE */}
-          <div className="userSdashboard">
+          <div className="userD">
             <h4 className="labelname">Events I Made</h4>
             {props.myEvents.length ? (
               props.myEvents.map((event) => {
@@ -74,7 +75,7 @@ export const UserPage = (props) => {
             )}
           </div>
           {/* EVENTS I AM PARTICIPATING IN */}
-          <div className="userSdashboard">
+          <div className="userD">
             <h4 className="labelname">My Events</h4>
             {props.participantIn.length ? (
               props.participantIn.map((event) => {
@@ -85,24 +86,39 @@ export const UserPage = (props) => {
             )}
           </div>
           {/* CHANNELS I OWN */}
-          <div className="userSdashboard">
+          <div className="userD">
             <h4 className="labelname">My Chat Channels</h4>
-            {props.ownedChannels.length ? (
-              props.ownedChannels.map((channel) => {
-                return (
-                  <div key={channel.id}>
-                    <div className="buttoncontainer">
-                      <Link to="/chat/channels">
-                        <button>{channel.name}</button>
-                      </Link>
-                    </div>
+            {props.ownedChannels.length ?
+              (props.ownedChannels.map(channel => {
+                const goToChannel = `/chat/channels/${channel.id}`
+                  return <div className="buttoncontainer" key={channel.id}>
+                    <Link to={goToChannel}>
+                      <button>{channel.name}</button>
+                    </Link>
                   </div>
-                );
               })
             ) : (
               <p>Currently None</p>
             )}
           </div>
+          {/* CHANNELS I HAVE A CONVERSATION IN */}
+         {/* <div className="userSdashboard">
+            <h4>Continue A Conversation</h4>
+            {props.participantChannels.length ?
+              props.participantChannels.map(channel => {
+                const goToChannel = `/chat/channels/${channel.id}`
+                  return <div key={channel.id}>
+                    <Link to={goToChannel}>
+                      <button>{channel.name}</button>
+                    </Link>
+                  </div>
+                })
+            :
+            <Link to="/chat/channels">
+              <button>Start Chatting With Other Parents!</button>
+            </Link>
+            }
+          </div>  */}
         </div>
       )}
     </div>
@@ -116,6 +132,7 @@ const mapStateToProps = (state) => {
     myEvents: state.events.myEvents,
     participantIn: state.events.participantIn,
     ownedChannels: state.chat.ownedChannels,
+    participantChannels: state.chat.participantChannels
   };
 };
 
@@ -127,6 +144,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchOwnedEvents: () => dispatch(fetchOwnedEvents()),
     fetchParticipantIn: () => dispatch(fetchParticipantIn()),
     fetchOwnedChannels: () => dispatch(fetchOwnedChannels()),
+    fetchParticipantChannels: () => dispatch(fetchParticipantChannels())
   };
 };
 

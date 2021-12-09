@@ -31,4 +31,10 @@
     font-size: 5em;
     width: 100%;
   }
+  .navitems{
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-evenly;
+    flex-direction: row;
+  }
 }

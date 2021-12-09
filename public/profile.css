@@ -1,5 +1,5 @@
 /* user dashboard */
-/* .userSdashboard select{
+.userSdashboard select{
     display: flex;
     margin: auto;
     justify-content: center;
@@ -10,9 +10,15 @@
     font-size: 16pt;
     margin-top: 5px;
     margin-bottom: 5px;
-} */
+}
 
-/* User profile */
+/* User profile
+
+  <div className="buttoncontainer">
+                      <Link to="/chat/channels">
+                        <button>{channel.name}</button>
+                      </Link>
+*/
 
 
 /* User profile */

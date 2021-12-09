@@ -14,10 +14,11 @@
 .Chat {
   display: flex;
   width: 800px;
-  height: 800px;
-  background-color: rgba(111, 116, 115, 0.95);
+  height: 550px;
+  background-color: rgba(233, 216, 217, 0.95);
   justify-content: center;
   border-radius: 10px 10px 10px 10px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.8);
 }
 .channel {
   display: flex;
@@ -40,7 +41,9 @@
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
-
+.dbuttons{
+  background-color: black;
+}
 .dropdown-content a {
   color: rgb(221, 221, 221);
   font-weight: 900;
@@ -79,6 +82,7 @@
   justify-content: center;
   width: 100%;
 }
+
 #new-message-form .inputcontainer {
   display: flex;
   justify-content: center;
@@ -86,7 +90,7 @@
   width: 60%;
   position: fixed;
   z-index: 0;
-  bottom: 5%;
+  bottom: 2%;
   overflow: hidden;
   padding: 0;
 }
@@ -129,31 +133,84 @@
   transform: translateY(4px);
   border-bottom: none;
 }
-
-.picturecontainer {
+.bodymessage{
   display: flex;
-  align-content: center;
   flex-direction: row;
+  padding: 40px
 }
-.sentmsgcontainer .picturecontainer img {
+.picturecontainer {
+  /* display: flex;
+  width: 200px;
+  align-content: center;
+  text-align: center;
+  flex-direction: row;
+  background-color: cornflowerblue;
+  overflow:hidden ;
+  */
+   width: 180vw; 
+   height: 80vh;
+   max-height: 100px;
+   max-width: 600px;
+   background: rgba(123, 186, 211, 0.60);
+   position: absolute;
+   left:100px;
+   -moz-border-radius: 10px; 
+   -webkit-border-radius: 10px; 
+   border-radius: 10px;
+   margin:auto;
+   word-break: break-all; 
+   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.4);
+   
+}
+.picturecontainer:before {
+  content:"";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 13px solid 
+transparent;
+  border-right: 25px solid 
+  rgba(123, 186, 211, 0.6);;
+  border-bottom: 13px solid 
+transparent;
+  margin: 13px 0 0 -25px;
+}
+.media-object{
   display: flex;
   border-radius: 50%;
   justify-content: center;
+  height: 40px;
+  width: 40px;
 }
-
+.media-heading{
+  font-size: x-small;
+  transform: rotate(-45deg);
+  color:rgba(150, 12, 12, 0.9);
+  font-weight: 900;
+}
 .sentmsgcontainer {
-  background-color: rgb(255, 255, 255);
-  width: 20px;
-  height: 20px;
+  width: auto;
+  height: auto
 }
+ .media-body{
+   padding-left: 20px;
+   text-shadow:2px 2px rgba(0, 0, 0, 0.8);
+   color: white;
+   font-weight: 900;
+ }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 820px) {
   .chatcontainer {
     width: 100%;
     height: 100%;
   }
   .inputcontainer {
     width: 100px;
+  }
+  .picturecontainer{
+    width:97%;
+    max-width: 210px;
+
   }
   #new-message-form .btn {
     width: 50px;
@@ -163,7 +220,7 @@
     font-size: small;
   }
   .Chat {
-    width: 100%;
+    width: 96%;
     height: 400px;
   }
   .ChatParent {
