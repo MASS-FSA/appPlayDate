@@ -8,7 +8,6 @@ export const loadMap = (
     [lat, long],
     12
   );
-  console.log(`map loaded`);
 
   const googleView = L.tileLayer(
     "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",

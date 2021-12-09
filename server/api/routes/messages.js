@@ -12,19 +12,24 @@ router.get("/channels/participant", requireToken, async (req, res, next) => {
   try {
     const channelIdens = await Message.findAll({
       where: {
-        userId: req.user.id
-      }
-    })
-    const mapped = channelIdens.map(message => (message.channelId))
-    const myChannels = await Promise.all(mapped.map(id => {
-      return Channel.findByPk(id)
-    }))
-    res.send(myChannels)
-    } catch (err) {
-      next(err)
-    }
+        userId: req.user.id,
+      },
+    });
+    const mapped = channelIdens.map((message) => message.channelId);
+    const newChannels = mapped.filter(function (item, pos) {
+      return mapped.indexOf(item) == pos;
+    });
+    const whatever = await Promise.all(
+      newChannels.map((id) => {
+        return Channel.findByPk(id);
+      })
+    );
 
-})
+    res.send(whatever);
+  } catch (err) {
+    next(err);
+  }
+});
 
 // all messages...
 router.get("/", async (req, res, next) => {
