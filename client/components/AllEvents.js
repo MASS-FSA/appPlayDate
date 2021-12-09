@@ -17,6 +17,7 @@ const AllEvents = (props) => {
 
   return (
     <div className="eventscontainer">
+      <div className="rowbutton">
       <button
         onClick={(e) => {
           e.preventDefault();
@@ -25,11 +26,12 @@ const AllEvents = (props) => {
       >
         Create Event
       </button>
-      <select>
+      </div>
+      {/* <select>
           <option> Today </option>
           <option> Weekend </option>
           <option> Near Me </option>
-      </select>
+      </select> */}
       {props.allEvents
         .sort((a, b) => a.id - b.id)
         .map((event) => {

@@ -5,12 +5,12 @@ const SinglePerson = (props) => {
   const { id, username, image } = props.person;
   const toProfile = `/profile/${id}`;
   return (
-    <Link to={toProfile}>
-      <div className="filtercontainer">
-        <p id="idname">{username}</p>
-        <img id="personImg" src={image} />
-      </div>
-    </Link>
+      <Link className="filtercontainer" to={toProfile}>
+         <>
+          <p id="idname">{username}</p>
+          <img id="personImg" src={image} />
+         </> 
+      </Link>
   );
 };
 

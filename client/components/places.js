@@ -153,8 +153,8 @@ const Places = (props) => {
         <LoadingSpinner />
       ) : (
         <div>
-          <div className='optionscontainer'>
-            <h2>Options</h2>
+          <div className="optionscontainer">
+            <h2>☰Options</h2>
             <br />
             <div className='optionsdropdown' onClick={handleCheckBox}>
               <input type='checkbox' name='selectionOne' value='seePlaces' />

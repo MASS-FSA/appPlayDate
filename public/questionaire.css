@@ -75,6 +75,9 @@
     cursor: pointer;
     text-align: center;
 }
+.questioncontainer form img{
+  width:100%
+}
 .lines{
     border-left: 1px solid #ffaa9f;
     border-right: 1px solid #ffaa9f;

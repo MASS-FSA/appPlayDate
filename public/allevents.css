@@ -12,6 +12,8 @@
     margin: auto;
     margin-top: 5px;
     margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
     width: 100px;
     height:60px;
     color: white;
@@ -25,6 +27,12 @@
     font-weight: bold;
     border: solid 2px #d27d00
 }
+.rowbutton{
+  display: flex;
+  flex-direction: row;
+  max-width: fit-content;
+  margin:auto
+}
 .eventscontainer > button:hover {
   background-color: rgb(255, 102, 0);
   box-shadow: 0 0 7.5px 3.75px #fff, 0 0 17.5px 7.5px rgb(255, 0, 106),
@@ -36,7 +44,7 @@
   transform: translateY(4px);
   border-bottom: none;
 }
-/* .eventscontainer select {
+.eventscontainer select {
   display: flex;
   margin: auto;
   justify-content: center;
@@ -48,7 +56,7 @@
   font-size: 16pt;
   margin-top: 5px;
   margin-bottom: 5px;
-} */
+}
 .singleEvent {
   border-radius: 15px 50px;
   display: flex;
@@ -106,21 +114,28 @@
   color: rgb(82, 80, 80);
   opacity: 0.8;
 }
-
+.selectorx{
+  box-shadow: 1px 1px 1px 1px black;
+  border-radius: 10px 10px 10px 10px;
+}
 @media only screen and (max-width: 500px) {
   .eventscontainer {
     width: 60%;
     height: 60%;
   }
   .eventscontainer img {
-    width: 100%;
-    height: 100%;
+    width: 92%;
+    height: 92%;
   }
   .singleeventcasing {
-    width: 100%;
+    width: 92%;
+  }
+  .rowbotton{
+    width: 92%;
+    margin:auto;
   }
   .singleEvent img {
-    height: 100%;
-    width: 100%;
+    height: 92%;
+    width: 92%;
   }
 }
