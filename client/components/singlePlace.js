@@ -20,7 +20,7 @@ const singlePlace = (props) => {
         <p>{vicinity}</p>
         <p className="labelname">{rating}</p>
         {/* <p>{types}</p> */}
-        <img src={defaultParkImg} />
+        <img id="personImg" src={defaultParkImg} />
       </Link>
     </div>
   );

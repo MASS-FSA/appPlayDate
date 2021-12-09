@@ -106,14 +106,14 @@ const SingleEvent = (props) => {
       ) : (
         <div className="eventscontainer">
           {props.user.id === props.event.createdBy ? (
-            <div>
-              <button onClick={(e) => handleEdit(e)}>Edit</button>
+            <div className="rowbutton">
+              <button onClick={(e) => handleEdit(e)}>Edit Event</button>
               <button type="button" onClick={() => handleDelete()}>
-                Delete
+                Delete Event
               </button>
             </div>
           ) : null}
-          <section>
+          <section className="rowbutton">
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -157,14 +157,16 @@ const SingleEvent = (props) => {
                 })}
             </select>
             <br />
+            <div className="rowbutton">
             <button
               onClick={(e) => {
                 e.preventDefault();
                 addFriend(friendId);
               }}
             >
-              Add
+              Add friend
             </button>
+            </div>
           </section>
 
           <img src={props.event.image} />

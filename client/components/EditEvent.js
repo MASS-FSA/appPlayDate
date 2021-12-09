@@ -34,7 +34,8 @@ export default function EditEvent(props) {
   }
 
   return (
-    <div>
+    <div className="questioncontainer">
+      <div className="lines" />
       <form>
         <label>Name</label>
         <input name="name" value={eventInfo.name} onChange={handleChange} />
@@ -64,7 +65,7 @@ export default function EditEvent(props) {
         <label>Image</label>
         <input name="image" value={eventInfo.image} onChange={handleChange} />
         <br />
-        <img src={eventInfo.image} height="300px" />
+        <img src={eventInfo.image} height="150px" width="150px" />
         <br />
         <button
           onClick={(e) => {

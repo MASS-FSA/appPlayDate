@@ -40,9 +40,9 @@ const Chat = (props) => {
           <div className='newmessage'></div>
         </div>
       </div>
-      <div>
+      {/* <div>
         <img id='MASSMasscot' src='trasparentdino.png' />
-      </div>
+      </div> */}
     </div>
   );
 };

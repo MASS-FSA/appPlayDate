@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import {
   fetchMyFriends,
   fetchUsersWithinDistance,
@@ -11,7 +11,7 @@ import { fetchOwnedChannels, fetchParticipantChannels } from "../store/chat";
 import { getGeoLocationFromBrowser } from "../../Util/loadMap";
 import SinglePerson from "./singlePerson";
 import LoadingSpinner from "./LoadingSpinner";
-import EventSimpleView from "./eventSimpleView"
+import EventSimpleView from "./eventSimpleView";
 
 export const UserPage = (props) => {
   // const goToChannel = `/chat/channel/${}`
@@ -51,61 +51,65 @@ export const UserPage = (props) => {
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <div>
+        <div className="dashContainer">
           {/* FRIENDS */}
-          <div className="userSdashboard">
-            <h4>Friends</h4>
-            {props.friends.length ?
-              props.friends.map((friend) => {
+            <div className="userD">
+              <h4 className="labelname">Friends</h4>
+              {props.friends.length ? (
+                props.friends.map((friend) => {
                   return <SinglePerson key={friend.id} person={friend} />;
                 })
-            :
-            <p>Currently No Friends</p>}
-          </div>
+              ) : (
+                <p>Currently No Friends</p>
+              )}
+            </div>
           {/* EVENTS I MADE */}
-          <div className="userSdashboard">
-            <h4>Events I Made</h4>
-            {props.myEvents.length ?
-              props.myEvents.map(event => {
-                  return <EventSimpleView key={event.id} event={event} />;
-                })
-            :
-            <p>Currently None</p>}
+          <div className="userD">
+            <h4 className="labelname">Events I Made</h4>
+            {props.myEvents.length ? (
+              props.myEvents.map((event) => {
+                return <EventSimpleView key={event.id} event={event} />;
+              })
+            ) : (
+              <h4 className="labelname">Currently None</h4>
+            )}
           </div>
           {/* EVENTS I AM PARTICIPATING IN */}
-          <div className="userSdashboard">
-            <h4>My Events</h4>
-            {props.participantIn.length ?
-              props.participantIn.map(event => {
-                  return <EventSimpleView key={event.id} event={event} />;
-                })
-            :
-            <p>Currently None</p>}
+          <div className="userD">
+            <h4 className="labelname">My Events</h4>
+            {props.participantIn.length ? (
+              props.participantIn.map((event) => {
+                return <EventSimpleView key={event.id} event={event} />;
+              })
+            ) : (
+              <p>Currently None</p>
+            )}
           </div>
           {/* CHANNELS I OWN */}
-          <div className="userSdashboard">
-            <h4>My Chat Channels</h4>
+          <div className="userD">
+            <h4 className="labelname">My Chat Channels</h4>
             {props.ownedChannels.length ?
-              props.ownedChannels.map(channel => {
+              (props.ownedChannels.map(channel => {
                 const goToChannel = `/chat/channels/${channel.id}`
-                  return <div key={channel.id}>
+                  return <div className="buttoncontainer" key={channel.id}>
                     <Link to={goToChannel}>
-                      <button>Go To Channel: {channel.name}</button>
+                      <button>{channel.name}</button>
                     </Link>
                   </div>
-                })
-            :
-            <p>Currently None</p>}
+              })
+            ) : (
+              <p>Currently None</p>
+            )}
           </div>
           {/* CHANNELS I HAVE A CONVERSATION IN */}
-          <div className="userSdashboard">
+         {/* <div className="userSdashboard">
             <h4>Continue A Conversation</h4>
             {props.participantChannels.length ?
               props.participantChannels.map(channel => {
                 const goToChannel = `/chat/channels/${channel.id}`
                   return <div key={channel.id}>
                     <Link to={goToChannel}>
-                      <button>Go To Channel: {channel.name}</button>
+                      <button>{channel.name}</button>
                     </Link>
                   </div>
                 })
@@ -114,12 +118,12 @@ export const UserPage = (props) => {
               <button>Start Chatting With Other Parents!</button>
             </Link>
             }
-          </div>
+          </div>  */}
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => {
   return {

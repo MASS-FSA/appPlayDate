@@ -42,16 +42,16 @@ const Channel = (props) => {
               {channel.name.split('_').join(' ')}
             </NavLink>
           </div>
-        ))}
-      <button>
-        <NavLink to='/channels/create'>Add New Channel</NavLink>
+        ))} 
+      <button className="dbuttons">
+        <NavLink to='/channels/create'>+ Channel</NavLink>
       </button>
-      <button
+      <button className="dbuttons"
         onClick={() => {
           props.removeChannel(selectedChannel, history);
         }}
       >
-        Delete Channel
+     <a>Remove</a>
       </button>
     </div>
   );
