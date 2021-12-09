@@ -12,6 +12,8 @@
     margin: auto;
     margin-top: 5px;
     margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
     width: 100px;
     height:60px;
     color: white;
@@ -24,6 +26,12 @@
     box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.05);
     font-weight: bold;
     border: solid 2px #d27d00
+}
+.rowbutton{
+  display: flex;
+  flex-direction: row;
+  max-width: fit-content;
+  margin:auto
 }
 .eventscontainer > button:hover {
   background-color: rgb(255, 102, 0);
@@ -113,14 +121,18 @@
     height: 60%;
   }
   .eventscontainer img {
-    width: 100%;
-    height: 100%;
+    width: 92%;
+    height: 92%;
   }
   .singleeventcasing {
-    width: 100%;
+    width: 92%;
+  }
+  .rowbotton{
+    width: 92%;
+    margin:auto;
   }
   .singleEvent img {
-    height: 100%;
-    width: 100%;
+    height: 92%;
+    width: 92%;
   }
 }
