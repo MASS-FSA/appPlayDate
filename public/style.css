@@ -16,6 +16,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 button {
@@ -72,6 +74,12 @@ form div {
 
 .event_people {
   display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: auto;
+  max-width: fit-content;
+  
+  
 }
 
 /* Load Spinner */
@@ -106,5 +114,9 @@ form div {
 @media only screen and (max-width: 500px) {
   .leafMap {
     height: 250px;
+  }
+  .event_people{
+    overflow-x: scroll;
+    height: 300px;
   }
 }
