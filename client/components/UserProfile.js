@@ -140,7 +140,7 @@ export const UserProfile = (props) => {
                   <div>
                     <h4>Request</h4>
                     <p>{request.requester.username}</p>
-                  </div>  
+                  </div>
                   <img
                     src={request.requester.image}
                     height="50px"
@@ -230,6 +230,9 @@ export const UserProfile = (props) => {
           </form>
         </div>
       )}
+      <div>
+        <img id="MASSMasscot" src="https://i.imgur.com/DD4vIP9.png" alt="" />
+      </div>
     </div>
   );
 };

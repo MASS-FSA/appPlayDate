@@ -41,7 +41,7 @@ const Chat = (props) => {
         </div>
       </div>
       <div>
-        <img id='MASSMasscot' src='trasparentdino.png' />
+        <img id="MASSMasscot" src="https://i.imgur.com/DD4vIP9.png" alt="" />
       </div>
     </div>
   );

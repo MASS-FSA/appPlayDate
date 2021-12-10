@@ -37,7 +37,7 @@ const AllEvents = (props) => {
         .map((event) => {
           return (
             <div key={event.id} className="singleEvent">
-              <fieldset
+              <div
                 key={event.id}
                 onClick={() => props.history.push(`/events/${event.id}`)}
               >
@@ -46,10 +46,13 @@ const AllEvents = (props) => {
                 <h4>Location: {event.location}</h4>
                 <h4>Time: {event.time.slice(0, 10)}</h4>
                 <p>{event.description}</p>
-              </fieldset>
+              </div>
             </div>
           );
         })}
+      <div>
+        <img id="MASSMasscot" src="https://i.imgur.com/DD4vIP9.png" alt="" />
+      </div>
     </div>
   );
 };
