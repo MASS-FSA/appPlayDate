@@ -24,8 +24,7 @@ const User = db.define("user", {
   },
   image: {
     type: Sequelize.TEXT,
-    defaultValue:
-      "https://us.123rf.com/450wm/kyryloff/kyryloff2008/kyryloff200800018/152844692-profile-icon-male-user-icon-ui-button-stock-vector-illustration-isolated-on-white-background-.jpg?ver=6",
+    defaultValue: "https://i.imgur.com/gZxm3dc.png",
     validate: {
       isUrl: true,
     },
