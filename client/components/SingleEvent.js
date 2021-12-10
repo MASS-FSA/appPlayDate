@@ -95,8 +95,6 @@ const SingleEvent = (props) => {
     setFriendId(event.target.value);
   }
 
-  console.log(props.event);
-
   return (
     <div>
       {edit ? (
