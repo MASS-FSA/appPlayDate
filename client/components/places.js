@@ -218,9 +218,11 @@ const Places = (props) => {
             {/* FOR DISPLAYING NEARBY PEOPLE */}
             {options.seePeople ? (
               props.people.length ? (
-                props.people.map((person) => (
-                  <SinglePerson key={person.id} person={person} />
-                ))
+                props.people
+                  .filter((person) => person.username !== props.me.username)
+                  .map((person) => (
+                    <SinglePerson key={person.id} person={person} />
+                  ))
               ) : (
                 <p>No People Near You Right Now. Please Try Again Later</p>
               )

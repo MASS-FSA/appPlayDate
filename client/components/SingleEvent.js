@@ -95,6 +95,8 @@ const SingleEvent = (props) => {
     setFriendId(event.target.value);
   }
 
+  console.log(props.event);
+
   return (
     <div>
       {edit ? (
@@ -144,7 +146,11 @@ const SingleEvent = (props) => {
             )}
           </section>
           <section>
-            <select className="selectorx" onChange={(e) => handleChange(e)} value={friendId}>
+            <select
+              className="selectorx"
+              onChange={(e) => handleChange(e)}
+              value={friendId}
+            >
               <option>Invite Friend</option>
               {props.friends
                 ?.filter((friend) => !existingUsers.includes(friend.id))
@@ -158,14 +164,14 @@ const SingleEvent = (props) => {
             </select>
             <br />
             <div className="rowbutton">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                addFriend(friendId);
-              }}
-            >
-              Add Friend
-            </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  addFriend(friendId);
+                }}
+              >
+                Add Friend
+              </button>
             </div>
           </section>
 
@@ -175,6 +181,7 @@ const SingleEvent = (props) => {
             <h4>Description</h4>
             <h4>{props.event.description}</h4>
             <h4>{props.event.location}</h4>
+            <h4>{props.event.time?.slice(0, 10)}</h4>
           </div>
           <h4>People Attending Event</h4>
           <div className="event_people">

@@ -98,7 +98,7 @@ export const CreateEvent = (props) => {
           onChange={handleChange}
         />
         <br />
-        <label>Time</label>
+        <label>Date</label>
         <input
           type="date"
           name="time"
