@@ -3,7 +3,6 @@ const axios = require('axios')
 const {
   models: { User, Channel, Message },
 } = require('../../db')
-const { requireToken } = require('../gatekeeping')
 const { createPlacesApiUrl, findMidPoint, distanceBetweenPoints } = require('../../../Util/utilityFuncs')
 
 module.exports = router;

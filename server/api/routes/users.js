@@ -2,7 +2,6 @@ const router = require("express").Router();
 const {
   models: { User, Intake, Friend },
 } = require("../../db");
-const { requireToken } = require("../gatekeeping");
 
 module.exports = router;
 
@@ -19,7 +18,7 @@ router.get("/nearby/:userId/:distance", async (req, res, next) => {
 });
 
 //  /api/users/friends/getall
-router.get("/friends/getAll", requireToken, async (req, res, next) => {
+router.get("/friends/getAll", async (req, res, next) => {
   //  for getting all 'me' friends
   try {
     const me = req.user;

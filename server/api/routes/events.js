@@ -3,13 +3,12 @@ const { reset } = require("nodemon");
 const {
   models: { User, Event, UserEvents },
 } = require("../../db");
-const {requireToken} = require("../gatekeeping")
 
 module.exports = router;
 
 // /api/events
 
-router.get('/myEvents', requireToken, async (req, res, next) => {
+router.get('/myEvents', async (req, res, next) => {
   try {
     const myEvents = await Event.findAll({
       where: {
@@ -22,7 +21,7 @@ router.get('/myEvents', requireToken, async (req, res, next) => {
   }
 })
 
-router.get('/participating', requireToken, async (req, res, next) => {
+router.get('/participating', async (req, res, next) => {
 
   try {
     const participantIn = await UserEvents.findAll({
@@ -53,7 +52,7 @@ router
       next(error);
     }
   })
-  .post(requireToken, async (req, res, next) => {
+  .post(async (req, res, next) => {
     try {
       // use token and add to event
       req.body.createdBy = req.user.id

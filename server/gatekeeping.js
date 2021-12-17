@@ -1,12 +1,14 @@
 const {
   models: { User },
-} = require('../db');
+} = require('./db');
 // store all functions here to act as middleware between requests and response
-const requireToken = async (req, res, next) => {
+const addJWT = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
     const user = await User.findByToken(token);
-    req.user = user;
+    if(user) {
+      req.user = user;
+    }
     next();
   } catch (error) {
     next(error);
@@ -14,5 +16,5 @@ const requireToken = async (req, res, next) => {
 };
 
 module.exports = {
-  requireToken,
+  addJWT,
 };

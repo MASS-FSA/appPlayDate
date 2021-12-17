@@ -2,13 +2,12 @@ const router = require("express").Router();
 const {
   models: { User, Channel, Message },
 } = require("../../db");
-const { requireToken } = require("../gatekeeping");
 
 module.exports = router;
 
 // GET /api/messages
 
-router.get("/channels/participant", requireToken, async (req, res, next) => {
+router.get("/channels/participant", async (req, res, next) => {
   try {
     const channelIdens = await Message.findAll({
       where: {
@@ -60,7 +59,7 @@ router.get("/:channelId/", async (req, res, next) => {
 
 // POST /api/messages
 // Creating a message based off of req.body
-router.post("/", requireToken, async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     req.body.userId = req.user.id;
     const message = await Message.create(req.body);

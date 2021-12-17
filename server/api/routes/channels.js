@@ -1,9 +1,8 @@
-const channelRouter = require("express").Router();
+const channelRouter = require("express").Router({mergeParams: true, strict: true});
 const {
   models: { Channel, Message },
 } = require("../../db");
 const User = require("../../db/models/User");
-const { requireToken } = require("../gatekeeping");
 
 
 module.exports = channelRouter;
@@ -25,7 +24,7 @@ channelRouter.get('/', async (req, res, next) => {
 
 //  get channels the user has created
 //  /api/channels/owned
-channelRouter.get('/owned', requireToken, async (req, res, next) => {
+channelRouter.get('/owned', async (req, res, next) => {
   try {
     const owned = await Channel.findAll({
       where: {
@@ -40,7 +39,7 @@ channelRouter.get('/owned', requireToken, async (req, res, next) => {
 
 //  get messages by channelId
 //  /api/channels/:channelId/messages
-channelRouter.get("/:channelId/messages", requireToken, async (req, res, next) => {
+channelRouter.get("/:channelId/messages", async (req, res, next) => {
   try {
     const user = req.user;
     const channelId = req.params.channelId;
@@ -60,7 +59,7 @@ channelRouter.get("/:channelId/messages", requireToken, async (req, res, next) =
 
 //  create new channel
 //  /api/channels/
-  channelRouter.post('/', requireToken, async(req, res, next) => {
+  channelRouter.post('/', async(req, res, next) => {
   try {
     // put user.id on the createdBy key
     req.body.createdBy = req.user.id;
@@ -80,7 +79,7 @@ channelRouter.get("/:channelId/messages", requireToken, async (req, res, next) =
 
 //  delete a chat channel
 //  /api/channels
-channelRouter.delete("/:channelId", requireToken, async (req, res, next) => {
+channelRouter.delete("/:channelId", async (req, res, next) => {
   try {
     const channel = await Channel.findByPk(req.params.channelId);
 
