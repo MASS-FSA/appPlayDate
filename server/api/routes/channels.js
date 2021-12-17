@@ -1,4 +1,5 @@
 const channelRouter = require("express").Router();
+const { reset } = require("nodemon");
 const {
   models: { Channel, Message },
 } = require("../../db");
@@ -84,13 +85,37 @@ channelRouter.delete("/:channelId", requireToken, async (req, res, next) => {
   try {
     const channel = await Channel.findByPk(req.params.channelId);
 
-    if (channel.createdBy === req.user.id) {
-      await channel.destroy();
-      res.send(202);
+    if(channel) {
+      if(channel.createdBy === req.user.id) {
+        await channel.destroy();
+        res.sendStatus(202)
+      } else {
+        res.sendStatus(405)
+      }
     } else {
-      res.sendStatus(403);
+      res.sendStatus(400)
     }
+
   } catch (err) {
     next(err);
   }
 });
+
+// test route DELETE ME
+
+channelRouter.get('/:channelId', async (req, res, next) => {
+  try {
+    const channel = await Channel.findOne({
+      where: {
+        id: req.params.channelId
+      }
+    });
+    if (channel) {
+      res.send(channel);
+    } else {
+      res.send('here')
+    }
+  } catch (err) {
+    next(err);
+  }
+})
