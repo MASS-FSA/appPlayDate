@@ -41,15 +41,17 @@ channelRouter.get('/owned', async (req, res, next) => {
 //  /api/channels/:channelId/messages
 channelRouter.get("/:channelId/messages", async (req, res, next) => {
   try {
-    const user = req.user;
-    const channelId = req.params.channelId;
+    //  only send messages if user has been active in channel
     const findUser = await Message.findOne({
-      where: { channelId, userId: user.id },
+      where: {
+        channelId: req.params.channelId,
+        userId: req.user.id },
     });
     if (!findUser) {
-      res.send("access denied");
+      res.sendStatus(401);
     } else {
-      const messages = await Message.findAll({ where: { channelId } });
+      const messages = await Message.findAll({
+        where: { channelId: req.params.channelId } });
       res.send(messages);
     }
   } catch (err) {
@@ -64,11 +66,12 @@ channelRouter.get("/:channelId/messages", async (req, res, next) => {
     // put user.id on the createdBy key
     req.body.createdBy = req.user.id;
     const channel = await Channel.create(req.body);
-
     const chatBot = await User.findOne({ where: { username: `Chat Bot` } });
+    //  create an initial message from 'chatbot' so that new channels look less empty to the user
     const message = await Message.create({
       content: `Welcome to ${channel.name} chat!`,
     });
+    //  create associations
     await message.setChannel(channel);
     await message.setUser(chatBot);
     res.send(channel);
@@ -82,7 +85,6 @@ channelRouter.get("/:channelId/messages", async (req, res, next) => {
 channelRouter.delete("/:channelId", async (req, res, next) => {
   try {
     const channel = await Channel.findByPk(req.params.channelId);
-
     if(channel) {
       if(channel.createdBy === req.user.id) {
         await channel.destroy();
