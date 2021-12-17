@@ -1,13 +1,17 @@
 const router = require("express").Router();
-const { reset } = require("nodemon");
 const {
-  models: { User, Event, UserEvents },
+  models: { User, Event, UserEvents, },
 } = require("../../db");
+const { Op } = require("sequelize");
+const { Events } = require("react-scroll");
 
 module.exports = router;
 
-// /api/events
+// **/api/events
 
+
+//  get events created by user
+//  /api/events/myevents
 router.get('/myEvents', async (req, res, next) => {
   try {
     const myEvents = await Event.findAll({
@@ -21,20 +25,23 @@ router.get('/myEvents', async (req, res, next) => {
   }
 })
 
+//  get events that include user
+//  /api/events/participating
 router.get('/participating', async (req, res, next) => {
-
   try {
     const participantIn = await UserEvents.findAll({
       where: {
         userId: req.user.id
       }
     })
-    const stepTwo = participantIn.map(userEvent => {
+    const userEventToId = participantIn.map(userEvent => {
       return userEvent.eventId
     })
-    const events = await Promise.all(stepTwo.map(id => {
-      return Event.findByPk(id)
-    }))
+    const events = await Event.findAll({
+      where: {id: {
+        [Op.in]: userEventToId
+      }}
+    })
     res.send(events)
   } catch (err) {
     next(err)
