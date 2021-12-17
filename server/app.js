@@ -10,7 +10,9 @@ app.use(morgan('dev'))
 
 // body parsing middleware
 app.use(express.json())
-console.log('log: ',addJWT)
+
+//  check for a token and add a req.user key on all requests/routes.
+//    Will be an empty{} if no JWT provided or token matches no Users in the db.
 app.use(addJWT)
 
 // auth and api routes
