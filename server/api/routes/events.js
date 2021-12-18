@@ -78,6 +78,7 @@ router.get('/:eventId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   //  this router requires a JWT
   try {
+    //  put user on the body as createdBy
     req.body.createdBy = req.user.id
     const newEvent = await Event.create(req.body);
     //  create association
@@ -109,24 +110,3 @@ router.delete('/:eventId', (async (req, res, next) => {
     next(error);
   }
 }))
-
-router
-  .route(`/:eventId`)
-  .post(async (req, res, next) => {
-    try {
-      const editEvent = await Event.findByPk(req.params.eventId);
-      res.send(await editEvent.update(req.body));
-    } catch (error) {
-      next(error);
-    }
-  })
-  .put(async (req, res, next) => {
-    try {
-      const userToAdd = await User.findByPk(req.body.userId);
-      const event = await Event.findByPk(req.params.eventId, { include: User });
-      await event.addUser(userToAdd);
-      res.send(await event.reload());
-    } catch (error) {
-      next(error);
-    }
-  });

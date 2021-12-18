@@ -104,7 +104,6 @@ export const createSingleEvent = (body, history) => {
   return async () => {
     try {
       const data = await authenticateRequest("post", "/api/events", body);
-
       history.push(`/events/${data.id}`);
     } catch (error) {
       console.error(error);
