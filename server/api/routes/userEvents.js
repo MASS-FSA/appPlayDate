@@ -12,6 +12,7 @@ module.exports = router;
 
 router.post('/:eventId', async (req, res, next) => {
   try {
+    //  this route requires a JWT
     const event = await Event.findByPk(req.params.eventId, {
       include: {
         model: User,
@@ -22,7 +23,7 @@ router.post('/:eventId', async (req, res, next) => {
     await event.addUser(req.user)
     //  return the event with the associated users on it
     res.send(event)
-  } catch(error) {
-    next (error)
+  } catch(err) {
+    next (err)
   }
 })
