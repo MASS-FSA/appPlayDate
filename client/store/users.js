@@ -8,7 +8,7 @@ const SET_SINGLE_USER = `SET_SINGLE_USER`;
 const SET_INTAKE = `SET_INTAKE`;
 const SET_STATUS = `SET_STATUS`;
 const SET_REQUESTS = `SET_REQUESTS`;
-const SET_MYFRIENDS = "SET_MYFRIENDS";
+const SET_MY_FRIENDS = "SET_MY_FRIENDS";
 
 // ACTION CREATORS
 export const setAllUsers = (users) => {
@@ -20,7 +20,7 @@ export const setAllUsers = (users) => {
 
 export const setMyFriends = (friends) => {
   return {
-    type: SET_MYFRIENDS,
+    type: SET_MY_FRIENDS,
     friends,
   };
 };
@@ -62,13 +62,10 @@ export const setRequests = (requests) => {
 
 // THUNKS
 
-export const fetchUsersWithinDistance = (userId, distance) => {
+export const fetchUsersWithinDistance = (distance) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(
-        `/api/users/nearby/${userId}/${distance}`
-      );
-
+      const data = await authenticateRequest('get', `/api/users/nearby/distance/${distance}`)
       dispatch(setNearbyUsers(data));
     } catch (error) {
       console.error(error);
@@ -193,7 +190,7 @@ export default (state = initialState, action) => {
       return { ...state, status: action.status };
     case SET_REQUESTS:
       return { ...state, requests: action.requests };
-    case SET_MYFRIENDS:
+    case SET_MY_FRIENDS:
       return { ...state, myFriends: action.friends };
 
     default:

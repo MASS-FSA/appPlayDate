@@ -2,18 +2,35 @@ const router = require("express").Router();
 const {
   models: { User, Intake, Friend },
 } = require("../../db");
+const { distanceBetweenPoints } = require('../../../Util/utilityFuncs')
 
 module.exports = router;
 
-// /api/users/nearby/:userId/:distance
-router.get("/nearby/:userId/:distance", async (req, res, next) => {
-  try {
-    const user = await User.findByPk(req.params.userId);
-    const output = await user.findNearbyUsers(req.params.distance);
+//  ** /api/users
 
-    res.send(output);
+// /api/users/nearby/user/:userId/distance/:distance
+router.get("/nearby/distance/:dis", async (req, res, next) => {
+  try {
+
+    const users = await User.findAll();
+    //  filter users for those within 'distance' parameter
+    const nearByUsers = users.filter((user) => {
+      const dist = distanceBetweenPoints(
+        req.user.latitude,
+        req.user.longitude,
+        user.homeLatitude,
+        user.homeLongitude
+      );
+      return dist <= req.params.dis
+    })
+    .map(user => {
+        //  protect user data
+        const {id, username, image, bio} = user
+        return {id, username, image, bio}
+      })
+    res.send(nearByUsers)
   } catch (error) {
-    next(error);
+    console.error(error);
   }
 });
 
