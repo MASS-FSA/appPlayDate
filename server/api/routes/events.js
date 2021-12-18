@@ -22,6 +22,7 @@ router.get('/', async (req, res, next) => {
 //  get events created by user
 //  /api/events/myevents
 router.get('/myEvents', async (req, res, next) => {
+  //  this router requires a JWT
   try {
     const myEvents = await Event.findAll({
       where: {
@@ -38,18 +39,18 @@ router.get('/myEvents', async (req, res, next) => {
 //  /api/events/participating
 router.get('/participating', async (req, res, next) => {
   try {
+    //  this router requires a JWT
     const participantIn = await UserEvents.findAll({
       attributes: ['eventId'],
       where: {
         userId: req.user.id
       },
     })
-    const eventsIdArray = participantIn.map(userEvent => {
-      return userEvent.eventId
-    })
     const events = await Event.findAll({
       where: {id: {
-        [Op.in]: eventsIdArray
+        [Op.in]: participantIn.map(userEvent => {
+          return userEvent.eventId
+        })
       }}
     })
     res.send(events)
@@ -58,21 +59,8 @@ router.get('/participating', async (req, res, next) => {
   }
 })
 
-
-//  create a new event
-//  /api/events/
-router.post('/', async (req, res, next) => {
-  try {
-    req.body.createdBy = req.user.id
-    const newEvent = await Event.create(req.body);
-    //  create association
-    await req.user.addEvent(newEvent);
-    res.send(newEvent);
-  } catch (error) {
-    next(error);
-  }
-});
-
+//  get event by Pk
+//  /api/events/:id
 router.get('/:eventId', async (req, res, next) => {
   try {
     const singleEvent = await Event.findByPk(req.params.eventId, {
@@ -84,6 +72,24 @@ router.get('/:eventId', async (req, res, next) => {
   }
 })
 
+
+//  create a new event
+//  /api/events/
+router.post('/', async (req, res, next) => {
+  //  this router requires a JWT
+  try {
+    req.body.createdBy = req.user.id
+    const newEvent = await Event.create(req.body);
+    //  create association
+    await req.user.addEvent(newEvent);
+    res.send(newEvent);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//  delete an event. Checks JWT for event.createdBy to match user sending request.
+//  /api/events/:id
 router.delete('/:eventId', (async (req, res, next) => {
   //  this router requires a JWT
   try {

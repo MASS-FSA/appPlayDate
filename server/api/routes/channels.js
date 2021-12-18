@@ -25,6 +25,7 @@ channelRouter.get('/', async (req, res, next) => {
 //  get channels the user has created
 //  /api/channels/owned
 channelRouter.get('/owned', async (req, res, next) => {
+  //  this router requires a JWT
   try {
     const owned = await Channel.findAll({
       where: {
@@ -40,6 +41,7 @@ channelRouter.get('/owned', async (req, res, next) => {
 //  get messages by channelId
 //  /api/channels/:channelId/messages
 channelRouter.get("/:channelId/messages", async (req, res, next) => {
+  //  this router requires a JWT
   try {
     //  only send messages if user has been active in channel
     const findUser = await Message.findOne({
@@ -62,6 +64,7 @@ channelRouter.get("/:channelId/messages", async (req, res, next) => {
 //  create new channel
 //  /api/channels/
   channelRouter.post('/', async(req, res, next) => {
+    //  this router requires a JWT
   try {
     // put user.id on the createdBy key
     req.body.createdBy = req.user.id;
@@ -84,6 +87,7 @@ channelRouter.get("/:channelId/messages", async (req, res, next) => {
 //  /api/channels
 channelRouter.delete("/:channelId", async (req, res, next) => {
   try {
+    //  this router requires a JWT
     const channel = await Channel.findByPk(req.params.channelId);
     if(channel) {
       if(channel.createdBy === req.user.id) {

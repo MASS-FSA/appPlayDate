@@ -10,7 +10,11 @@ const Event = require("./models/Event");
 const Friend = require("./models/Friend");
 const Intake = require("./models/Intake");
 const UserEvents = require("./models/UserEvents");
-//associations could go here!
+
+
+//associations
+
+
 Channel.hasMany(Message, {
   onDelete: "cascade",
   hooks: true,
