@@ -64,7 +64,11 @@ router.get('/participating', async (req, res, next) => {
 router.get('/:eventId', async (req, res, next) => {
   try {
     const singleEvent = await Event.findByPk(req.params.eventId, {
-      include: User,
+      include: {
+        model: User,
+        //  protect user info
+        attributes: ['id', 'username', 'image', 'bio']
+      }
     });
     res.send(singleEvent);
   } catch (error) {

@@ -16,7 +16,7 @@ router.post('/:eventId', async (req, res, next) => {
       include: {
         model: User,
         //  protect user info
-        attributes: ['username']
+        attributes: ['id', 'username', 'image', 'bio']
       }
     })
     await event.addUser(req.user)
