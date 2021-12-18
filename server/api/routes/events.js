@@ -1,16 +1,16 @@
-const router = require("express").Router();
+const eventsRouter = require("express").Router();
 const {
   models: { User, Event, UserEvents, },
 } = require("../../db");
 const { Op } = require("sequelize");
 
-module.exports = router;
+module.exports = eventsRouter;
 
 // **/api/events
 
 //  get all events
 //  /api/events/
-router.get('/', async (req, res, next) => {
+eventsRouter.get('/', async (req, res, next) => {
   try {
     const allEvents = await Event.findAll();
     res.send(allEvents);
@@ -21,7 +21,7 @@ router.get('/', async (req, res, next) => {
 
 //  get events created by user
 //  /api/events/myevents
-router.get('/myEvents', async (req, res, next) => {
+eventsRouter.get('/myEvents', async (req, res, next) => {
   //  this router requires a JWT
   try {
     const myEvents = await Event.findAll({
@@ -37,7 +37,7 @@ router.get('/myEvents', async (req, res, next) => {
 
 //  get events that include user
 //  /api/events/participating
-router.get('/participating', async (req, res, next) => {
+eventsRouter.get('/participating', async (req, res, next) => {
   try {
     //  this router requires a JWT
     const participantIn = await UserEvents.findAll({
@@ -61,7 +61,7 @@ router.get('/participating', async (req, res, next) => {
 
 //  get event by Pk
 //  /api/events/:id
-router.get('/:eventId', async (req, res, next) => {
+eventsRouter.get('/:eventId', async (req, res, next) => {
   try {
     const singleEvent = await Event.findByPk(req.params.eventId, {
       include: {
@@ -78,7 +78,7 @@ router.get('/:eventId', async (req, res, next) => {
 
 //  create a new event
 //  /api/events/
-router.post('/', async (req, res, next) => {
+eventsRouter.post('/', async (req, res, next) => {
   //  this router requires a JWT
   try {
     //  put user on the body as createdBy
@@ -94,7 +94,7 @@ router.post('/', async (req, res, next) => {
 
 //  delete an event. Checks JWT for event.createdBy to match user sending request.
 //  /api/events/:id
-router.delete('/:eventId', (async (req, res, next) => {
+eventsRouter.delete('/:eventId', (async (req, res, next) => {
   //  this router requires a JWT
   try {
     const eventToBeDeleted = await Event.findOne({
