@@ -72,7 +72,6 @@ router.get('/:eventId', async (req, res, next) => {
   }
 })
 
-
 //  create a new event
 //  /api/events/
 router.post('/', async (req, res, next) => {
@@ -104,9 +103,21 @@ router.delete('/:eventId', (async (req, res, next) => {
       await eventToBeDeleted.destroy();
       res.send(202);
     } else {
-      res.send(405)
+      res.send(401)
     }
   } catch (error) {
     next(error);
   }
 }))
+
+
+router.put(async (req, res, next) => {
+  try {
+    const userToAdd = await User.findByPk(req.body.userId);
+    const event = await Event.findByPk(req.params.eventId, { include: User });
+    await event.addUser(userToAdd);
+    res.send(await event.reload());
+  } catch (error) {
+    next(error);
+  }
+});
