@@ -148,7 +148,7 @@ export const updateFriendStatus = (userId, friendId, response) => {
 
 export const fetchMyFriends = () => async (dispatch) => {
   try {
-    const data = await authenticateRequest("get", "/api/users/friends/getAll");
+    const data = await authenticateRequest('get', '/api/friends/');
     dispatch(setMyFriends(data));
   } catch (err) {
     console.error(err);
@@ -158,7 +158,7 @@ export const fetchMyFriends = () => async (dispatch) => {
 export const fetchFriendRequests = (userId) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`/api/users/requests/${userId}`);
+      const data = await authenticateRequest('get', '/api/friends/requests')
       dispatch(setRequests(data));
     } catch (error) {
       console.error(error);

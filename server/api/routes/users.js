@@ -2,16 +2,18 @@ const router = require("express").Router();
 const {
   models: { User, Intake, Friend },
 } = require("../../db");
+const { Op } = require('sequelize')
 const { distanceBetweenPoints } = require('../../../Util/utilityFuncs')
 
 module.exports = router;
 
 //  ** /api/users
 
+// get nearby users based on distance parameter
 // /api/users/nearby/user/:userId/distance/:distance
 router.get("/nearby/distance/:dis", async (req, res, next) => {
   try {
-
+    //  this router requires a JWT
     const users = await User.findAll();
     //  filter users for those within 'distance' parameter
     const nearByUsers = users.filter((user) => {
@@ -34,29 +36,7 @@ router.get("/nearby/distance/:dis", async (req, res, next) => {
   }
 });
 
-//  /api/users/friends/getall
-router.get("/friends/getAll", async (req, res, next) => {
-  //  for getting all 'me' friends
-  try {
-    const me = req.user;
-    const myFriends = await Friend.findAll({
-      where: {
-        userId: me.id,
-        status: "accepted",
-      }
-    })
-    const userIds = await Promise.all(myFriends.map(friend => {
-      return friend.AddresseeId
-    }))
-    const friendList = await Promise.all(userIds.map(id => {
-      return User.findByPk(id)
-    }))
-    res.send(friendList);
 
-  } catch (err) {
-    next(err);
-  }
-});
 
 // /api/users/requests/:userId
 router
@@ -64,21 +44,19 @@ router
   .get(async (req, res, next) => {
     try {
       const requests = await Friend.findAll({
-        where: { AddresseeId: req.params.userId, status: `pending` },
-        // include: { model: User },
+        where: {
+          AddresseeId: req.params.userId,
+          status: `pending`
+        },
       });
+      const requesters = await User.findAll({
+        where: {id: {
+          [Op.in] : requests.map(request => (request.userId)),
+        }},
+        attributes: ['id', 'username', 'image', 'bio']
+      })
 
-      // [{pending request.. userId sean}, {pending request... userId Alex}... ]
-      const manualEagerLoad = await Promise.all(
-        requests.map(async (request) => {
-          let output = { ...request };
-          const user = await User.findByPk(request.userId);
-          output.requester = user;
-          return output;
-        })
-      );
-
-      res.send(manualEagerLoad);
+      res.send(requesters);
 
       // if (!requests) res.send([]);
       // else res.send(requests);

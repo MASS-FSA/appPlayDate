@@ -39,7 +39,7 @@ router.get("/channels/participant", async (req, res, next) => {
     const channelSet = new Set(messages.map(message => (message.channelId)))
     const channels = await Channel.findAll({
       where: {id: {
-          [Op.in]: [...channelSet]
+          [Op.in]: [...channelSet],
         }}
       }
     )
