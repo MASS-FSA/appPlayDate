@@ -111,11 +111,10 @@ export const createSingleEvent = (body, history) => {
   };
 };
 
-export const addUserToEvent = (eventId, userId) => {
-  const body = { userId };
+export const addUserToEvent = (eventId) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.put(`/api/events/${eventId}`, body);
+      const { data } = await axios.post(`/api/events/${eventId}`);
       dispatch(setSingleEvent(data));
     } catch (error) {
       console.error(error);

@@ -109,15 +109,3 @@ router.delete('/:eventId', (async (req, res, next) => {
     next(error);
   }
 }))
-
-
-router.put(async (req, res, next) => {
-  try {
-    const userToAdd = await User.findByPk(req.body.userId);
-    const event = await Event.findByPk(req.params.eventId, { include: User });
-    await event.addUser(userToAdd);
-    res.send(await event.reload());
-  } catch (error) {
-    next(error);
-  }
-});
