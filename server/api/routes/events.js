@@ -3,12 +3,21 @@ const {
   models: { User, Event, UserEvents, },
 } = require("../../db");
 const { Op } = require("sequelize");
-const { Events } = require("react-scroll");
 
 module.exports = router;
 
 // **/api/events
 
+//  get all events
+//  /api/events/
+router.get('/', async (req, res, next) => {
+  try {
+    const allEvents = await Event.findAll();
+    res.send(allEvents);
+  } catch (error) {
+    next(error);
+  }
+})
 
 //  get events created by user
 //  /api/events/myevents
@@ -30,16 +39,17 @@ router.get('/myEvents', async (req, res, next) => {
 router.get('/participating', async (req, res, next) => {
   try {
     const participantIn = await UserEvents.findAll({
+      attributes: ['eventId'],
       where: {
         userId: req.user.id
-      }
+      },
     })
-    const userEventToId = participantIn.map(userEvent => {
+    const eventsIdArray = participantIn.map(userEvent => {
       return userEvent.eventId
     })
     const events = await Event.findAll({
       where: {id: {
-        [Op.in]: userEventToId
+        [Op.in]: eventsIdArray
       }}
     })
     res.send(events)
@@ -48,52 +58,54 @@ router.get('/participating', async (req, res, next) => {
   }
 })
 
-router
-  .route(`/`)
-  .get(async (req, res, next) => {
-    try {
-      // in future, will need to find single user, and find nearby events.. figure out how to turn address into lat/lng
-      const allEvents = await Event.findAll();
-      res.send(allEvents);
-    } catch (error) {
-      next(error);
-    }
-  })
-  .post(async (req, res, next) => {
-    try {
-      // use token and add to event
-      req.body.createdBy = req.user.id
-      const newEvent = await Event.create(req.body);
-      await req.user.addEvent(newEvent);
-      res.send(newEvent);
-    } catch (error) {
-      next(error);
-    }
-  });
 
-// /api/events/:eventId
+//  create a new event
+//  /api/events/
+router.post('/', async (req, res, next) => {
+  try {
+    req.body.createdBy = req.user.id
+    const newEvent = await Event.create(req.body);
+    //  create association
+    await req.user.addEvent(newEvent);
+    res.send(newEvent);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/:eventId', async (req, res, next) => {
+  try {
+    const singleEvent = await Event.findByPk(req.params.eventId, {
+      include: User,
+    });
+    res.send(singleEvent);
+  } catch (error) {
+    next(error);
+  }
+})
+
+router.delete('/:eventId', (async (req, res, next) => {
+  //  this router requires a JWT
+  try {
+    const eventToBeDeleted = await Event.findOne({
+      where: {
+        id: req.params.eventId,
+        createdBy: req.user.id,
+      }
+    });
+    if (eventToBeDeleted) {
+      await eventToBeDeleted.destroy();
+      res.send(202);
+    } else {
+      res.send(405)
+    }
+  } catch (error) {
+    next(error);
+  }
+}))
 
 router
   .route(`/:eventId`)
-  .get(async (req, res, next) => {
-    try {
-      const singleEvent = await Event.findByPk(req.params.eventId, {
-        include: User,
-      });
-      res.send(singleEvent);
-    } catch (error) {
-      next(error);
-    }
-  })
-  .delete(async (req, res, next) => {
-    try {
-      const deleteEvent = await Event.findByPk(req.params.eventId);
-      await deleteEvent.destroy();
-      res.send();
-    } catch (error) {
-      next(error);
-    }
-  })
   .post(async (req, res, next) => {
     try {
       const editEvent = await Event.findByPk(req.params.eventId);
