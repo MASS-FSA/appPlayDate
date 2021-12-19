@@ -86,11 +86,12 @@ router.post('/:friendId', async(req, res, next) => {
   //  this router requires a JWT
   try {
     const friend = await User.findByPk(req.params.friendId)
-    await req.user.addAddressee(friend)
-    res.send(202)
+    const update = await req.user.addAddressee(friend)
+    res.send(update[0].status)
   } catch (err) {
   }next(err)
 })
 
+router.put('')
 
 
