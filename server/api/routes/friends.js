@@ -58,3 +58,24 @@ router.get('/requests', async (req, res, next) => {
     next(error);
   }
 })
+
+//  get friendship status
+//  /api/friends/:friendId
+router.get('/:friendId', async (req, res, next) => {
+  //  this router requires a JWT
+  try {
+    const relationship = await Friend.findOne({
+      where: {
+        userId: req.user.id,
+        AddresseeId: req.params.friendId,
+      }
+    });
+    if (relationship) {
+      res.send(relationship.status)
+    } else {
+      res.send('none')
+    }
+  } catch (err) {
+    next (err)
+  }
+})

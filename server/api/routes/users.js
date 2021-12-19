@@ -36,56 +36,9 @@ router.get("/nearby/distance/:dis", async (req, res, next) => {
   }
 });
 
-
-
-// /api/users/requests/:userId
-router
-  .route(`/requests/:userId`)
-  .get(async (req, res, next) => {
-    try {
-      const requests = await Friend.findAll({
-        where: {
-          AddresseeId: req.params.userId,
-          status: `pending`
-        },
-      });
-      const requesters = await User.findAll({
-        where: {id: {
-          [Op.in] : requests.map(request => (request.userId)),
-        }},
-        attributes: ['id', 'username', 'image', 'bio']
-      })
-
-      res.send(requesters);
-
-      // if (!requests) res.send([]);
-      // else res.send(requests);
-    } catch (error) {
-      next(error);
-    }
-  })
-  .post(async (req, res, next) => {
-    try {
-    } catch (error) {
-      next(error);
-    }
-  });
-
 // /api/users/friends/:friendId/:userId
 router
   .route(`/friends/:friendId/:userId`)
-  .get(async (req, res, next) => {
-    // for checking friend request status
-    try {
-      const connection = await Friend.findOne({
-        where: { userId: req.params.userId, AddresseeId: req.params.friendId },
-      });
-      if (connection) res.send(connection.status);
-      else res.send(`none`);
-    } catch (error) {
-      next(error);
-    }
-  })
   .post(async (req, res, next) => {
     // for sending a friend request
     try {
