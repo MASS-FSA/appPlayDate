@@ -53,7 +53,7 @@ export const OthersProfile = ({
   }, [user]);
 
   function handleAddFriend() {
-    friendRequest(myId, user.id);
+    friendRequest(user.id);
   }
 
   function statusSetter() {
@@ -137,8 +137,8 @@ const mapDispatchToProps = (dispatch) => {
     getUser: (userId) => dispatch(fetchSingleUser(userId)),
     checkStatus: (userId, friendId) =>
       dispatch(checkFriendStatus(userId, friendId)),
-    friendRequest: (userId, friendId) =>
-      dispatch(sendFriendRequest(userId, friendId)),
+    friendRequest: (friendId) =>
+      dispatch(sendFriendRequest(friendId)),
     blockUser: (userId, friendId, status) =>
       dispatch(updateFriendStatus(userId, friendId, status)),
   };

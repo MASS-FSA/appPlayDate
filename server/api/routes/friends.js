@@ -79,3 +79,18 @@ router.get('/:friendId', async (req, res, next) => {
     next (err)
   }
 })
+
+//  send a friend request
+//  api/friends/:friendId
+router.post('/:friendId', async(req, res, next) => {
+  //  this router requires a JWT
+  try {
+    const friend = await User.findByPk(req.params.friendId)
+    await req.user.addAddressee(friend)
+    res.send(202)
+  } catch (err) {
+  }next(err)
+})
+
+
+

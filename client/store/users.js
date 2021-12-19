@@ -108,10 +108,7 @@ export const createUserIntake = (userId, body) => {
 export const checkFriendStatus = (userId, friendId) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(
-        `/api/users/friends/${friendId}/${userId}`,
-        {}
-      );
+      const data = authenticateRequest('get', `/api/friends/${friendId}`)
       dispatch(setStatus(data));
     } catch (error) {
       console.error(error);
@@ -119,7 +116,7 @@ export const checkFriendStatus = (userId, friendId) => {
   };
 };
 
-export const sendFriendRequest = (userId, friendId) => {
+export const sendFriendRequest = (friendId) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.post(
