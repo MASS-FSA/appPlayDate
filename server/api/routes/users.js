@@ -1,8 +1,7 @@
 const usersRouter = require("express").Router();
 const {
-  models: { User, Intake, Friend },
+  models: { User, Intake},
 } = require("../../db");
-const { Op } = require('sequelize')
 const { distanceBetweenPoints } = require('../../../Util/utilityFuncs')
 
 module.exports = usersRouter;
