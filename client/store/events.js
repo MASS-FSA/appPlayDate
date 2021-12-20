@@ -113,7 +113,6 @@ export const createSingleEvent = (body, history) => {
 export const addUserToEvent = (eventId, targetId) => {
   return async (dispatch) => {
     try {
-      console.log(targetId)
       const body = {targetId: targetId}
       const { data } = await axios.put(`/api/userEvents/${eventId}`, body);
       dispatch(setSingleEvent(data));

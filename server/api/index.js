@@ -3,7 +3,8 @@ const User = require('../db/models/User')
 
 module.exports = router;
 
-//  custom middleware puts user model instance on all api requests via JWT token. used by 'next' routes as req.user
+//  custom middleware puts user model instance on all api requests via JWT token. User instance can
+//    found on all next() requests as req.user
 router.use(async (req, res, next) => {
   try {
     const token = req.headers.authorization;

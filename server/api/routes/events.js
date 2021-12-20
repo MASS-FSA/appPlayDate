@@ -40,12 +40,14 @@ eventsRouter.get('/myEvents', async (req, res, next) => {
 eventsRouter.get('/participating', async (req, res, next) => {
   try {
     //  this router requires a JWT
+    //  we just need the eventId to use in the next step
     const participantIn = await UserEvents.findAll({
       attributes: ['eventId'],
       where: {
         userId: req.user.id
       },
     })
+    //  find events that the user has posted a message in
     const events = await Event.findAll({
       where: {id: {
         [Op.in]: participantIn.map(userEvent => {
