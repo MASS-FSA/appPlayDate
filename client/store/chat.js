@@ -81,7 +81,7 @@ export const fetchParticipantChannels = () => async (dispatch) => {
 
 export const fetchMessages = () => async (dispatch) => {
   try {
-    const { data: messages } = await axios.get(`/api/messages`);
+    const { data: messages } = await axios.get(`/api/messages/`);
     dispatch(getMessages(messages));
   } catch (err) {
     throw ("error something went wrong", err);

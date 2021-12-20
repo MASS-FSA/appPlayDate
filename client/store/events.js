@@ -5,7 +5,7 @@ import { authenticateRequest } from "./gateKeepingMiddleWare";
 const SET_ALL_EVENTS = "SET_ALL_EVENTS";
 const SET_SINGLE_EVENT = "SET_SINGLE_EVENT";
 const SET_OWNED_EVENTS = "SET_OWNED_EVENTS";
-const SET_PARTICIPANTIN = "SET_PARTICIPANTIN";
+const SET_PARTICIPANT_IN = "SET_PARTICIPANT_IN";
 
 // Action Creators
 export const setAllEvents = (events) => {
@@ -31,7 +31,7 @@ const setOwnedEvents = (events) => {
 
 const setParticipantIn = (events) => {
   return {
-    type: SET_PARTICIPANTIN,
+    type: SET_PARTICIPANT_IN,
     events,
   };
 };
@@ -71,7 +71,6 @@ export const fetchSingleEvent = (eventId) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`/api/events/${eventId}`);
-
       dispatch(setSingleEvent(data));
     } catch (error) {
       console.error(error);
@@ -139,7 +138,7 @@ export default (state = initialState, action) => {
       return { ...state, singleEvent: action.event };
     case SET_OWNED_EVENTS:
       return { ...state, myEvents: action.events };
-    case SET_PARTICIPANTIN:
+    case SET_PARTICIPANT_IN:
       return { ...state, participantIn: action.events };
     default:
       return state;
