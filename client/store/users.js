@@ -62,6 +62,7 @@ export const setRequests = (requests) => {
 
 // THUNKS
 
+//  distance in KM
 export const fetchUsersWithinDistance = (distance) => {
   return async (dispatch) => {
     try {
@@ -84,10 +85,10 @@ export const fetchSingleUser = (userId) => {
   };
 };
 
-export const updateSingleUser = (userId, body) => {
+export const updateSingleUser = (body) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.post(`/api/users/${userId}`, body);
+      const data = await authenticateRequest('post', '/api/users', body)
       dispatch(setSingleUser(data));
     } catch (error) {
       console.error(error);
@@ -98,7 +99,7 @@ export const updateSingleUser = (userId, body) => {
 export const createUserIntake = (userId, body) => {
   return async () => {
     try {
-      await axios.post(`/api/users/intakes/${userId}`, body);
+      await authenticateRequest('post', 'api/users/intakes', body)
     } catch (error) {
       console.error(error);
     }

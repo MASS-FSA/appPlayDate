@@ -35,8 +35,8 @@ export const Questionaire = (props) => {
       const [{ x, y }] = await parseAddress(userLocation.address);
       userLocation.homeLatitude = y.toFixed(7);
       userLocation.homeLongitude = x.toFixed(7);
-      props.updateUser(props.me.id, userLocation);
-      props.addIntake(props.me.id, body);
+      props.updateUser(userLocation);
+      props.addIntake(body);
       props.history.push(`/home`);
     } catch (error) {
       console.error(error);
@@ -96,8 +96,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addIntake: (userId, body) => dispatch(createUserIntake(userId, body)),
-    updateUser: (userId, body) => dispatch(updateSingleUser(userId, body)),
+    addIntake: (body) => dispatch(createUserIntake(body)),
+    updateUser: (body) => dispatch(updateSingleUser(body)),
   };
 };
 

@@ -36,37 +36,43 @@ router.get("/nearby/distance/:dis", async (req, res, next) => {
   }
 });
 
-// /api/users/:userId
-router
-  .route(`/:userId`)
-  .get(async (req, res, next) => {
+//  get a user by Id
+//  /api/users/:userId
+  router.get('/:userId', async (req, res, next) => {
     try {
       const singleUser = await User.findByPk(req.params.userId, {
         include: Intake,
+        //  protect user info
+        attributes: ['id', 'username', 'image', 'bio']
       });
       res.send(singleUser);
     } catch (error) {
       next(error);
     }
   })
-  .post(async (req, res, next) => {
+  router.post('/', async (req, res, next) => {
+    //  this router requires a JWT
     try {
-      const updatedUser = await User.findByPk(req.params.userId);
-      await updatedUser.update(req.body);
-
-      res.send(await updatedUser.reload({ include: Intake }));
+      await req.user.update(req.body)
+      const updatedUser = User.findOne({
+        where: {
+          id: req.user.id
+        },
+        include: Intake
+      })
+      res.send(updatedUser);
     } catch (error) {
       next(error);
     }
   });
 
-// /api/users/intakes/:userId
-
-router.route(`/intakes/:userId`).post(async (req, res, next) => {
+//  creates the intake form onto the User
+//  /api/users/intakes
+router.post(`/intakes`).post(async (req, res, next) => {
+  //  this router requires a JWT
   try {
-    const user = await User.findByPk(req.params.userId);
-    await user.createIntake(req.body);
-    res.send(200);
+    await req.user.createIntake(req.body);
+    res.sendStatus(202);
   } catch (error) {
     next(error);
   }

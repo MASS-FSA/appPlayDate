@@ -38,7 +38,7 @@ export const UserProfile = (props) => {
     }
 
     getUserData();
-    props.checkRequests(props.myId);
+    props.checkRequests();
   }, []);
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export const UserProfile = (props) => {
         infoObject.homeLongitude = x.toFixed(7);
         infoObject.homeLatitude = y.toFixed(7);
       }
-      props.updateUser(props.myId, infoObject);
+      props.updateUser(infoObject);
 
       setEdit((prevEdit) => !prevEdit);
     } catch (error) {
@@ -89,7 +89,7 @@ export const UserProfile = (props) => {
 
   function handleUpdateRequest(event, friendId) {
     event.preventDefault();
-    props.updateRequest(props.myId, friendId, event.target.value);
+    props.updateRequest(friendId, event.target.value);
   }
 
   async function parseAddress(address) {
@@ -248,10 +248,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getUser: (userId) => dispatch(fetchSingleUser(userId)),
-    updateUser: (userId, body) => dispatch(updateSingleUser(userId, body)),
-    checkRequests: (userId) => dispatch(fetchFriendRequests(userId)),
-    updateRequest: (userId, friendId, response) =>
-      dispatch(updateFriendStatus(userId, friendId, response)),
+    updateUser: (body) => dispatch(updateSingleUser(body)),
+    checkRequests: () => dispatch(fetchFriendRequests()),
+    updateRequest: (friendId, response) =>
+      dispatch(updateFriendStatus(friendId, response)),
   };
 };
 
