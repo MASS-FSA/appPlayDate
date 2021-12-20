@@ -92,6 +92,25 @@ router.post('/:friendId', async(req, res, next) => {
   }next(err)
 })
 
-router.put('')
+
+//  Figure out what this put route is even trying to do
+
+
+router.put('/friendId', async(req, res, next ) => {
+  //  this router requires a JWT
+  try {
+    const friend = await User.findByPk(req.params.friendId);
+    if (req.body.status === 'blocked' || req.body.status === 'accepted') {
+      // When updating a block or accept.. have to update the table both ways for users
+      friend.addAddressee(req.user);
+      req.user.addAddressee(friend)
+    } else {
+      friend.addAddressee(req.user, { through: { status: req.body.status } });
+    }
+    res.sendStatus(202)
+  } catch (err) {
+    next(err)
+  }
+})
 
 
