@@ -92,11 +92,9 @@ router.post('/:friendId', async(req, res, next) => {
   }next(err)
 })
 
-
-//  Figure out what this put route is even trying to do
-
-
-router.put('/friendId', async(req, res, next ) => {
+//  used to update friends table after a friend request is acknowledged.
+//  /api/friends/:id
+router.put('/:friendId', async(req, res, next ) => {
   //  this router requires a JWT
   try {
     const friend = await User.findByPk(req.params.friendId);

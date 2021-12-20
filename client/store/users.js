@@ -119,9 +119,7 @@ export const checkFriendStatus = (userId, friendId) => {
 export const sendFriendRequest = (friendId) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.post(
-        `/api/users/friends/${friendId}/${userId}`
-      );
+      const data = await authenticateRequest('post', `api/friends/${friendId}`)
       dispatch(setStatus(data));
     } catch (error) {
       console.error(error);
@@ -133,7 +131,7 @@ export const updateFriendStatus = (userId, friendId, response) => {
   const body = { status: response };
   return async (dispatch) => {
     try {
-      await axios.put(`/api/users/friends/${friendId}/${userId}`, body);
+      await authenticateRequest('put', `api/friends/${friendId}`)
       // updated all friend requests with other thunk function
       if (response === `blocked`) dispatch(checkFriendStatus(userId, friendId));
       else dispatch(fetchFriendRequests(userId));
