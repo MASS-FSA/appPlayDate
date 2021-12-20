@@ -10,9 +10,10 @@ module.exports = userEventsRouter;
 //  associate a user with an event.
 //  /api/userEvents/:id
 
-userEventsRouter.post('/:eventId', async (req, res, next) => {
+userEventsRouter.put('/:eventId', async (req, res, next) => {
   try {
-    //  this route requires a JWT
+    const userToAdd = await User.findByPk(req.body.targetId)
+    console.log('to add: ' , userToAdd)
     const event = await Event.findByPk(req.params.eventId, {
       include: {
         model: User,
@@ -20,7 +21,7 @@ userEventsRouter.post('/:eventId', async (req, res, next) => {
         attributes: ['id', 'username', 'image', 'bio']
       }
     })
-    await event.addUser(req.user)
+    await event.addUser(userToAdd)
     //  return the event with the associated users on it
     res.send(event)
   } catch(err) {
