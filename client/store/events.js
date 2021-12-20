@@ -91,7 +91,7 @@ export const deleteSingleEvent = (id) => {
 export const updateSingleEvent = (id, body) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.post(`/api/events/${id}`, body);
+      const { data } = await axios.put(`/api/events/${id}`, body);
       dispatch(setSingleEvent(data));
     } catch (error) {
       console.error(error);

@@ -92,6 +92,18 @@ eventsRouter.post('/', async (req, res, next) => {
   }
 });
 
+//  edit an event
+//  api/events/id
+eventsRouter.put('/:eventId', async (req, res, next) => {
+  try {
+    const event = await Event.findByPk(req.params.eventId);
+    const update = await event.update(req.body)
+    res.send(update)
+  } catch (err) {
+    next (err)
+  }
+});
+
 //  delete an event. Checks JWT for event.createdBy to match user sending request.
 //  /api/events/:id
 eventsRouter.delete('/:eventId', (async (req, res, next) => {
