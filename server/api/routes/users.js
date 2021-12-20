@@ -1,17 +1,31 @@
-const router = require("express").Router();
+const usersRouter = require("express").Router();
 const {
   models: { User, Intake, Friend },
 } = require("../../db");
 const { Op } = require('sequelize')
 const { distanceBetweenPoints } = require('../../../Util/utilityFuncs')
 
-module.exports = router;
+module.exports = usersRouter;
 
 //  ** /api/users
 
+//  get all users
+// /api/users
+usersRouter.get("/", async (req, res, next) => {
+  try {
+    const users = await User.findAll({
+      //  protect user data
+      attributes: ['id', 'username', 'email', 'image', 'bio'],
+    });
+    res.send(users);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // get nearby users based on distance parameter
 // /api/users/nearby/user/:userId/distance/:distance
-router.get("/nearby/distance/:dis", async (req, res, next) => {
+usersRouter.get("/nearby/distance/:dis", async (req, res, next) => {
   try {
     //  this router requires a JWT
     const users = await User.findAll();
@@ -38,37 +52,40 @@ router.get("/nearby/distance/:dis", async (req, res, next) => {
 
 //  get a user by Id
 //  /api/users/:userId
-  router.get('/:userId', async (req, res, next) => {
-    try {
-      const singleUser = await User.findByPk(req.params.userId, {
-        include: Intake,
-        //  protect user info
-        attributes: ['id', 'username', 'image', 'bio']
-      });
-      res.send(singleUser);
-    } catch (error) {
-      next(error);
-    }
-  })
-  router.post('/', async (req, res, next) => {
-    //  this router requires a JWT
-    try {
-      await req.user.update(req.body)
-      const updatedUser = User.findOne({
-        where: {
-          id: req.user.id
-        },
-        include: Intake
-      })
-      res.send(updatedUser);
-    } catch (error) {
-      next(error);
-    }
-  });
+usersRouter.get('/:userId', async (req, res, next) => {
+  try {
+    const singleUser = await User.findByPk(req.params.userId, {
+      include: Intake,
+      //  protect user info
+      attributes: ['id', 'username', 'image', 'bio']
+    });
+    res.send(singleUser);
+  } catch (error) {
+    next(error);
+  }
+})
+
+//  for a user updates their own profile
+//  /api/users/
+usersRouter.post('/', async (req, res, next) => {
+  //  this router requires a JWT
+  try {
+    await req.user.update(req.body)
+    const updatedUser = User.findOne({
+      where: {
+        id: req.user.id
+      },
+      include: Intake
+    })
+    res.send(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+});
 
 //  creates the intake form onto the User
 //  /api/users/intakes
-router.post(`/intakes`).post(async (req, res, next) => {
+usersRouter.post(`/intakes`).post(async (req, res, next) => {
   //  this router requires a JWT
   try {
     await req.user.createIntake(req.body);
@@ -78,18 +95,4 @@ router.post(`/intakes`).post(async (req, res, next) => {
   }
 });
 
-// /api/users
-router.get("/", async (req, res, next) => {
-  try {
-    const users = await User.findAll({
-      // explicitly select only the id and username fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
-      attributes: ["id", "username", "email", "image"],
-    });
 
-    res.send(users);
-  } catch (err) {
-    next(err);
-  }
-});

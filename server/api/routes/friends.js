@@ -1,16 +1,16 @@
-const router = require("express").Router();
+const friendsRouter = require("express").Router();
 const {
   models: {User, Friend}
 } = require('../../db');
 const { Op } = require("sequelize");
 
-module.exports = router;
+module.exports = friendsRouter;
 
 //  ** /api/friends
 
 //  get all friends
 //  /api/friends/all
-router.get('/', async (req, res, next) => {
+friendsRouter.get('/', async (req, res, next) => {
   try {
     //  this router requires a JWT
     const myFriends = await Friend.findAll({
@@ -18,6 +18,7 @@ router.get('/', async (req, res, next) => {
         userId: req.user.id,
         status: "accepted",
       },
+      //  we only need the addresseeId field
       attributes: ['AddresseeId']
     })
     const friendList = await User.findAll({
@@ -35,7 +36,7 @@ router.get('/', async (req, res, next) => {
 
 //  get friend requests
 //  /api/friends/requests
-router.get('/requests', async (req, res, next) => {
+friendsRouter.get('/requests', async (req, res, next) => {
   try {
     //  this router requires a JWT
     //  find pending requests where ser is addressee
@@ -61,7 +62,7 @@ router.get('/requests', async (req, res, next) => {
 
 //  get friendship status
 //  /api/friends/:friendId
-router.get('/:friendId', async (req, res, next) => {
+friendsRouter.get('/:friendId', async (req, res, next) => {
   //  this router requires a JWT
   try {
     const relationship = await Friend.findOne({
@@ -82,7 +83,7 @@ router.get('/:friendId', async (req, res, next) => {
 
 //  send a friend request
 //  api/friends/:friendId
-router.post('/:friendId', async(req, res, next) => {
+friendsRouter.post('/:friendId', async(req, res, next) => {
   //  this router requires a JWT
   try {
     const friend = await User.findByPk(req.params.friendId)
@@ -94,7 +95,7 @@ router.post('/:friendId', async(req, res, next) => {
 
 //  used to update friends table after a friend request is acknowledged.
 //  /api/friends/:id
-router.put('/:friendId', async(req, res, next ) => {
+friendsRouter.put('/:friendId', async(req, res, next ) => {
   //  this router requires a JWT
   try {
     const friend = await User.findByPk(req.params.friendId);
