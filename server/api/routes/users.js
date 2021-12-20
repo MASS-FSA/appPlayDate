@@ -36,54 +36,6 @@ router.get("/nearby/distance/:dis", async (req, res, next) => {
   }
 });
 
-// /api/users/friends/:friendId/:userId
-router
-  .route(`/friends/:friendId/:userId`)
-  .post(async (req, res, next) => {
-    // for sending a friend request
-    try {
-      const user = await User.findByPk(req.params.userId);
-      const friend = await User.findByPk(req.params.friendId);
-      const connection = await user.addAddressee(friend);
-      // const connection = await Friend.create({
-      //   where: { userId: req.body.userId, AddresseeId: req.params.friendId },
-      // });
-      res.send(connection[0].status);
-    } catch (error) {
-      next(error);
-    }
-  })
-  .put(async (req, res, next) => {
-    try {
-      if (req.body.status === `blocked` || req.body.status === `accepted`) {
-        // When updating a block or accept.. have to update the table both ways for users
-        const userOne = await User.findByPk(req.params.userId);
-        const userTwo = await User.findByPk(req.params.friendId);
-
-        userOne.addAddressee(userTwo, { through: { status: req.body.status } });
-        userTwo.addAddressee(userOne, { through: { status: req.body.status } });
-
-        res.send();
-      } else {
-        // When updating responses to friend requests
-        // const connection = await Friend.findOne({
-        //   where: {
-        //     userId: req.params.friendId,
-        //     AddresseeId: req.params.userId,
-        //   },
-        // });
-        const userOne = await User.findByPk(req.params.userId);
-        const userTwo = await User.findByPk(req.params.friendId);
-
-        userTwo.addAddressee(userOne, { through: { status: req.body.status } });
-
-        res.send();
-      }
-    } catch (error) {
-      next(error);
-    }
-  });
-
 // /api/users/:userId
 router
   .route(`/:userId`)
