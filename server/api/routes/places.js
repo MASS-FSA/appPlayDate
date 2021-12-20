@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const axios = require('axios')
 const {
-  models: { User, Channel, Message },
+  models: { User,},
 } = require('../../db')
 const { createPlacesApiUrl, findMidPoint, distanceBetweenPoints } = require('../../../Util/utilityFuncs')
 
