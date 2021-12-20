@@ -96,7 +96,7 @@ export const updateSingleUser = (body) => {
   };
 };
 
-export const createUserIntake = (userId, body) => {
+export const createUserIntake = (body) => {
   return async () => {
     try {
       await authenticateRequest('post', 'api/users/intakes', body)
@@ -106,7 +106,7 @@ export const createUserIntake = (userId, body) => {
   };
 };
 
-export const checkFriendStatus = (userId, friendId) => {
+export const checkFriendStatus = (friendId) => {
   return async (dispatch) => {
     try {
       const data = authenticateRequest('get', `/api/friends/${friendId}`)
@@ -128,14 +128,14 @@ export const sendFriendRequest = (friendId) => {
   };
 };
 
-export const updateFriendStatus = (userId, friendId, response) => {
+export const updateFriendStatus = (friendId, response) => {
   const body = { status: response };
   return async (dispatch) => {
     try {
-      await authenticateRequest('put', `api/friends/${friendId}`)
+      await authenticateRequest('put', `api/friends/${friendId}`, body)
       // updated all friend requests with other thunk function
       if (response === `blocked`) dispatch(checkFriendStatus(userId, friendId));
-      else dispatch(fetchFriendRequests(userId));
+      else dispatch(fetchFriendRequests());
     } catch (error) {
       console.error(error);
     }
@@ -151,7 +151,7 @@ export const fetchMyFriends = () => async (dispatch) => {
   }
 };
 
-export const fetchFriendRequests = (userId) => {
+export const fetchFriendRequests = () => {
   return async (dispatch) => {
     try {
       const data = await authenticateRequest('get', '/api/friends/requests')
