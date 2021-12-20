@@ -1,16 +1,16 @@
-const router = require("express").Router();
+const messagesRouter = require("express").Router();
 const {
   models: { User, Channel, Message },
 } = require("../../db");
 const { Op } = require("sequelize");
 
-module.exports = router;
+module.exports = messagesRouter;
 
 //  ** /api/messages
 
 //  get all messages
 //  /api/messages/
-router.get("/", async (req, res, next) => {
+messagesRouter.get("/", async (req, res, next) => {
   try {
     const messages = await Message.findAll({
       include: {
@@ -27,7 +27,7 @@ router.get("/", async (req, res, next) => {
 
 //  get channels that one have a message in
 //  /api/messages/channels/participant
-router.get("/channels/participant", async (req, res, next) => {
+messagesRouter.get("/channels/participant", async (req, res, next) => {
   //  this route requires a JWT
   try {
     const messages = await Message.findAll({
@@ -52,7 +52,7 @@ router.get("/channels/participant", async (req, res, next) => {
 
 // messages by channel id
 // /api/routes/messages/:channelId
-router.get("/:channelId/", async (req, res, next) => {
+messagesRouter.get("/:channelId/", async (req, res, next) => {
   try {
     const messages = await Message.findAll({
       where: { channelId: req.params.channelId },
@@ -70,7 +70,7 @@ router.get("/:channelId/", async (req, res, next) => {
 
 //  Creating a message based off of req.body
 //  /api/messages/
-router.post("/", async (req, res, next) => {
+messagesRouter.post("/", async (req, res, next) => {
   try {
     //  put userId on message
     req.body.userId = req.user.id;
@@ -93,7 +93,7 @@ router.post("/", async (req, res, next) => {
 });
 
 //  delete message by Id
-router.delete("/:messageId", async (req, res, next) => {
+messagesRouter.delete("/:messageId", async (req, res, next) => {
   try {
     const id = req.params.messageId;
     await Message.destroy({ where: { id } });
