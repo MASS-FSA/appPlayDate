@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const authenticateRequest = async (request, url, body) => {
+export const authenticateRequest = async (request, url, body) => {
   try {
     const token = window.localStorage.getItem("token");
     const header = {
@@ -28,5 +28,3 @@ const authenticateRequest = async (request, url, body) => {
     console.error(error);
   }
 };
-
-export { authenticateRequest };

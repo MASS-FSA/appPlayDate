@@ -1,15 +1,31 @@
-const router = require("express").Router();
+const channelRouter = require("express").Router({mergeParams: true, strict: true});
 const {
   models: { Channel, Message },
 } = require("../../db");
 const User = require("../../db/models/User");
-const { requireToken } = require("../gatekeeping");
 
-module.exports = router;
 
+module.exports = channelRouter;
+
+// channel refers to chat channels.
+
+//  ** /api/channels/
+
+//  get all channels
 //  /api/channels/
+channelRouter.get('/', async (req, res, next) => {
+  try {
+    const channels = await Channel.findAll();
+    res.send(channels);
+  } catch (err) {
+    next(err);
+  }
+})
 
-router.get('/owned', requireToken, async (req, res, next) => {
+//  get channels the user has created
+//  /api/channels/owned
+channelRouter.get('/owned', async (req, res, next) => {
+  //  this router requires a JWT
   try {
     const owned = await Channel.findAll({
       where: {
@@ -22,64 +38,43 @@ router.get('/owned', requireToken, async (req, res, next) => {
   }
 })
 
-router
-  .route(`/`)
-  .get(async (req, res, next) => {
-    try {
-      const channels = await Channel.findAll();
-      res.send(channels);
-    } catch (err) {
-      next(err);
-    }
-  })
-  .post(requireToken, async (req, res, next) => {
-    // Creating a channel based off of req.body
-    try {
-      req.body.createdBy = req.user.id;
-      const channel = await Channel.create(req.body);
-
-      const chatBot = await User.findOne({ where: { username: `Chat Bot` } });
-      const message = await Message.create({
-        content: `Welcome to ${channel.name} chat!`,
-      });
-      await message.setChannel(channel);
-      await message.setUser(chatBot);
-      res.send(channel);
-    } catch (err) {
-      next(err);
-    }
-  });
-
-// GET /api/channels/:channelId/messages
-router.get("/:channelId/messages", requireToken, async (req, res, next) => {
+//  create new channel
+//  /api/channels/
+  channelRouter.post('/', async(req, res, next) => {
+    //  this router requires a JWT
   try {
-    const user = req.user;
-    const channelId = req.params.channelId;
-    const findUser = await Message.findOne({
-      where: { channelId, userId: user.id },
+    // put user.id on the createdBy key
+    req.body.createdBy = req.user.id;
+    const channel = await Channel.create(req.body);
+    const chatBot = await User.findOne({ where: { username: `Chat Bot` } });
+    //  create an initial message from 'chatbot' so that new channels look less empty to the user
+    const message = await Message.create({
+      content: `Welcome to ${channel.name} chat!`,
     });
-    if (!findUser) {
-      res.send("access denied");
-    } else {
-      const messages = await Message.findAll({ where: { channelId } });
-      res.send(messages);
-    }
+    //  create associations
+    await message.setChannel(channel);
+    await message.setUser(chatBot);
+    res.send(channel);
   } catch (err) {
     next(err);
   }
 });
 
-// DELETE /api/channels
-// create frontend " ARE YOU SURE YOU WANT TO DELETE ?"
-router.delete("/:channelId", requireToken, async (req, res, next) => {
+//  delete a chat channel
+//  /api/channels
+channelRouter.delete("/:channelId", async (req, res, next) => {
   try {
+    //  this router requires a JWT
     const channel = await Channel.findByPk(req.params.channelId);
-
-    if (channel.createdBy === req.user.id) {
-      await channel.destroy();
-      res.send(202);
+    if(channel) {
+      if(channel.createdBy === req.user.id) {
+        await channel.destroy();
+        res.sendStatus(202)
+      } else {
+        res.sendStatus(401)
+      }
     } else {
-      res.sendStatus(403);
+      res.sendStatus(400)
     }
   } catch (err) {
     next(err);

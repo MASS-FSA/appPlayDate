@@ -77,7 +77,7 @@ const Places = (props) => {
 
   useEffect(() => {
     if (props.me.id) {
-      props.fetchUsersWithinDistance(props.me.id, 60000);
+      props.fetchUsersWithinDistance(60000);
       props.fetchMyFriends();
       props.fetchAllEvents();
     }
@@ -275,8 +275,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchPlaces: (loc, radius) => dispatch(fetchPlaces(loc, radius)),
-    fetchUsersWithinDistance: (id, distance) =>
-      dispatch(fetchUsersWithinDistance(id, distance)),
+    fetchUsersWithinDistance: (distance) =>
+      dispatch(fetchUsersWithinDistance(distance)),
     fetchMyFriends: () => dispatch(fetchMyFriends()),
     fetchAllEvents: () => dispatch(fetchAllEvents()),
     setSingleEvent: (event) => dispatch(setSingleEvent(event)),

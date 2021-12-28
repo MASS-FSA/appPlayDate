@@ -1,15 +1,28 @@
-const router = require("express").Router();
-const { reset } = require("nodemon");
+const eventsRouter = require("express").Router();
 const {
-  models: { User, Event, UserEvents },
+  models: { User, Event, UserEvents, },
 } = require("../../db");
-const {requireToken} = require("../gatekeeping")
+const { Op } = require("sequelize");
 
-module.exports = router;
+module.exports = eventsRouter;
 
-// /api/events
+// **/api/events
 
-router.get('/myEvents', requireToken, async (req, res, next) => {
+//  get all events
+//  /api/events/
+eventsRouter.get('/', async (req, res, next) => {
+  try {
+    const allEvents = await Event.findAll();
+    res.send(allEvents);
+  } catch (error) {
+    next(error);
+  }
+})
+
+//  get events created by user
+//  /api/events/myevents
+eventsRouter.get('/myEvents', async (req, res, next) => {
+  //  this router requires a JWT
   try {
     const myEvents = await Event.findAll({
       where: {
@@ -22,87 +35,93 @@ router.get('/myEvents', requireToken, async (req, res, next) => {
   }
 })
 
-router.get('/participating', requireToken, async (req, res, next) => {
-
+//  get events that include user
+//  /api/events/participating
+eventsRouter.get('/participating', async (req, res, next) => {
   try {
+    //  this router requires a JWT
     const participantIn = await UserEvents.findAll({
+      attributes: ['eventId'],
       where: {
         userId: req.user.id
-      }
+      },
     })
-    const stepTwo = participantIn.map(userEvent => {
-      return userEvent.eventId
+    const events = await Event.findAll({
+      where: {id: {
+        [Op.in]: participantIn.map(userEvent => {
+          return userEvent.eventId
+        })
+      }}
     })
-    const events = await Promise.all(stepTwo.map(id => {
-      return Event.findByPk(id)
-    }))
     res.send(events)
   } catch (err) {
     next(err)
   }
 })
 
-router
-  .route(`/`)
-  .get(async (req, res, next) => {
-    try {
-      // in future, will need to find single user, and find nearby events.. figure out how to turn address into lat/lng
-      const allEvents = await Event.findAll();
-      res.send(allEvents);
-    } catch (error) {
-      next(error);
-    }
-  })
-  .post(requireToken, async (req, res, next) => {
-    try {
-      // use token and add to event
-      req.body.createdBy = req.user.id
-      const newEvent = await Event.create(req.body);
-      await req.user.addEvent(newEvent);
-      res.send(newEvent);
-    } catch (error) {
-      next(error);
-    }
-  });
+//  get event by Pk
+//  /api/events/:id
+eventsRouter.get('/:eventId', async (req, res, next) => {
+  try {
+    const singleEvent = await Event.findByPk(req.params.eventId, {
+      include: {
+        model: User,
+        //  protect user info
+        attributes: ['id', 'username', 'image', 'bio']
+      }
+    });
+    res.send(singleEvent);
+  } catch (error) {
+    next(error);
+  }
+})
 
-// /api/events/:eventId
+//  create a new event
+//  /api/events/
+eventsRouter.post('/', async (req, res, next) => {
+  //  this router requires a JWT
+  try {
+    //  put user on the body as createdBy
+    req.body.createdBy = req.user.id
+    const newEvent = await Event.create(req.body);
+    //  create association
+    await req.user.addEvent(newEvent);
+    res.send(newEvent);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router
-  .route(`/:eventId`)
-  .get(async (req, res, next) => {
-    try {
-      const singleEvent = await Event.findByPk(req.params.eventId, {
-        include: User,
-      });
-      res.send(singleEvent);
-    } catch (error) {
-      next(error);
+//  edit an event
+//  api/events/id
+eventsRouter.put('/:eventId', async (req, res, next) => {
+  try {
+    const event = await Event.findByPk(req.params.eventId);
+    const update = await event.update(req.body)
+    res.send(update)
+  } catch (err) {
+    next (err)
+  }
+});
+
+//  delete an event. Checks JWT for event.createdBy to match user sending request.
+//  /api/events/:id
+eventsRouter.delete('/:eventId', (async (req, res, next) => {
+  //  this router requires a JWT
+  try {
+    const eventToBeDeleted = await Event.findOne({
+      where: {
+        id: req.params.eventId,
+        createdBy: req.user.id,
+      }
+    });
+    if (eventToBeDeleted) {
+      await eventToBeDeleted.destroy();
+      res.send(202);
+    } else {
+      res.send(401)
     }
-  })
-  .delete(async (req, res, next) => {
-    try {
-      const deleteEvent = await Event.findByPk(req.params.eventId);
-      await deleteEvent.destroy();
-      res.send();
-    } catch (error) {
-      next(error);
-    }
-  })
-  .post(async (req, res, next) => {
-    try {
-      const editEvent = await Event.findByPk(req.params.eventId);
-      res.send(await editEvent.update(req.body));
-    } catch (error) {
-      next(error);
-    }
-  })
-  .put(async (req, res, next) => {
-    try {
-      const userToAdd = await User.findByPk(req.body.userId);
-      const event = await Event.findByPk(req.params.eventId, { include: User });
-      await event.addUser(userToAdd);
-      res.send(await event.reload());
-    } catch (error) {
-      next(error);
-    }
-  });
+  } catch (error) {
+    next(error);
+  }
+}))

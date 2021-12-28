@@ -6,12 +6,15 @@ module.exports = app
 
 // logging middleware
 app.use(morgan('dev'))
-
 // body parsing middleware
 app.use(express.json())
 
+
 // auth and api routes
 app.use('/auth', require('./auth'))
+//  check for a token and add a req.user key on all requests/routes.
+//    Will be an empty{} if no JWT provided or token matches no Users in the db.
+
 app.use('/api', require('./api'))
 
 app.get('/', (req, res)=> res.sendFile(path.join(__dirname, '..', 'public/index.html')));

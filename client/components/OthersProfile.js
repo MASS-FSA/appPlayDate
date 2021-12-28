@@ -34,7 +34,7 @@ export const OthersProfile = ({
       history.push(`/myProfile`);
     else {
       getUser(match.params.userId);
-      checkStatus(myId, match.params.userId);
+      checkStatus(match.params.userId);
     }
   }, []);
 
@@ -53,7 +53,7 @@ export const OthersProfile = ({
   }, [user]);
 
   function handleAddFriend() {
-    friendRequest(myId, user.id);
+    friendRequest(user.id);
   }
 
   function statusSetter() {
@@ -77,7 +77,7 @@ export const OthersProfile = ({
   function handleBlock(event) {
     event.preventDefault();
 
-    blockUser(myId, user.id, event.target.value);
+    blockUser(user.id, event.target.value);
   }
 
   return (
@@ -135,12 +135,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getUser: (userId) => dispatch(fetchSingleUser(userId)),
-    checkStatus: (userId, friendId) =>
-      dispatch(checkFriendStatus(userId, friendId)),
-    friendRequest: (userId, friendId) =>
-      dispatch(sendFriendRequest(userId, friendId)),
-    blockUser: (userId, friendId, status) =>
-      dispatch(updateFriendStatus(userId, friendId, status)),
+    checkStatus: (friendId) =>
+      dispatch(checkFriendStatus(friendId)),
+    friendRequest: (friendId) =>
+      dispatch(sendFriendRequest(friendId)),
+    blockUser: (friendId, status) =>
+      dispatch(updateFriendStatus(friendId, status)),
   };
 };
 

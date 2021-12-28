@@ -87,26 +87,6 @@ User.prototype.generateToken = function () {
   return jwt.sign({ id: this.id }, process.env.JWT);
 };
 
-User.prototype.findNearbyUsers = async function (distance) {
-  try {
-    const users = await User.findAll();
-    return users.filter((user) => {
-      const dist = distanceBetweenPoints(
-        this.latitude,
-        this.longitude,
-        user.homeLatitude,
-        user.homeLongitude
-      );
-      return dist <= distance;
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-/**
- * classMethods
- */
 User.authenticate = async function ({ username, password }) {
   const user = await this.findOne({ where: { username } });
   if (!user || !(await user.correctPassword(password))) {
@@ -119,14 +99,20 @@ User.authenticate = async function ({ username, password }) {
 
 User.findByToken = async function (token) {
   try {
-    const { id } = await jwt.verify(token, process.env.JWT);
-    const user = User.findByPk(id);
-    if (!user) {
-      throw "nooo";
+    if (token){
+      const { id } = await jwt.verify(token, process.env.JWT);
+      const user = User.findByPk(id);
+      if (!user) {
+        throw "nooo";
+      }
+      return user;
     }
-    return user;
+    return {
+      fail: true,
+      token: token,
+    }
   } catch (ex) {
-    const error = Error("bad token");
+    const error = Error(" bad token");
     error.status = 401;
     throw error;
   }

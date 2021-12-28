@@ -81,7 +81,7 @@ export const fetchParticipantChannels = () => async (dispatch) => {
 
 export const fetchMessages = () => async (dispatch) => {
   try {
-    const { data: messages } = await axios.get(`/api/messages`);
+    const { data: messages } = await axios.get(`/api/messages/`);
     dispatch(getMessages(messages));
   } catch (err) {
     throw ("error something went wrong", err);
@@ -125,19 +125,11 @@ export const getChannels = () => async (dispatch) => {
 
 export const sendMessage = (message) => async (dispatch) => {
   try {
-    // const { data: newMessage } = await axios.post(
-    //   '/api/messages',
-    //   message,
-    //   tokenHeader
-    // );
-
     const newMessage = await authenticateRequest(
       `post`,
       `/api/messages`,
       message
     );
-
-    // dispatch(gotMessage(newMessage)); I think we can delete this. -sh
     socket.emit("new-message", { newMessage, channel: newMessage.channelId });
   } catch (error) {
     console.error(error);

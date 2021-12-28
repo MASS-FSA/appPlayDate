@@ -23,11 +23,11 @@ const SingleEvent = (props) => {
   const [chatId, setChatId] = useState(``);
 
   useEffect(() => {
-    async function fetchData() {
+    function fetchData() {
       try {
-        await props.getEvent(props.match.params.id);
-        await props.getFriends();
-        await props.getChannels();
+        props.getEvent(props.match.params.id);
+        props.getFriends();
+        props.getChannels();
       } catch (error) {
         console.error(error);
       }
@@ -208,7 +208,7 @@ const mapDispatchToProps = (dispatch, { history }) => {
     deleteEvent: (id) => dispatch(deleteSingleEvent(id)),
     updateEvent: (id, body) => dispatch(updateSingleEvent(id, body)),
     getFriends: () => dispatch(fetchMyFriends()),
-    addFriend: (eventId, userId) => dispatch(addUserToEvent(eventId, userId)),
+    addFriend: (eventId, targetId) => dispatch(addUserToEvent(eventId, targetId)),
     createChat: (channelName) => dispatch(addChannel(channelName, history)),
     getChannels: () => dispatch(getChannels()),
   };
